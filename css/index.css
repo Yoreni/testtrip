@@ -1,0 +1,12 @@
+*s {
+    margin: 0;
+    padding: 0;
+}
+
+canvas {
+    position: absolute;
+}
+
+.test {
+    font-size: xx-large;
+}
