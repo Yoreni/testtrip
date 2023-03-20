@@ -73,3 +73,22 @@ function addDragAndDrop(sprite)
     sprite.on('mouseup', (e) => onDragEnd(e, sprite));
     sprite.on('mouseupoutside', (e) => onDragEnd(e, sprite));
 }
+
+function mod(num1, num2)
+{
+    return ((num1 % num2) + num2) % num2;
+}
+
+// function multiplyMatrix(materix1, materix2)
+// {
+// 	for(a = 0 ; a < 4 ; a++)
+// 	{
+// 		//MATHS YAY
+// 		var x = player.pos[a].x - player.centerX;
+// 		var y = player.pos[a].y - player.centerY;
+// 		var newX = (identity[0][0] * x) + (identity[0][1] * y);
+// 		var newY = (identity[1][0] * x) + (identity[1][1] * y);
+// 		player.pos[a].x = player.centerX + newX;
+// 		player.pos[a].y = player.centerY + newY;
+// 	}
+// }
