@@ -79,6 +79,11 @@ function mod(num1, num2)
     return ((num1 % num2) + num2) % num2;
 }
 
+function deepCopy(object)
+{
+    return JSON.parse(JSON.stringify(object))
+}
+
 // function multiplyMatrix(materix1, materix2)
 // {
 // 	for(a = 0 ; a < 4 ; a++)
