@@ -97,3 +97,19 @@ function deepCopy(object)
 // 		player.pos[a].y = player.centerY + newY;
 // 	}
 // }
+
+/**
+ * Shuffles array in place.
+ * @param {Array} array items An array containing the items.
+ */
+function shuffle(array) 
+{
+    for (let index = array.length - 1; index > 0; index--) 
+    {
+        let index2 = randInt(0, index);
+        //swap the 2 indexes around
+        [array[index], array[index2]] = [array[index2], array[index]]
+    }
+
+    return array;
+}
