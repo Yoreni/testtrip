@@ -113,3 +113,11 @@ function shuffle(array)
 
     return array;
 }
+
+function Point(x, y)
+{
+    return {
+        x: x,
+        y: y
+    }
+}

@@ -24,12 +24,32 @@ const pieces = {
 
 class FallingPiece
 {
-    constructor(type)
+    constructor(type, x, y)
     {
         this._minos = deepCopy(pieces[type]);
         this._rotation = 0;
         this._id = type;
-        console.log(this._minos);
+        this._position = Point(0, 0)
+    }
+
+    get x()
+    {
+        return this._position.x;
+    }
+
+    set x(newX)
+    {
+        this._position.x = newX;
+    }
+
+    get y()
+    {
+        return this._position.y;
+    }
+
+    set y(newY)
+    {
+        this._position.y = newY;
     }
 
     rotate(amount)
@@ -70,8 +90,9 @@ class FallingPiece
         }
 
         this._rotation = mod(this._rotation + amount, 4)
-
     }
+
+
     // rotate(amount)
     // {
     //     let rotationMatrix = []
