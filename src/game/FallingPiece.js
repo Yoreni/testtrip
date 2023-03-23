@@ -28,7 +28,7 @@ class FallingPiece
     {
         this._minos = deepCopy(pieces[type]);
         this._rotation = 0;
-        this._id = type;
+        this._type = type;
         this._position = Point(0, 0)
     }
 
@@ -50,6 +50,11 @@ class FallingPiece
     set y(newY)
     {
         this._position.y = newY;
+    }
+
+    get type()
+    {
+        return this._type;
     }
 
     rotate(amount)
@@ -126,17 +131,15 @@ class FallingPiece
     //     this._rotation = newRotation;
     // }
 
-    
-
-    _getMinos(type)
+    get minos()
     {
         let minos = [];
 
         //geting how much we need to move it by so its center is at 0, 0
-        const centerTranslationY = Math.ceil(pieces[type].length / 2);
-        const centerTranslationX = Math.ceil(pieces[type][0].length / 2);
+        const centerTranslationY = Math.ceil(this._minos.length / 2);
+        const centerTranslationX = Math.ceil(this._minos[0].length / 2);
 
-        for (const [yIndex, yElement] of pieces[type].entries())
+        for (const [yIndex, yElement] of this._minos.entries())
         {
             for (const [xIndex, xElement] of yElement.entries())
             {
@@ -144,8 +147,8 @@ class FallingPiece
                     //pieces[type].length for x and y is to fix for the piece to be unsidedown and the wrong way round
                     //that is caused by how arrays are indexed
                     minos.push({
-                        x: (pieces[type][0].length - xIndex) - centerTranslationX,
-                        y: (pieces[type].length - yIndex) - centerTranslationY
+                        x: (this._minos[0].length - xIndex) - centerTranslationX + this.x,
+                        y: (this._minos.length - yIndex) - centerTranslationY + this.y
                     });
             }
         }
