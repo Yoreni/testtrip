@@ -13,7 +13,8 @@ class Board
         this._board = Array(this._rules.board.height + 10).fill(null)
             .map(() => Array(this._rules.board.width).fill("0"))
         this._currentPiece = undefined;
-        this._nextQueue = [].push(rules.pieceGeneration([]));
+        console.log(this._rules.pieceGeneration)
+        this._nextQueue = [].push(this._rules.pieceGeneration([]));
         this._hold = null;
         this._hasHeld = false;
         this._stats = {};
@@ -22,6 +23,21 @@ class Board
     get currentPiece()
     {
         return this._currentPiece;
+    }
+
+    get board()
+    {
+        return this._board;
+    }
+
+    set board(newBoard)
+    {
+        this._board = newBoard;
+    }
+
+    getMinoOnBoard(x, y)
+    {
+        return this._board[y][x];
     }
 
     _fallingPieceCollidesWithBoard(fallingPiece)
