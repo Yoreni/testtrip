@@ -32,6 +32,8 @@ class Game extends IScene
     {
         this._objects.debugText.text = this._keybaord.hardDrop.getSecondsDown()
 
+        this._handleKeyboard()
+
         this._drawBoard();
         this._drawFallingPiece();
     }
@@ -85,5 +87,13 @@ class Game extends IScene
         for (let mino of piece.minos)
             this._objects.fallingPiece.drawRect(mino.x * 16, mino.y * 16, 16, 16)
         this._objects.fallingPiece.endFill();
+    }
+
+    _handleKeyboard()
+    {
+        if (this._keybaord.left.framesDown === 1)
+            this._board.currentPiece.x -= 1;
+        else if (this._keybaord.right.framesDown === 1)
+            this._board.currentPiece.x += 1;
     }
 }
