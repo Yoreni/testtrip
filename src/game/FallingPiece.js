@@ -157,8 +157,8 @@ class FallingPiece
                     //pieces[type].length for x and y is to fix for the piece to be unsidedown and the wrong way round
                     //that is caused by how arrays are indexed
                     minos.push({
-                        x: (this._minos[0].length - xIndex) - centerTranslationX + this.x,
-                        y: (this._minos.length - yIndex) - centerTranslationY + this.y
+                        x: xIndex - centerTranslationX + this.x,
+                        y: yIndex - centerTranslationY + this.y
                     });
             }
         }
