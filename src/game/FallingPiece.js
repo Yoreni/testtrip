@@ -25,7 +25,7 @@ const pieces = {
 const pieceColours = {
     I: 0x3ffff2,
     J: 0x1928fc,
-    L: 0xfc2d2d,
+    L: 0xff7f1e,
     O: 0xffff21,
     S: 0x6bff21,
     T: 0xa32ae0,
