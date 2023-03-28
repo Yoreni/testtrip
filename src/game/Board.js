@@ -12,9 +12,9 @@ class Board
 
         this._board = Array(this._rules.board.height + 10).fill(null)
             .map(() => Array(this._rules.board.width).fill("0"))
-        this._currentPiece = undefined;
-        console.log(this._rules.pieceGeneration)
-        this._nextQueue = [].push(this._rules.pieceGeneration([]));
+        this._nextQueue = this._rules.pieceGeneration([]);
+        console.log(this._nextQueue)
+        this._currentPiece = new FallingPiece(this._nextQueue.shift());
         this._hold = null;
         this._hasHeld = false;
         this._stats = {};

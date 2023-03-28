@@ -31,10 +31,9 @@ class Game extends IScene
     update()
     {
         this._objects.debugText.text = this._keybaord.hardDrop.getSecondsDown()
-        if (new Date().getTime() % 10 === 0)
-            this._board.board[randInt(0, 19)][ randInt(0, 9)] = "I";
 
         this._drawBoard();
+        this._drawFallingPiece();
     }
 
     destory()
@@ -48,9 +47,16 @@ class Game extends IScene
         this._objects.debugText.position.set(10, 50);
         this.container.addChild(this._objects.debugText);
 
+        let playField = new PIXI.Container();
+        playField.position.set(500, 200);
+
         this._objects.board = new PIXI.Graphics();
-        this._objects.board.position.set(500, 200);
-        this.container.addChild(this._objects.board);
+        playField.addChild(this._objects.board);
+
+        this._objects.fallingPiece = new PIXI.Graphics();
+        playField.addChild(this._objects.fallingPiece);
+
+        this.container.addChild(playField);
 
     }
 
@@ -69,5 +75,15 @@ class Game extends IScene
                 this._objects.board.endFill();
             }
         }
+    }
+
+    _drawFallingPiece()
+    {
+        this._objects.fallingPiece.clear()
+        const piece = this._board.currentPiece;
+        this._objects.fallingPiece.beginFill(pieceColours[piece.type]);
+        for (let mino of piece.minos)
+            this._objects.fallingPiece.drawRect(mino.x * 16, mino.y * 16, 16, 16)
+        this._objects.fallingPiece.endFill();
     }
 }
