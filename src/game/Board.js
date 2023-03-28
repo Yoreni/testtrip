@@ -14,10 +14,12 @@ class Board
             .map(() => Array(this._rules.board.width).fill("0"))
         this._nextQueue = this._rules.pieceGeneration([]);
         console.log(this._nextQueue)
-        this._currentPiece = new FallingPiece(this._nextQueue.shift());
+        this._currentPiece = undefined;
         this._hold = null;
         this._hasHeld = false;
         this._stats = {};
+
+        this._spawnNextPiece();
     }
 
     get currentPiece()
@@ -40,14 +42,40 @@ class Board
         return this._board[y][x];
     }
 
+    movePieceLeft()
+    {
+        this._currentPiece.x -= 1;
+        if (this._fallingPieceCollidesWithBoard(this._currentPiece))
+        {
+            this._currentPiece.x += 1;
+            return;
+        }
+    }
+
+    movePieceRight()
+    {
+        this._currentPiece.x += 1;
+        if (this._fallingPieceCollidesWithBoard(this._currentPiece))
+        {
+            this._currentPiece.x -= 1;
+            return;
+        }
+    }
+
     _fallingPieceCollidesWithBoard(fallingPiece)
     {
-        for (mino of fallingPiece.minos)
+        for (let mino of fallingPiece.minos)
         {
-            if (newBoard[mino.y][mino.x] !== "0")
+            //if (this.getMinoOnBoard(mino.x, mino.y) !== "0")
+            //    return true;
+            
+            //check if the mino is in bounds
+            if (mino.x < 0 || mino.x >= this._rules.board.width)
                 return true;
+            //if (mino.y >= this._rules.board.height)
+            //    return true;
         }
-        return true;
+        return false;
     }
 
     _lockCurrentPiece()
@@ -73,7 +101,9 @@ class Board
     {
         let newFallingPiece = new FallingPiece(this._nextQueue.shift());
         newFallingPiece.x = this._rules.board.width / 2;
-        newFallingPiece.y = this._rules.board.height + 2;
+        newFallingPiece.y -= 1;
+
+        this._currentPiece = newFallingPiece;
 
         //refill next queue
         if (this._nextQueue.length < 5)

@@ -92,8 +92,8 @@ class Game extends IScene
     _handleKeyboard()
     {
         if (this._keybaord.left.framesDown === 1)
-            this._board.currentPiece.x -= 1;
+            this._board.movePieceLeft();
         else if (this._keybaord.right.framesDown === 1)
-            this._board.currentPiece.x += 1;
+            this._board.movePieceRight();
     }
 }
