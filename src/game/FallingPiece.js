@@ -22,6 +22,16 @@ const pieces = {
         [0, 0, 0]]
 }
 
+const pieceColours = {
+    I: 0x3ffff2,
+    J: 0x1928fc,
+    L: 0xfc2d2d,
+    O: 0xffff21,
+    S: 0x6bff21,
+    T: 0xa32ae0,
+    Z: 0xff2121,
+}
+
 class FallingPiece
 {
     constructor(type, x, y)

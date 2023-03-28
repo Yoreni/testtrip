@@ -32,7 +32,7 @@ class Game extends IScene
     {
         this._objects.debugText.text = this._keybaord.hardDrop.getSecondsDown()
         if (new Date().getTime() % 10 === 0)
-            this._board.board[randInt(0, 19)][ randInt(0, 9)] = "Z";
+            this._board.board[randInt(0, 19)][ randInt(0, 9)] = "I";
 
         this._drawBoard();
     }
@@ -62,7 +62,8 @@ class Game extends IScene
         {
             for (let y = 0; y != 20; ++y)
             {
-                const colour = this._board.getMinoOnBoard(x, y) === "0" ? 0x111111 : 0xFF0000;
+                const minoType = this._board.getMinoOnBoard(x, y);
+                const colour = minoType === "0" ? 0x111111 : pieceColours[minoType];
                 this._objects.board.beginFill(colour);
                 this._objects.board.drawRect(x * 16, y * 16, 16, 16);
                 this._objects.board.endFill();
