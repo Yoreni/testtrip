@@ -71,15 +71,14 @@ class Game extends IScene
         {
             for (let y = 0; y != 30; ++y)
             {
-                //const boardY = 30 - y - 1;
-                const boardY = y;
-                const minoType = this._board.getMinoOnBoard(x, boardY);
-                if (minoType === "0" && boardY >= 20)
+                const minoType = this._board.getMinoOnBoard(x, y);
+
+                if (minoType === "0" && y >= 20)    //dont draw the background above the playfield
                     continue;
 
-                const colour = minoType === "0" ? boardY * 5 : pieceColours[minoType];
+                const colour = minoType === "0" ? 0x111111 : pieceColours[minoType];
                 this._objects.board.beginFill(colour);
-                this._objects.board.drawRect(x * 16, boardY * -16, 16, 16);
+                this._objects.board.drawRect(x * 16, y * -16, 16, 16);
                 this._objects.board.endFill();
             }
         }
@@ -104,5 +103,7 @@ class Game extends IScene
             this._board.movePieceRight();
         else if (this._keybaord.hardDrop.framesDown === 1)
             this._board._lockCurrentPiece();
+        else if (this._keybaord.softDrop.framesDown === 1)
+            this._board.softDrop();
     }
 }

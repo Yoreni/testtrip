@@ -117,6 +117,16 @@ class Board
         }
     }
 
+    softDrop()
+    {
+        this._currentPiece.y -= 1;
+        if (this._fallingPieceCollidesWithBoard(this._currentPiece))
+        {
+            this._currentPiece.y += 1;
+            return;
+        }
+    }
+
     _fallingPieceCollidesWithBoard(fallingPiece)
     {
         for (let mino of fallingPiece.minos)
@@ -127,8 +137,8 @@ class Board
             //check if the mino is in bounds
             if (mino.x < 0 || mino.x >= this._board.width)
                 return true;
-            //if (mino.y >= this._rules.board.height)
-            //    return true;
+            if (mino.y < 0)
+                return true;
         }
         return false;
     }
@@ -147,7 +157,6 @@ class Board
             return;
         }
 
-        //y is off by 1
         let newBoard = this._board.copy();
         console.log(newBoard);
         for (let mino of this._currentPiece.minos)
