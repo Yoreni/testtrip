@@ -143,8 +143,8 @@ class Board
     {
         for (let mino of fallingPiece.minos)
         {
-            //if (this.getMinoOnBoard(mino.x, mino.y) !== "0")
-            //    return true;
+            if (this.getMinoOnBoard(mino.x, mino.y) !== "0")
+                return true;
             
             //check if the mino is in bounds
             if (mino.x < 0 || mino.x >= this._board.width)
