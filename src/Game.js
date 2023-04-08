@@ -102,8 +102,13 @@ class Game extends IScene
         else if (this._keybaord.right.framesDown === 1)
             this._board.movePieceRight();
         else if (this._keybaord.hardDrop.framesDown === 1)
+        {
             this._board._lockCurrentPiece();
+            this._board._spawnNextPiece();
+        }
         else if (this._keybaord.softDrop.framesDown === 1)
             this._board.softDrop();
+        else if (this._keybaord.rotateClockwise.framesDown === 1)
+            this._board.rotateClockwise();
     }
 }

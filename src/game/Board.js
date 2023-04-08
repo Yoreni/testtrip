@@ -127,6 +127,16 @@ class Board
         }
     }
 
+    rotateClockwise()
+    {
+        this._currentPiece.rotate(1);
+        if (this._fallingPieceCollidesWithBoard(this._currentPiece))
+        {
+            this._currentPiece.rotate(-1);
+            return;
+        }
+    }
+
     _fallingPieceCollidesWithBoard(fallingPiece)
     {
         for (let mino of fallingPiece.minos)
@@ -158,12 +168,8 @@ class Board
         }
 
         let newBoard = this._board.copy();
-        console.log(newBoard);
         for (let mino of this._currentPiece.minos)
-        {
-            console.log(mino)
             newBoard.set(mino.x, mino.y, this.currentPiece.type);
-        }
 
         this._board = newBoard;
     }
@@ -184,6 +190,6 @@ class Board
 
         //refill next queue
         if (this._nextQueue.length < 5)
-            this._nextQueue.push(this._rules.pieceGeneration(this._nextQueue))
+            this._nextQueue.push(...this._rules.pieceGeneration(this._nextQueue))
     }
 }
