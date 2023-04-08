@@ -50,12 +50,13 @@ class Game extends IScene
         this.container.addChild(this._objects.debugText);
 
         let playField = new PIXI.Container();
-        playField.position.set(500, 200);
+        playField.position.set(500, 500);
 
         this._objects.board = new PIXI.Graphics();
         playField.addChild(this._objects.board);
 
         this._objects.fallingPiece = new PIXI.Graphics();
+        //this._objects.fallingPiece.anchor.y = 1;
         playField.addChild(this._objects.fallingPiece);
 
         this.container.addChild(playField);
@@ -68,12 +69,17 @@ class Game extends IScene
 
         for (let x = 0; x != 10; ++x)
         {
-            for (let y = 0; y != 20; ++y)
+            for (let y = 0; y != 30; ++y)
             {
-                const minoType = this._board.getMinoOnBoard(x, y);
-                const colour = minoType === "0" ? 0x111111 : pieceColours[minoType];
+                //const boardY = 30 - y - 1;
+                const boardY = y;
+                const minoType = this._board.getMinoOnBoard(x, boardY);
+                if (minoType === "0" && boardY >= 20)
+                    continue;
+
+                const colour = minoType === "0" ? boardY * 5 : pieceColours[minoType];
                 this._objects.board.beginFill(colour);
-                this._objects.board.drawRect(x * 16, y * 16, 16, 16);
+                this._objects.board.drawRect(x * 16, boardY * -16, 16, 16);
                 this._objects.board.endFill();
             }
         }
@@ -85,7 +91,8 @@ class Game extends IScene
         const piece = this._board.currentPiece;
         this._objects.fallingPiece.beginFill(pieceColours[piece.type]);
         for (let mino of piece.minos)
-            this._objects.fallingPiece.drawRect(mino.x * 16, mino.y * 16, 16, 16)
+            // * -16 for y coordinate because of how y works in PIXI.js
+            this._objects.fallingPiece.drawRect(mino.x * 16, mino.y * -16, 16, 16)
         this._objects.fallingPiece.endFill();
     }
 
@@ -95,5 +102,7 @@ class Game extends IScene
             this._board.movePieceLeft();
         else if (this._keybaord.right.framesDown === 1)
             this._board.movePieceRight();
+        else if (this._keybaord.hardDrop.framesDown === 1)
+            this._board._lockCurrentPiece();
     }
 }

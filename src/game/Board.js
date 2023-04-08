@@ -1,3 +1,59 @@
+class Playfield
+{
+    constructor(width, height)
+    {
+        this._width = width;
+        this._height = height;
+        this._board = Array(height + 10).fill(null)
+            .map(() => Array(width).fill("0"))
+    }
+
+    get width()
+    {
+        return this._width;
+    }
+
+    get height()
+    {
+        return this._height;
+    }
+
+    get(x, y)
+    {
+        return this._board[this._yToArrayIndex(y)][x]
+    }
+
+    set(x, y, mino)
+    {
+        this._board[this._yToArrayIndex(y)][x] = mino;
+    }
+
+    clearLine(y)
+    {
+        this._board.splice(this._yToArrayIndex(y), 1);
+        this._board.push(Array(width).fill("0"))
+    }
+
+    copy()
+    {
+        let copy = new Playfield(this.width, this.height);
+        for (let y = 0; y != this.height + 10; ++y)
+        {
+            for (let x = 0; x != this.width; ++x)
+                copy.set(x, y, this.get(x, y));
+                //copy._board[y][x] = this._board[y][x];
+        }
+
+        return copy;
+    }
+
+    _yToArrayIndex(y)
+    {
+        return this._board.length - y - 1
+    }
+}
+
+//maybe rename this to Player class
 class Board
 {
     constructor(rules)
@@ -10,8 +66,7 @@ class Board
             pieceGeneration: sevenBag
         }
 
-        this._board = Array(this._rules.board.height + 10).fill(null)
-            .map(() => Array(this._rules.board.width).fill("0"))
+        this._board = new Playfield(this._rules.board.width, this._rules.board.height);
         this._nextQueue = this._rules.pieceGeneration([]);
         console.log(this._nextQueue)
         this._currentPiece = undefined;
@@ -39,7 +94,7 @@ class Board
 
     getMinoOnBoard(x, y)
     {
-        return this._board[y][x];
+        return this._board.get(x, y);
     }
 
     movePieceLeft()
@@ -70,7 +125,7 @@ class Board
             //    return true;
             
             //check if the mino is in bounds
-            if (mino.x < 0 || mino.x >= this._rules.board.width)
+            if (mino.x < 0 || mino.x >= this._board.width)
                 return true;
             //if (mino.y >= this._rules.board.height)
             //    return true;
@@ -86,22 +141,35 @@ class Board
             return;
         }
 
-        if (_fallingPieceCollidesWithBoard(this.currentPiece))
+        if (this._fallingPieceCollidesWithBoard(this.currentPiece))
         {
             console.warn("Could not lock the current piece onto the board");
             return;
         }
 
-        let newBoard = deepCopy(this._board);
-        for (mino of this._currentPiece.minos)
-            newBoard[mino.y][mino.x] = this.currentPiece.type;
+        //y is off by 1
+        let newBoard = this._board.copy();
+        console.log(newBoard);
+        for (let mino of this._currentPiece.minos)
+        {
+            console.log(mino)
+            newBoard.set(mino.x, mino.y, this.currentPiece.type);
+        }
+
+        this._board = newBoard;
     }
 
     _spawnNextPiece()
     {
+        if (this._nextQueue.length === 0)
+            throw "Could not spawn piece because the next queue is empty"
+
         let newFallingPiece = new FallingPiece(this._nextQueue.shift());
-        newFallingPiece.x = this._rules.board.width / 2;
-        newFallingPiece.y -= 1;
+        newFallingPiece.x = this.board.width / 2;
+
+        const lowestY = Math.min(...newFallingPiece.minos.map(mino => mino.y))
+        //- lowestY + 1 makes the piece spawns 1 unit above the board
+        newFallingPiece.y = this.board.height - lowestY + 1;
 
         this._currentPiece = newFallingPiece;
 

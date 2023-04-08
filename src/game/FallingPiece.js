@@ -19,7 +19,11 @@ const pieces = {
         [0, 0, 0]],
     Z: [[1, 1, 0],
         [0, 1, 1],
-        [0, 0, 0]]
+        [0, 0, 0]],
+    Y: [[0, 1, 0, 0],
+        [1, 1, 1, 1],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]],
 }
 
 const pieceColours = {
@@ -30,6 +34,7 @@ const pieceColours = {
     S: 0x6bff21,
     T: 0xa32ae0,
     Z: 0xff2121,
+    Y: 0x9faa66,
 }
 
 class FallingPiece
@@ -154,11 +159,11 @@ class FallingPiece
             for (const [xIndex, xElement] of yElement.entries())
             {
                 if (xElement === 1)
-                    //pieces[type].length for x and y is to fix for the piece to be unsidedown and the wrong way round
+                    //this._minos.length - 1 for y is to fix for the piece to be unsidedown
                     //that is caused by how arrays are indexed
                     minos.push({
                         x: xIndex - centerTranslationX + this.x,
-                        y: yIndex - centerTranslationY + this.y
+                        y: this._minos.length - 1 - yIndex - centerTranslationY + this.y
                     });
             }
         }
