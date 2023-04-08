@@ -101,40 +101,42 @@ class Board
     {
         this._currentPiece.x -= 1;
         if (this._fallingPieceCollidesWithBoard(this._currentPiece))
-        {
             this._currentPiece.x += 1;
-            return;
-        }
     }
 
     movePieceRight()
     {
         this._currentPiece.x += 1;
         if (this._fallingPieceCollidesWithBoard(this._currentPiece))
-        {
             this._currentPiece.x -= 1;
-            return;
-        }
     }
 
     softDrop()
     {
         this._currentPiece.y -= 1;
         if (this._fallingPieceCollidesWithBoard(this._currentPiece))
-        {
             this._currentPiece.y += 1;
-            return;
-        }
     }
 
     rotateClockwise()
     {
         this._currentPiece.rotate(1);
         if (this._fallingPieceCollidesWithBoard(this._currentPiece))
-        {
             this._currentPiece.rotate(-1);
-            return;
-        }
+    }
+
+    rotateAnticlockwise()
+    {
+        this._currentPiece.rotate(-1);
+        if (this._fallingPieceCollidesWithBoard(this._currentPiece))
+            this._currentPiece.rotate(1);
+    }
+
+    rotate180()
+    {
+        this._currentPiece.rotate(2);
+        if (this._fallingPieceCollidesWithBoard(this._currentPiece))
+            this._currentPiece.rotate(-2);
     }
 
     _fallingPieceCollidesWithBoard(fallingPiece)

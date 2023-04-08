@@ -110,5 +110,9 @@ class Game extends IScene
             this._board.softDrop();
         else if (this._keybaord.rotateClockwise.framesDown === 1)
             this._board.rotateClockwise();
+        else if (this._keybaord.rotateAnticlockwise.framesDown === 1)
+            this._board.rotateAnticlockwise();
+        else if (this._keybaord.rotate180.framesDown === 1)
+            this._board.rotate180();
     }
 }
