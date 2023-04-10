@@ -34,6 +34,25 @@ class Playfield
         this._board.push(Array(width).fill("0"))
     }
 
+    doesColide(minos)
+    {
+        if (minos instanceof FallingPiece)
+            minos = minos.minos;
+
+            for (let mino of minos)
+            {
+                if (this.get(mino.x, mino.y) !== "0")
+                    return true;
+                
+                //check if the mino is in bounds
+                if (mino.x < 0 || mino.x >= this.width)
+                    return true;
+                if (mino.y < 0)
+                    return true;
+            }
+            return false;
+    }
+
     copy()
     {
         let copy = new Playfield(this.width, this.height);
@@ -62,7 +81,8 @@ class Board
                 width: 10,
                 height: 20
             },
-            pieceGeneration: sevenBag
+            pieceGeneration: sevenBag,
+            rotationSystem: SRS
         }
 
         this._board = new Playfield(this._rules.board.width, this._rules.board.height);
@@ -99,59 +119,43 @@ class Board
     movePieceLeft()
     {
         this._currentPiece.x -= 1;
-        if (this._fallingPieceCollidesWithBoard(this._currentPiece))
+        if (this._board.doesColide(this._currentPiece))
             this._currentPiece.x += 1;
     }
 
     movePieceRight()
     {
         this._currentPiece.x += 1;
-        if (this._fallingPieceCollidesWithBoard(this._currentPiece))
+        if (this._board.doesColide(this._currentPiece))
             this._currentPiece.x -= 1;
     }
 
     softDrop()
     {
         this._currentPiece.y -= 1;
-        if (this._fallingPieceCollidesWithBoard(this._currentPiece))
+        if (this._board.doesColide(this._currentPiece))
             this._currentPiece.y += 1;
     }
 
     rotateClockwise()
     {
         this._currentPiece.rotate(1);
-        if (this._fallingPieceCollidesWithBoard(this._currentPiece))
+        if (this._board.doesColide(this._currentPiece))
             this._currentPiece.rotate(-1);
     }
 
     rotateAnticlockwise()
     {
         this._currentPiece.rotate(-1);
-        if (this._fallingPieceCollidesWithBoard(this._currentPiece))
+        if (this._board.doesColide(this._currentPiece))
             this._currentPiece.rotate(1);
     }
 
     rotate180()
     {
         this._currentPiece.rotate(2);
-        if (this._fallingPieceCollidesWithBoard(this._currentPiece))
+        if (this._board.doesColide(this._currentPiece))
             this._currentPiece.rotate(-2);
-    }
-
-    _fallingPieceCollidesWithBoard(fallingPiece)
-    {
-        for (let mino of fallingPiece.minos)
-        {
-            if (this.getMinoOnBoard(mino.x, mino.y) !== "0")
-                return true;
-            
-            //check if the mino is in bounds
-            if (mino.x < 0 || mino.x >= this._board.width)
-                return true;
-            if (mino.y < 0)
-                return true;
-        }
-        return false;
     }
 
     _lockCurrentPiece()
@@ -162,7 +166,7 @@ class Board
             return;
         }
 
-        if (this._fallingPieceCollidesWithBoard(this.currentPiece))
+        if (this._board.doesColide(this.currentPiece))
         {
             console.warn("Could not lock the current piece onto the board");
             return;
