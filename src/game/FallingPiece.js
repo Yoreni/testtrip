@@ -37,10 +37,9 @@ const pieceColours = {
     Y: 0x9faa66,
 }
 
-//TODO: add a copy method
 class FallingPiece
 {
-    constructor(type, x, y)
+    constructor(type)
     {
         this._minos = deepCopy(pieces[type]);
         this._rotation = 0;
@@ -76,6 +75,39 @@ class FallingPiece
     get rotation()
     {
         return this._rotation;
+    }
+
+    get minos()
+    {
+        let minos = [];
+
+        //geting how much we need to move it by so its center is at 0, 0
+        const centerTranslationY = Math.ceil(this._minos.length / 2);
+        const centerTranslationX = Math.ceil(this._minos[0].length / 2);
+
+        for (const [yIndex, yElement] of this._minos.entries())
+        {
+            for (const [xIndex, xElement] of yElement.entries())
+            {
+                if (xElement === 1)
+                    //this._minos.length - 1 for y is to fix for the piece to be unsidedown
+                    //that is caused by how arrays are indexed
+                    minos.push({
+                        x: xIndex - centerTranslationX + this.x,
+                        y: this._minos.length - 1 - yIndex - centerTranslationY + this.y
+                    });
+            }
+        }
+
+        return minos;
+    }
+
+    copy()
+    {
+        let copy = new FallingPiece(this.type);
+        copy._position = deepCopy(this._position);
+        copy.rotate(this._rotation);
+        return copy;
     }
 
     rotate(amount)
@@ -151,29 +183,4 @@ class FallingPiece
 
     //     this._rotation = newRotation;
     // }
-
-    get minos()
-    {
-        let minos = [];
-
-        //geting how much we need to move it by so its center is at 0, 0
-        const centerTranslationY = Math.ceil(this._minos.length / 2);
-        const centerTranslationX = Math.ceil(this._minos[0].length / 2);
-
-        for (const [yIndex, yElement] of this._minos.entries())
-        {
-            for (const [xIndex, xElement] of yElement.entries())
-            {
-                if (xElement === 1)
-                    //this._minos.length - 1 for y is to fix for the piece to be unsidedown
-                    //that is caused by how arrays are indexed
-                    minos.push({
-                        x: xIndex - centerTranslationX + this.x,
-                        y: this._minos.length - 1 - yIndex - centerTranslationY + this.y
-                    });
-            }
-        }
-
-        return minos;
-    }
 }
