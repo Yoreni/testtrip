@@ -41,7 +41,6 @@ class Playfield
         {
             for (let x = 0; x != this.width; ++x)
                 copy.set(x, y, this.get(x, y));
-                //copy._board[y][x] = this._board[y][x];
         }
 
         return copy;

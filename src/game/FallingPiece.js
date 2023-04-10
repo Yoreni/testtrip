@@ -37,6 +37,7 @@ const pieceColours = {
     Y: 0x9faa66,
 }
 
+//TODO: add a copy method
 class FallingPiece
 {
     constructor(type, x, y)
@@ -70,6 +71,11 @@ class FallingPiece
     get type()
     {
         return this._type;
+    }
+
+    get rotation()
+    {
+        return this._rotation;
     }
 
     rotate(amount)
