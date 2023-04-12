@@ -113,9 +113,9 @@ class FallingPiece
     rotate(amount)
     {
         amount = mod(amount, 4);
-        if (amount === 0)
+        if (amount === 0)            //no rotation
             return;
-        if (amount === 2)
+        if (amount === 2)            //180
         {
             this._minos.forEach(row => row.reverse());
             this._minos.reverse();
@@ -137,15 +137,10 @@ class FallingPiece
             }
         }
 
-        if (amount === 1)
+        if (amount === 1)             //clockwise
             this._minos.forEach(row => row.reverse());
-        if (amount === 3)
+        if (amount === 3)             //anti-clockwise
             this._minos.reverse();
-        if (amount === 2)
-        {
-            this._minos.reverse();
-            this._minos.forEach(row => row.reverse());
-        }
 
         this._rotation = mod(this._rotation + amount, 4)
     }

@@ -139,23 +139,26 @@ class Board
 
     rotateClockwise()
     {
-        this._currentPiece.rotate(1);
-        if (this._board.doesColide(this._currentPiece))
-            this._currentPiece.rotate(-1);
+        this._currentPiece = this._rules.rotationSystem(1, this._currentPiece, this._board);
+        // this._currentPiece.rotate(1);
+        // if (this._board.doesColide(this._currentPiece))
+        //     this._currentPiece.rotate(-1);
     }
 
     rotateAnticlockwise()
     {
-        this._currentPiece.rotate(-1);
-        if (this._board.doesColide(this._currentPiece))
-            this._currentPiece.rotate(1);
+        this._currentPiece = this._rules.rotationSystem(-1, this._currentPiece, this._board);
+        // this._currentPiece.rotate(-1);
+        // if (this._board.doesColide(this._currentPiece))
+        //     this._currentPiece.rotate(1);
     }
 
     rotate180()
     {
-        this._currentPiece.rotate(2);
-        if (this._board.doesColide(this._currentPiece))
-            this._currentPiece.rotate(-2);
+        //this._currentPiece = this._rules.rotationSystem(1, this._currentPiece, this._board);
+         this._currentPiece.rotate(2);
+         if (this._board.doesColide(this._currentPiece))
+             this._currentPiece.rotate(-2);
     }
 
     _lockCurrentPiece()

@@ -25,6 +25,21 @@ function SRS(direction, fallingPiece, playfield)
 {
     const kicktableType = fallingPiece.type === "I" ? "I" : "*";
     const kicktableDirection = fallingPiece.rotation + "" + mod(fallingPiece.rotation + direction, 4);
+    const kickData = SRSkicktable[kicktableType][kicktableDirection];
 
-    
+    for (let attempt = 0; attempt != kickData.length; ++attempt)
+    {
+        let piece = fallingPiece.copy();
+        piece.rotate(direction);
+        piece.x += kickData[attempt].x;
+        piece.y += kickData[attempt].y;
+
+        if (!playfield.doesColide(piece))
+        {
+            console.log(attempt);
+            return piece;
+        }
+    }
+
+    return fallingPiece;
 }
