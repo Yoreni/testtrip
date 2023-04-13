@@ -28,9 +28,10 @@ class Game extends IScene
 
     }
 
-    update()
+    update(delta)
     {
         this._objects.debugText.text = this._keybaord.hardDrop.getSecondsDown()
+        this._board.tick(delta)
 
         this._handleKeyboard()
 

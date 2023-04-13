@@ -45,6 +45,7 @@ class FallingPiece
         this._rotation = 0;
         this._type = type;
         this._position = Point(0, 0)
+        this._subPosition = Point(0, 0)
     }
 
     get x()
@@ -106,6 +107,8 @@ class FallingPiece
     {
         let copy = new FallingPiece(this.type);
         copy._position = deepCopy(this._position);
+        copy._subPosition = deepCopy(this._subPosition);
+        //console.log(this._position)
         copy.rotate(this._rotation);
         return copy;
     }
@@ -145,6 +148,17 @@ class FallingPiece
         this._rotation = mod(this._rotation + amount, 4)
     }
 
+    move(changeX, changeY)
+    {
+        this._subPosition.x += changeX;
+        this._subPosition.y += changeY;
+        
+        this.x += Math.floor(this._subPosition.x);
+        this.y += Math.floor(this._subPosition.y);
+
+        this._subPosition.x = mod(this._subPosition.x, 1);
+        this._subPosition.y = mod(this._subPosition.y, 1);
+    }
 
     // rotate(amount)
     // {

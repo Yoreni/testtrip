@@ -41,13 +41,14 @@ class Playfield
 
             for (let mino of minos)
             {
-                if (this.get(mino.x, mino.y) !== "0")
-                    return true;
-                
                 //check if the mino is in bounds
+                if (mino.y < 0)
+                    return true;
+
                 if (mino.x < 0 || mino.x >= this.width)
                     return true;
-                if (mino.y < 0)
+
+                if (this.get(mino.x, mino.y) !== "0")
                     return true;
             }
             return false;
@@ -140,17 +141,11 @@ class Board
     rotateClockwise()
     {
         this._currentPiece = this._rules.rotationSystem(1, this._currentPiece, this._board);
-        // this._currentPiece.rotate(1);
-        // if (this._board.doesColide(this._currentPiece))
-        //     this._currentPiece.rotate(-1);
     }
 
     rotateAnticlockwise()
     {
         this._currentPiece = this._rules.rotationSystem(-1, this._currentPiece, this._board);
-        // this._currentPiece.rotate(-1);
-        // if (this._board.doesColide(this._currentPiece))
-        //     this._currentPiece.rotate(1);
     }
 
     rotate180()
@@ -159,6 +154,17 @@ class Board
          this._currentPiece.rotate(2);
          if (this._board.doesColide(this._currentPiece))
              this._currentPiece.rotate(-2);
+    }
+
+    tick(delta)
+    {
+        const newPiece = this._currentPiece.copy()
+        newPiece.move(0, -1/60);
+        console.log(newPiece._subPosition);
+        if (!this._board.doesColide(newPiece))
+            this._currentPiece = newPiece;
+        //console.log(this._currentPiece.y)
+        //console.log("delta", delta);
     }
 
     _lockCurrentPiece()

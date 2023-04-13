@@ -1,4 +1,4 @@
-const SRSkicktable = {
+const SRSkicktable = {  //this could be simplified
     "*": {
         "01": [Point(0, 0), Point(-1, 0), Point(-1, 1), Point(0, -2), Point(-1, -2)],
         "10": [Point(0, 0), Point(1, 0), Point(1, -1), Point(0, 2), Point(1, 2)],
