@@ -37,6 +37,7 @@ class Game extends IScene
 
         this._drawBoard();
         this._drawFallingPiece();
+        this._drawGhostPiece();
     }
 
     destory()
@@ -57,8 +58,10 @@ class Game extends IScene
         playField.addChild(this._objects.board);
 
         this._objects.fallingPiece = new PIXI.Graphics();
-        //this._objects.fallingPiece.anchor.y = 1;
         playField.addChild(this._objects.fallingPiece);
+
+        this._objects.ghostPiece = new PIXI.Graphics();
+        playField.addChild(this._objects.ghostPiece);
 
         this.container.addChild(playField);
 
@@ -85,18 +88,33 @@ class Game extends IScene
         }
     }
 
-    _drawFallingPiece()
+    _drawPiece(piece, graphics , x, y, trans = 1)
     {
-        this._objects.fallingPiece.clear()
-        const piece = this._board.currentPiece;
-        this._objects.fallingPiece.beginFill(pieceColours[piece.type]);
+        graphics.clear()
+        graphics.beginFill(pieceColours[piece.type], trans);
         for (let mino of piece.minos)
             // * -16 for y coordinate because of how y works in PIXI.js
-            this._objects.fallingPiece.drawRect(mino.x * 16, mino.y * -16, 16, 16)
-        this._objects.fallingPiece.endFill();
+        {
+            const drawX = ((mino.x - piece.x) * 16) + x;
+            const drawY = ((mino.y - piece.y) * -16) + y;
+            graphics.drawRect(drawX, drawY, 16, 16)
+        }
+        graphics.endFill();
     }
 
-    _handleKeyboard()
+    _drawFallingPiece()
+    {
+        const piece = this._board.currentPiece;
+        this._drawPiece(piece, this._objects.fallingPiece, piece.x * 16, piece.y * -16)
+    }
+
+    _drawGhostPiece()
+    {
+        const piece = this._board.ghostPiece
+        this._drawPiece(piece, this._objects.ghostPiece, piece.x * 16, piece.y * -16, 0.3)
+    }
+
+    _handleKeyboard() 
     {
         if (this._keybaord.left.framesDown === 1)
             this._board.movePieceLeft();
