@@ -82,15 +82,31 @@ class Board
              this._currentPiece.rotate(-2);
     }
 
+    harddrop()
+    {
+        console.log("ghostpiece: ", this.ghostPiece)
+        this._currentPiece = this.ghostPiece;
+        this._lockCurrentPiece();
+        this._spawnNextPiece();
+    }
+
     tick(delta)
     {
         const newPiece = this._currentPiece.copy()
         newPiece.move(0, -1/60);
-        console.log(newPiece._subPosition);
         if (!this._board.doesColide(newPiece))
             this._currentPiece = newPiece;
         //console.log(this._currentPiece.y)
         //console.log("delta", delta);
+    }
+
+    get ghostPiece()
+    {
+        let ghostPiece = this._currentPiece.copy();
+        while (!this._board.doesColide(ghostPiece))
+            ghostPiece.y -= 1;
+        ghostPiece.y += 1;             //1 above  the place it would colide with other minos/bounds
+        return ghostPiece;
     }
 
     _lockCurrentPiece()
