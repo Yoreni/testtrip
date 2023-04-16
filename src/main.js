@@ -1,7 +1,8 @@
 "use strict";
 let canvasSize = {width: 0, height: 0}
 
-function init() {
+function init() 
+{
     resize();
     app.ticker.maxFPS = 60
 
@@ -55,4 +56,9 @@ function resize()
         console.log(canvasSize)
 }
 
-init();
+const textures = PIXI.Assets.load(["assets/rasei.png"])
+    .then(function()
+    {
+        console.log("Textures Loaded");
+        init();
+    });

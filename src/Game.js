@@ -15,6 +15,11 @@ class Game extends IScene
             rotate180: new KeyDetector(app, "c"),
             hardDrop: new KeyDetector(app, " "),
         }
+        this._handling = {
+            DAS: 5,
+            SDF: 1,
+            ARR: 10
+        }
         this._board = new Board();
     }
 
@@ -64,6 +69,12 @@ class Game extends IScene
         playField.addChild(this._objects.ghostPiece);
 
         this.container.addChild(playField);
+
+        //add rasei
+        this._objects.rasei = PIXI.Sprite.from("assets/rasei.png");
+        this._objects.rasei.scale.set(0.4);
+        this._objects.rasei.position.set(0, canvasSize.height - this._objects.rasei.height);
+        this.container.addChild(this._objects.rasei);
 
     }
 
@@ -116,9 +127,9 @@ class Game extends IScene
 
     _handleKeyboard() 
     {
-        if (this._keybaord.left.framesDown === 1)
+        if (this._keybaord.left.framesDown === 1 || this._keybaord.left.framesDown > this._handling.DAS)
             this._board.movePieceLeft();
-        else if (this._keybaord.right.framesDown === 1)
+        else if (this._keybaord.right.framesDown === 1 || this._keybaord.right.framesDown > this._handling.DAS)
             this._board.movePieceRight();
         else if (this._keybaord.hardDrop.framesDown === 1)
             this._board.harddrop();

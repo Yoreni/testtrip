@@ -70,7 +70,8 @@ function DebugMenu(pixiApp)
     this.FPStext.position.set(490,0)
     this.container.addChild(this.FPStext)
 
-    app.renderer.plugins.interaction.on('mousemove', (e) => cursorPosText.update())
+    //const ev = new PIXI.EventBoundary(app.stage)
+    this.app.stage.on('mousemove', (e) => cursorPosText.update())
 
     var onSpace = new KeyDetector(pixiApp, "F8")
     onSpace.onDown = () => 
