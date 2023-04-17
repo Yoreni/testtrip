@@ -35,10 +35,7 @@ function SRS(direction, fallingPiece, playfield)
         piece.y += kickData[attempt].y;
 
         if (!playfield.doesColide(piece))
-        {
-            console.log(attempt);
             return piece;
-        }
     }
 
     return fallingPiece;

@@ -102,10 +102,14 @@ class Board
 
     get ghostPiece()
     {
+        //if the piece colides with somthing then ghostPiece == fallingPiece
+        if (this._board.doesColide(this._currentPiece))
+            return this._currentPiece;
+
         let ghostPiece = this._currentPiece.copy();
         while (!this._board.doesColide(ghostPiece))
             ghostPiece.y -= 1;
-        ghostPiece.y += 1;             //1 above  the place it would colide with other minos/bounds
+        ghostPiece.y += 1;             //1 above the place it would colide with other minos/bounds
         return ghostPiece;
     }
 
