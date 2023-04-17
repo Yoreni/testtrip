@@ -16,9 +16,9 @@ class Game extends IScene
             hardDrop: new KeyDetector(app, " "),
         }
         this._handling = {
-            DAS: 5,
+            DAS: 10,
             SDF: 1,
-            ARR: 10
+            ARR: 1
         }
         this._board = new Board();
     }
@@ -131,15 +131,15 @@ class Game extends IScene
             this._board.movePieceLeft();
         else if (this._keybaord.right.framesDown === 1 || this._keybaord.right.framesDown > this._handling.DAS)
             this._board.movePieceRight();
-        else if (this._keybaord.hardDrop.framesDown === 1)
+        if (this._keybaord.hardDrop.framesDown === 1)
             this._board.harddrop();
-        else if (this._keybaord.softDrop.framesDown === 1)
+        if (this._keybaord.softDrop.framesDown === 1)
             this._board.softDrop();
-        else if (this._keybaord.rotateClockwise.framesDown === 1)
+        if (this._keybaord.rotateClockwise.framesDown === 1)
             this._board.rotateClockwise();
-        else if (this._keybaord.rotateAnticlockwise.framesDown === 1)
+        if (this._keybaord.rotateAnticlockwise.framesDown === 1)
             this._board.rotateAnticlockwise();
-        else if (this._keybaord.rotate180.framesDown === 1)
+        if (this._keybaord.rotate180.framesDown === 1)
             this._board.rotate180();
     }
 }

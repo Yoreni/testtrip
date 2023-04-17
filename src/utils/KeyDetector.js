@@ -19,9 +19,7 @@ function KeyDetector(app, key)
         if(e.key === key)
         {
             if(!this.isDown)
-            {
                 this.firstPressed = new Date().getTime()
-            }
 
            this.isDown = true
         }
