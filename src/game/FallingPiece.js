@@ -20,10 +20,10 @@ const pieces = {
     Z: [[1, 1, 0],
         [0, 1, 1],
         [0, 0, 0]],
-    Y: [[0, 1, 0, 0],
-        [1, 1, 1, 1],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0]],
+    // Y: [[0, 1, 0, 0],
+    //     [1, 1, 1, 1],
+    //     [0, 0, 0, 0],
+    //     [0, 0, 0, 0]],
 }
 
 const pieceColours = {
@@ -119,7 +119,7 @@ class FallingPiece
         let copy = new FallingPiece(this.type);
         copy._position = deepCopy(this._position);
         copy._subPosition = deepCopy(this._subPosition);
-        //console.log(this._position)
+        copy._lockTimer = this._lockTimer;
         copy.rotate(this._rotation);
         return copy;
     }

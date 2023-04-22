@@ -9,7 +9,9 @@ class Board
                 height: 20
             },
             pieceGeneration: sevenBag,
-            rotationSystem: SRS
+            rotationSystem: SRS,
+            lockDelay: 31,
+            gravitiy: 1 / 60,
         }
 
         this._board = new Playfield(this._rules.board.width, this._rules.board.height);
@@ -79,11 +81,22 @@ class Board
     tick(delta)
     {
         const newPiece = this._currentPiece.copy()
-        newPiece.move(0, -1/60);
+        newPiece.move(0, -this._rules.gravitiy);
         if (!this._board.doesColide(newPiece))
             this._currentPiece = newPiece;
-        //console.log(this._currentPiece.y)
-        //console.log("delta", delta);
+        else
+            this._currentPiece = this.ghostPiece;
+
+        console.log()
+        if (this.ghostPiece.y == this._currentPiece.y)
+        {
+            ++(this._currentPiece.lockTimer)
+            if (this._currentPiece.lockTimer >= this._rules.lockDelay)
+            {
+                this._lockCurrentPiece();
+                this._spawnNextPiece();
+            }
+        }
     }
 
     get ghostPiece()
