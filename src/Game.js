@@ -1,3 +1,9 @@
+const handling = {
+    DAS: 6,
+    SDF: 1,
+    ARR: 1,
+}
+
 class Game extends IScene
 {
     constructor()
@@ -15,17 +21,11 @@ class Game extends IScene
             rotate180: new KeyDetector(app, "c"),
             hardDrop: new KeyDetector(app, " "),
         }
-        this._handling = {
-            DAS: 10,
-            SDF: 1,
-            ARR: 1
-        }
         this._board = new Board();
     }
 
     start()
     {
-        
     }
 
     stop()
@@ -75,7 +75,6 @@ class Game extends IScene
         this._objects.rasei.scale.set(0.4);
         this._objects.rasei.position.set(0, canvasSize.height - this._objects.rasei.height);
         this.container.addChild(this._objects.rasei);
-
     }
 
     _drawBoard()
@@ -127,10 +126,21 @@ class Game extends IScene
 
     _handleKeyboard() 
     {
-        if (this._keybaord.left.framesDown === 1 || this._keybaord.left.framesDown > this._handling.DAS)
-            this._board.movePieceLeft();
-        else if (this._keybaord.right.framesDown === 1 || this._keybaord.right.framesDown > this._handling.DAS)
-            this._board.movePieceRight();
+        if (this._keybaord.left.isDown)
+        {
+            if (this._keybaord.left.framesDown === 1)
+                this._board.moveCurrentPiece(-1);
+            else if (this._keybaord.left.framesDown > handling.DAS)
+                this._board.moveCurrentPiece(-1 / handling.ARR);
+        }
+        else if (this._keybaord.right.isDown)
+        {
+            if (this._keybaord.right.framesDown === 1)
+                this._board.moveCurrentPiece(1);
+            else if (this._keybaord.right.framesDown > handling.DAS)
+                this._board.moveCurrentPiece(1 / handling.ARR);
+        }
+
         if (this._keybaord.hardDrop.framesDown === 1)
             this._board.harddrop();
         if (this._keybaord.softDrop.framesDown === 1)

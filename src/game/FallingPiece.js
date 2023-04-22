@@ -46,6 +46,7 @@ class FallingPiece
         this._type = type;
         this._position = Point(0, 0)
         this._subPosition = Point(0, 0)
+        this._lockTimer = 0;
     }
 
     get x()
@@ -76,6 +77,16 @@ class FallingPiece
     get rotation()
     {
         return this._rotation;
+    }
+
+    get _lockTimer()
+    {
+        return this._lockTimer
+    }
+
+    set _lockTimer(newNumber)
+    {
+        this._lockTimer = newNumber;
     }
 
     get minos()

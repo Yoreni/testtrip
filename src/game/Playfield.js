@@ -71,3 +71,39 @@ class Playfield
         return this._board.length - y - 1
     }
 }
+
+function leftToColision(fallingPiece, playfield)
+{
+    if (playfield.doesColide(fallingPiece))
+        return 0;
+
+    fallingPiece = fallingPiece.copy();
+    let count = 0;
+    while (!playfield.doesColide(fallingPiece))
+    {
+        fallingPiece.x -= 1;
+        count += 1;
+    }
+
+    fallingPiece.x += 1;             //1 above the place it would colide with other minos/bounds
+    count -= 1;
+    return count;
+}
+
+function rightToColision(fallingPiece, playfield)
+{
+    if (playfield.doesColide(fallingPiece))
+        return 0;
+
+    fallingPiece = fallingPiece.copy();
+    let count = 0;
+    while (!playfield.doesColide(fallingPiece))
+    {
+        fallingPiece.x += 1;
+        count += 1
+    }
+
+    fallingPiece.x -= 1;             //1 above the place it would colide with other minos/bounds
+    count -= 1;
+    return count;
+}

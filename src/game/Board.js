@@ -43,20 +43,6 @@ class Board
         return this._board.get(x, y);
     }
 
-    movePieceLeft()
-    {
-        this._currentPiece.x -= 1;
-        if (this._board.doesColide(this._currentPiece))
-            this._currentPiece.x += 1;
-    }
-
-    movePieceRight()
-    {
-        this._currentPiece.x += 1;
-        if (this._board.doesColide(this._currentPiece))
-            this._currentPiece.x -= 1;
-    }
-
     softDrop()
     {
         this._currentPiece.y -= 1;
@@ -111,6 +97,17 @@ class Board
             ghostPiece.y -= 1;
         ghostPiece.y += 1;             //1 above the place it would colide with other minos/bounds
         return ghostPiece;
+    }
+
+    moveCurrentPiece(amount)
+    {
+        const maxLeft = -leftToColision(this._currentPiece, this._board);
+        const maxRight = rightToColision(this._currentPiece, this._board);
+
+        let newPiece = this._currentPiece.copy();
+        newPiece.move(Math.max(maxLeft, Math.min(amount, maxRight)), 0);
+        if (!this._board.doesColide(newPiece))
+            this._currentPiece = newPiece;
     }
 
     _lockCurrentPiece()
