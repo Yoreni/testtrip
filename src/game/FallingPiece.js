@@ -79,12 +79,12 @@ class FallingPiece
         return this._rotation;
     }
 
-    get _lockTimer()
+    get lockTimer()
     {
         return this._lockTimer
     }
 
-    set _lockTimer(newNumber)
+    set lockTimer(newNumber)
     {
         this._lockTimer = newNumber;
     }
