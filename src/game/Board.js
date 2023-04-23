@@ -72,15 +72,13 @@ class Board
 
     harddrop()
     {
-        console.log("ghostpiece: ", this.ghostPiece)
         this._currentPiece = this.ghostPiece;
-        this._lockCurrentPiece();
-        this._spawnNextPiece();
+        this._placeCurrentPiece();
     }
 
     tick(delta)
     {
-        const newPiece = this._currentPiece.copy()
+        const newPiece = this._currentPiece.copy();
         newPiece.move(0, -this._rules.gravitiy);
         if (!this._board.doesColide(newPiece))
             this._currentPiece = newPiece;
@@ -92,10 +90,7 @@ class Board
         {
             ++(this._currentPiece.lockTimer)
             if (this._currentPiece.lockTimer >= this._rules.lockDelay)
-            {
-                this._lockCurrentPiece();
-                this._spawnNextPiece();
-            }
+                this._placeCurrentPiece();
         }
     }
 
@@ -121,6 +116,14 @@ class Board
         newPiece.move(Math.max(maxLeft, Math.min(amount, maxRight)), 0);
         if (!this._board.doesColide(newPiece))
             this._currentPiece = newPiece;
+    }
+
+    _placeCurrentPiece()
+    {
+        this._lockCurrentPiece();
+        for (let clearedLineY of this._board.completedLines)
+            this._board.clearLine(clearedLineY);
+        this._spawnNextPiece();
     }
 
     _lockCurrentPiece()

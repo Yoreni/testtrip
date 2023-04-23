@@ -31,7 +31,7 @@ class Playfield
     clearLine(y)
     {
         this._board.splice(this._yToArrayIndex(y), 1);
-        this._board.push(Array(width).fill("0"))
+        this._board.unshift(Array(this._width).fill("0"))
     }
 
     doesColide(minos)
@@ -52,6 +52,17 @@ class Playfield
                     return true;
             }
             return false;
+    }
+
+    get completedLines()
+    {
+        let completedLines = [];
+        for (let [y, line] of this._board.entries())
+        {
+            if (line.indexOf("0") === -1)
+                completedLines.push(this._yToArrayIndex(y))
+        }
+        return completedLines;
     }
 
     copy()
