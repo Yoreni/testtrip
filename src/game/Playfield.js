@@ -1,11 +1,18 @@
 class Playfield
-{
+{obj
     constructor(width, height)
     {
         this._width = width;
         this._height = height;
         this._board = Array(height + 10).fill(null)
             .map(() => Array(width).fill("0"))
+
+        //TST setup
+        // this._board[25] = ["Y", "Y", "Y","0", "0", "Y","Y", "Y", "Y","Y"];
+        // this._board[26] = ["Y", "Y", "Y","0", "0", "0","Y", "Y", "Y","Y"];
+        // this._board[27] = ["Y", "Y", "Y","Y", "Y", "0","Y", "Y", "Y","Y"];
+        // this._board[28] = ["Y", "Y", "Y","Y", "0", "0","Y", "Y", "Y","Y"];
+        // this._board[29] = ["Y", "Y", "Y","Y", "Y", "0","Y", "Y", "Y","Y"];
     }
 
     get width()
@@ -77,6 +84,7 @@ class Playfield
         return copy;
     }
 
+    //TODO: maybe this makes things more complicated then they need to be?
     _yToArrayIndex(y)
     {
         return this._board.length - y - 1

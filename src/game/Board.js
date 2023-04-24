@@ -47,9 +47,14 @@ class Board
 
     softDrop()
     {
-        this._currentPiece.y -= 1;
-        if (this._board.doesColide(this._currentPiece))
-            this._currentPiece.y += 1;
+        const minSoftDrop = 1/60 * handling.SDF;
+
+        let newPiece = this._currentPiece.copy();
+        newPiece.move(0, -Math.max(minSoftDrop, this._rules.gravitiy * handling.SDF));
+        if (!this._board.doesColide(newPiece))
+            this._currentPiece = newPiece;
+        else
+            this._currentPiece = this.ghostPiece;
     }
 
     rotateClockwise()

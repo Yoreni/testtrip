@@ -1,6 +1,6 @@
 const handling = {
     DAS: 6,
-    SDF: 1,
+    SDF: 1.79e308,
     ARR: 1,
 }
 
@@ -143,7 +143,7 @@ class Game extends IScene
 
         if (this._keybaord.hardDrop.framesDown === 1)
             this._board.harddrop();
-        if (this._keybaord.softDrop.framesDown === 1)
+        if (this._keybaord.softDrop.framesDown > 0)
             this._board.softDrop();
         if (this._keybaord.rotateClockwise.framesDown === 1)
             this._board.rotateClockwise();
