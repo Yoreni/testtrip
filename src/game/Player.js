@@ -1,5 +1,4 @@
-//maybe rename this to Player class
-class Board
+class Player
 {
     constructor(rules)
     {

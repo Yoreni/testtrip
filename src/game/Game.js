@@ -21,7 +21,7 @@ class Game extends IScene
             rotate180: new KeyDetector(app, "c"),
             hardDrop: new KeyDetector(app, " "),
         }
-        this._board = new Board();
+        this._board = new Player();
     }
 
     start()
