@@ -9,7 +9,7 @@ class Board
                 height: 20
             },
             pieceGeneration: sevenBag,
-            rotationSystem: SRS,
+            rotationSystem: SRSkicktable,
             lockDelay: 31,
             gravitiy: 1 / 60,
         }
@@ -59,12 +59,12 @@ class Board
 
     rotateClockwise()
     {
-        this._currentPiece = this._rules.rotationSystem(1, this._currentPiece, this._board);
+        this._currentPiece = this._rotate(1);
     }
 
     rotateAnticlockwise()
     {
-        this._currentPiece = this._rules.rotationSystem(-1, this._currentPiece, this._board);
+        this._currentPiece = this._rotate(-1);
     }
 
     rotate180()
@@ -73,6 +73,27 @@ class Board
          this._currentPiece.rotate(2);
          if (this._board.doesColide(this._currentPiece))
              this._currentPiece.rotate(-2);
+    }
+
+    _rotate(direction)
+    {
+        const kicktableType = this._currentPiece.type === "I" ? "I" : "*";
+        const kicktableDirection = "" 
+                        + this._currentPiece.rotation + mod(this._currentPiece.rotation + direction, 4);
+        const kickData = this._rules.rotationSystem[kicktableType][kicktableDirection];
+    
+        for (let attempt = 0; attempt != kickData.length; ++attempt)
+        {
+            let piece = this._currentPiece.copy();
+            piece.rotate(direction);
+            piece.x += kickData[attempt].x;
+            piece.y += kickData[attempt].y;
+    
+            if (!this._board.doesColide(piece))
+                return piece;
+        }
+    
+        return fallingPiece;
     }
 
     harddrop()
@@ -130,6 +151,8 @@ class Board
             this._board.clearLine(clearedLineY);
         this._spawnNextPiece();
     }
+
+    
 
     _lockCurrentPiece()
     {
