@@ -34,6 +34,11 @@ class Player
         return this._board;
     }
 
+    get nextQueue()
+    {
+        return this._nextQueue;
+    }
+
     set board(newBoard)
     {
         this._board = newBoard;
