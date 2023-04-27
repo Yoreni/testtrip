@@ -121,3 +121,13 @@ function Point(x, y)
         y: y
     }
 }
+
+function saveOptionsWithDeafults(settingsObject, defaultsObject)
+{
+    let object = Object.create(defaultsObject);
+
+    for (let key of Object.keys(settingsObject))
+        object[key] = settingsObject[key]
+
+    return object;
+}

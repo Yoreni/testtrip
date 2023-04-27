@@ -11,6 +11,7 @@ class Player
             rotationSystem: SRSkicktable,
             lockDelay: 31,
             gravitiy: 1 / 60,
+            hold: 1                     //0 = off, 1 = on, 2 = on (infinite hold)
         }
 
         this._board = new Playfield(this._rules.board.width, this._rules.board.height);
@@ -20,6 +21,8 @@ class Player
         this._hold = null;
         this._hasHeld = false;
         this._stats = {};
+        this._hold = null;
+        this._holdUsed = false;
 
         this._spawnNextPiece();
     }
@@ -29,14 +32,24 @@ class Player
         return this._currentPiece;
     }
 
-    get board()
-    {
-        return this._board;
-    }
-
     get nextQueue()
     {
         return this._nextQueue;
+    }
+
+    get holdPiece()
+    {
+        return this._hold;
+    }
+
+    get holdUsed()
+    {
+        return this._rules.hold === 2 ? false : this._holdUsed;
+    }
+
+    get board()
+    {
+        return this._board;
     }
 
     set board(newBoard)
@@ -101,6 +114,22 @@ class Player
     {
         this._currentPiece = this.ghostPiece;
         this._placeCurrentPiece();
+    }
+
+    hold()
+    {
+        if (this._rules.hold === 0)
+            return;
+
+        if (this._rules.hold === 1 && this._holdUsed)
+            return;
+
+        //preform the hold action
+        const oldHoldPiece = this._hold;
+        this._hold = this._currentPiece.type;
+        this._spawnNextPiece(oldHoldPiece);
+
+        this._holdUsed = true;
     }
 
     tick(delta)
@@ -174,14 +203,24 @@ class Player
             newBoard.set(mino.x, mino.y, this.currentPiece.type);
 
         this._board = newBoard;
+        this._holdUsed = false;             //refresh hold
     }
 
-    _spawnNextPiece()
+    /*
+        spawns a new falling piece on the playfield and cancels the old one.
+        if a type is specified then it spawns one of that type otherwise it
+        gets the next that is next in the next queue.
+     */
+    _spawnNextPiece(type = null)
     {
-        if (this._nextQueue.length === 0)
-            throw "Could not spawn piece because the next queue is empty"
+        if (type == null)
+        {
+            if (this._nextQueue.length === 0)
+                throw "Could not spawn piece because the next queue is empty"
+            type = this._nextQueue.shift()
+        }
 
-        let newFallingPiece = new FallingPiece(this._nextQueue.shift());
+        let newFallingPiece = new FallingPiece(type);
         newFallingPiece.x = this.board.width / 2;
 
         const lowestY = Math.min(...newFallingPiece.minos.map(mino => mino.y))

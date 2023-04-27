@@ -44,6 +44,7 @@ class Game extends IScene
         this._drawFallingPiece();
         this._drawGhostPiece();
         this._drawNextQueue();
+        this._drawHoldPiece();
     }
 
     destory()
@@ -74,6 +75,10 @@ class Game extends IScene
         this._objects.nextQueue.position.set(16 * 13, -16 * 19);
         for (let idx= 0; idx != 5; ++idx)
             this._objects.nextQueue.addChild(new PIXI.Graphics())
+
+        this._objects.holdPiece = new PIXI.Graphics();
+        playField.addChild(this._objects.holdPiece);
+    
 
         this.container.addChild(playField);
 
@@ -140,6 +145,16 @@ class Game extends IScene
         }
     }
 
+    _drawHoldPiece()
+    {
+        const pieceType = this._board.holdPiece;
+        if(pieceType == null)
+            return;
+
+        this._drawPiece(new FallingPiece(pieceType), this._objects.holdPiece,
+            2 * -16, (this._board.board.height - 1) * -16, 1);
+    }
+
     _handleKeyboard() 
     {
         if (this._keybaord.left.isDown)
@@ -167,5 +182,7 @@ class Game extends IScene
             this._board.rotateAnticlockwise();
         if (this._keybaord.rotate180.framesDown === 1)
             this._board.rotate180();
+        if (this._keybaord.hold.framesDown === 1)
+            this._board.hold();
     }
 }
