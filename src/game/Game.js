@@ -4,6 +4,12 @@ const handling = {
     ARR: 1,
 }
 
+const defaultDrawPieceValues = {
+    transpancery: 1,
+    size: 16,
+    grayscale: false,
+}
+
 class Game extends IScene
 {
     constructor()

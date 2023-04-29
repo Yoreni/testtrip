@@ -47,6 +47,7 @@ class FallingPiece
         this._position = Point(0, 0)
         this._subPosition = Point(0, 0)
         this._lockTimer = 0;
+        this._lockResets = 0;
     }
 
     get x()
@@ -89,6 +90,16 @@ class FallingPiece
         this._lockTimer = newNumber;
     }
 
+    get lockResets()
+    {
+        return this._lockResets
+    }
+
+    set lockResets(newLockResets)
+    {
+        this._lockResets = newLockResets;
+    }
+
     get minos()
     {
         let minos = [];
@@ -120,6 +131,7 @@ class FallingPiece
         copy._position = deepCopy(this._position);
         copy._subPosition = deepCopy(this._subPosition);
         copy._lockTimer = this._lockTimer;
+        copy._lockResets = this._lockResets;
         copy.rotate(this._rotation);
         return copy;
     }

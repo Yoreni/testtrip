@@ -10,8 +10,9 @@ class Player
             pieceGeneration: sevenBag,
             rotationSystem: SRSkicktable,
             lockDelay: 31,
+            maxLockResets: 15,
             gravitiy: 1 / 60,
-            hold: 1                     //0 = off, 1 = on, 2 = on (infinite hold)
+            hold: 2                     //0 = off, 1 = on, 2 = on (infinite hold)
         }
 
         this._board = new Playfield(this._rules.board.width, this._rules.board.height);
@@ -77,16 +78,19 @@ class Player
     rotateClockwise()
     {
         this._currentPiece = this._rotate(1);
+        this._resetLockDelay();
     }
 
     rotateAnticlockwise()
     {
         this._currentPiece = this._rotate(-1);
+        this._resetLockDelay();
     }
 
     rotate180()
     {
         this._currentPiece = this._rotate(2);
+        this._resetLockDelay();
     }
 
     _rotate(direction)
@@ -107,7 +111,8 @@ class Player
                 return piece;
         }
     
-        return fallingPiece;
+        //orginal piece gets returned if all kick table rotations failed
+        return this.currentPiece;
     }
 
     harddrop()
@@ -172,6 +177,20 @@ class Player
         newPiece.move(Math.max(maxLeft, Math.min(amount, maxRight)), 0);
         if (!this._board.doesColide(newPiece))
             this._currentPiece = newPiece;
+
+        this._resetLockDelay();
+    }
+
+    //this resets the lock delay of a piece if it got moved whiile locking
+    _resetLockDelay()
+    {
+        if (this.currentPiece.lockTimer > 0)
+        {
+            this.currentPiece.lockTimer = 0;
+            ++(this.currentPiece.lockResets);
+            if (this.currentPiece.lockResets > this._rules.maxLockResets)
+                this._placeCurrentPiece();
+        }
     }
 
     _placeCurrentPiece()
