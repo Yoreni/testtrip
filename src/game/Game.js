@@ -116,10 +116,11 @@ class Game extends IScene
         }
     }
 
-    _drawPiece(piece, graphics , x, y, trans = 1)
+    _drawPiece(piece, graphics , x, y, settings = {})
     {
+        settings = saveOptionsWithDeafults(settings, defaultDrawPieceValues);
         graphics.clear()
-        graphics.beginFill(pieceColours[piece.type], trans);
+        graphics.beginFill(pieceColours[piece.type], settings.transpancery);
         for (let mino of piece.minos)
             // * -16 for y coordinate because of how y works in PIXI.js
         {
@@ -139,7 +140,10 @@ class Game extends IScene
     _drawGhostPiece()
     {
         const piece = this._board.ghostPiece
-        this._drawPiece(piece, this._objects.ghostPiece, piece.x * 16, piece.y * -16, 0.3)
+        this._drawPiece(piece, this._objects.ghostPiece, piece.x * 16, piece.y * -16,
+            {
+                transpancery: 0.3
+            })
     }
 
     _drawNextQueue()
