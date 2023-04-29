@@ -45,6 +45,23 @@ const SRSPlusKicktable = {
     }
 }
 
+const noKicktable = {
+    "*": {
+        "01": [Point(0, 0)],
+        "10": [Point(0, 0)],
+        "12": [Point(0, 0)],
+        "21": [Point(0, 0)],
+        "23": [Point(0, 0)],
+        "32": [Point(0, 0)],
+        "30": [Point(0, 0)],
+        "03": [Point(0, 0)],
+        "02": [Point(0, 0)],
+        "20": [Point(0, 0)],
+        "13": [Point(0, 0)],
+        "31": [Point(0, 0)],
+    }
+}  
+
 function SRS(direction, fallingPiece, playfield)
 {
     const kicktableType = fallingPiece.type === "I" ? "I" : "*";
