@@ -17,13 +17,13 @@ class Player
 
         this._board = new Playfield(this._rules.board.width, this._rules.board.height);
         this._nextQueue = this._rules.pieceGeneration([]);
-        console.log(this._nextQueue)
         this._currentPiece = undefined;
         this._hold = null;
         this._hasHeld = false;
         this._stats = {};
         this._hold = null;
         this._holdUsed = false;
+        this._alive = true;
 
         this._spawnNextPiece();
     }
@@ -51,6 +51,11 @@ class Player
     get board()
     {
         return this._board;
+    }
+
+    get isAlive()
+    {
+        return this._alive;
     }
 
     set board(newBoard)
@@ -139,6 +144,9 @@ class Player
 
     tick(delta)
     {
+        if (!this._alive)
+            return;
+
         const newPiece = this._currentPiece.copy();
         newPiece.move(0, -this._rules.gravitiy);
         if (!this._board.doesColide(newPiece))
@@ -228,6 +236,13 @@ class Player
             return;
         }
 
+        //check for topout
+        console.log(Math.min(...this.currentPiece.minos.map(element => element.y)))
+        if (Math.min(...this.currentPiece.minos.map(element => element.y)) >= this._board.height)
+        {
+            this._alive = false;
+        }
+
         let newBoard = this._board.copy();
         for (let mino of this._currentPiece.minos)
             newBoard.set(mino.x, mino.y, this.currentPiece.type);
@@ -256,6 +271,14 @@ class Player
         const lowestY = Math.min(...newFallingPiece.minos.map(mino => mino.y))
         //- lowestY + 1 makes the piece spawns 1 unit above the board
         newFallingPiece.y = this.board.height - lowestY + 1;
+
+        //check for topout
+        if (this._board.doesColide(newFallingPiece))
+        {
+            this._alive = false;
+            return;
+        }
+
 
         this._currentPiece = newFallingPiece;
 
