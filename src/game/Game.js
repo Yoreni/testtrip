@@ -32,6 +32,7 @@ class Game extends IScene
 
     start()
     {
+        
     }
 
     stop()

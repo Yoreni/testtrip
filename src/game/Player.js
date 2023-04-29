@@ -196,9 +196,20 @@ class Player
     _placeCurrentPiece()
     {
         this._lockCurrentPiece();
+        
+        if (this._board.completedLines.length > 0)
+        {
+            if (this._stats.linesCleared == undefined)
+                this._stats.linesCleared = {}
+            //total lines summing each key * its value
+            ++(this._stats.linesCleared[this._board.completedLines.length])
+        }
+
         for (let clearedLineY of this._board.completedLines)
             this._board.clearLine(clearedLineY);
         this._spawnNextPiece();
+
+        this._stats.piecesPlaced += 1
     }
 
     
