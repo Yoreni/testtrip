@@ -45,11 +45,11 @@ class Game extends IScene
         this._objects.debugText.text = this._keybaord.hardDrop.getSecondsDown()
         this._board.tick(delta)
 
-        if (this._board.isAlive)
+        if (this._board.isAlive && this._board.AREtimer === 0)
             this._handleKeyboard()
 
         this._drawBoard();
-        if (this._board.isAlive)
+        if (this._board.isAlive && this._board.AREtimer === 0)
         {
             this._drawFallingPiece();
             this._drawGhostPiece();

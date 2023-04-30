@@ -12,7 +12,9 @@ class Player
             lockDelay: 31,
             maxLockResets: 15,
             gravitiy: 1 / 60,
-            hold: 2                     //0 = off, 1 = on, 2 = on (infinite hold)
+            hold: 2,                    //0 = off, 1 = on, 2 = on (infinite hold)
+            ARE: 20,
+            lineARE: 0 
         }
 
         this._board = new Playfield(this._rules.board.width, this._rules.board.height);
@@ -24,6 +26,7 @@ class Player
         this._hold = null;
         this._holdUsed = false;
         this._alive = true;
+        this._AREtimer = 0;
 
         this._spawnNextPiece();
     }
@@ -56,6 +59,11 @@ class Player
     get isAlive()
     {
         return this._alive;
+    }
+
+    get AREtimer()
+    {
+        return this._AREtimer;
     }
 
     set board(newBoard)
@@ -128,6 +136,9 @@ class Player
 
     hold()
     {
+        if (this._AREtimer > 0)
+            return;
+
         if (this._rules.hold === 0)
             return;
 
@@ -146,7 +157,14 @@ class Player
     {
         if (!this._alive)
             return;
+        if (this._AREtimer > 0)
+        {
+            --(this._AREtimer);
+            console.log("a")
+            return;
+        }
 
+        //move piece down by gravity
         const newPiece = this._currentPiece.copy();
         newPiece.move(0, -this._rules.gravitiy);
         if (!this._board.doesColide(newPiece))
@@ -154,7 +172,6 @@ class Player
         else
             this._currentPiece = this.ghostPiece;
 
-        console.log()
         if (this.ghostPiece.y == this._currentPiece.y)
         {
             ++(this._currentPiece.lockTimer)
@@ -176,8 +193,12 @@ class Player
         return ghostPiece;
     }
 
+    //this function can be split up
     moveCurrentPiece(amount)
     {
+        if (this._AREtimer > 0)
+            return;
+
         const maxLeft = -leftToColision(this._currentPiece, this._board);
         const maxRight = rightToColision(this._currentPiece, this._board);
 
@@ -205,16 +226,19 @@ class Player
     {
         this._lockCurrentPiece();
         
-        if (this._board.completedLines.length > 0)
+        const linesClearedThisPiece = this._board.completedLines.length
+        if (linesClearedThisPiece > 0)
         {
             if (this._stats.linesCleared == undefined)
                 this._stats.linesCleared = {}
             //total lines summing each key * its value
-            ++(this._stats.linesCleared[this._board.completedLines.length])
+            ++(this._stats.linesCleared[linesClearedThisPiece])
         }
 
         for (let clearedLineY of this._board.completedLines)
             this._board.clearLine(clearedLineY);
+
+        this._AREtimer = linesClearedThisPiece > 0 ? this._rules.lineARE : this._rules.ARE;
         this._spawnNextPiece();
 
         this._stats.piecesPlaced += 1
@@ -237,7 +261,6 @@ class Player
         }
 
         //check for topout
-        console.log(Math.min(...this.currentPiece.minos.map(element => element.y)))
         if (Math.min(...this.currentPiece.minos.map(element => element.y)) >= this._board.height)
         {
             this._alive = false;
