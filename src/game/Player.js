@@ -13,7 +13,7 @@ class Player
             maxLockResets: 15,
             gravitiy: 1 / 60,
             hold: 2,                    //0 = off, 1 = on, 2 = on (infinite hold)
-            ARE: 20,
+            ARE: 0,
             lineARE: 0 
         }
 
@@ -22,7 +22,7 @@ class Player
         this._currentPiece = undefined;
         this._hold = null;
         this._hasHeld = false;
-        this._stats = {};
+        this._stats = {start: new Date()};  //assuming the game starts as soon as the object is constructed
         this._hold = null;
         this._holdUsed = false;
         this._alive = true;
@@ -64,6 +64,11 @@ class Player
     get AREtimer()
     {
         return this._AREtimer;
+    }
+
+    get time()
+    {
+        return ((new Date()) - this._stats.start) / 1000;
     }
 
     set board(newBoard)

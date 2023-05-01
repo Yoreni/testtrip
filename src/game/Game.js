@@ -42,7 +42,7 @@ class Game extends IScene
 
     update(delta)
     {
-        this._objects.debugText.text = this._keybaord.hardDrop.getSecondsDown()
+        this._objects.debugText.text = this._board.time.toFixed(3);
         this._board.tick(delta)
 
         if (this._board.isAlive && this._board.AREtimer === 0)
