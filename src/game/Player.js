@@ -8,7 +8,7 @@ class Player
                 height: 20
             },
             pieceGeneration: sevenBag,
-            rotationSystem: SRSkicktable,
+            rotationSystem: SRSPlusKicktable,
             lockDelay: 31,
             maxLockResets: 15,
             gravitiy: 1 / 60,
@@ -108,7 +108,8 @@ class Player
 
     _rotate(direction)
     {
-        const kicktableType = this._currentPiece.type === "I" ? "I" : "*";
+        const kicktableType = this._rules.rotationSystem[this._currentPiece.type] === undefined 
+                    ? "*" : this._currentPiece.type;
         const kicktableDirection = "" 
                         + this._currentPiece.rotation + mod(this._currentPiece.rotation + direction, 4);
         const kickData = this._rules.rotationSystem[kicktableType][kicktableDirection];
