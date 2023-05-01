@@ -4,8 +4,8 @@ class Player
     {
         this._rules = {
             board: {
-                width: 10,
-                height: 20
+                width: 4,
+                height: 20,
             },
             pieceGeneration: sevenBag,
             rotationSystem: SRSPlusKicktable,
@@ -22,7 +22,10 @@ class Player
         this._currentPiece = undefined;
         this._hold = null;
         this._hasHeld = false;
-        this._stats = {start: new Date()};  //assuming the game starts as soon as the object is constructed
+        this._stats = {
+            start: new Date(),       //assuming the game starts as soon as the object is constructed
+            perfectClears: 0
+        };  
         this._hold = null;
         this._holdUsed = false;
         this._alive = true;
@@ -257,6 +260,9 @@ class Player
 
         for (let clearedLineY of this._board.completedLines)
             this._board.clearLine(clearedLineY);
+        
+        if (this._board.isPc)
+            ++(this._stats.perfectClears)
 
         this._AREtimer = linesClearedThisPiece > 0 ? this._rules.lineARE : this._rules.ARE;
         this._spawnNextPiece();

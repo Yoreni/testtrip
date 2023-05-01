@@ -79,6 +79,16 @@ class Playfield
         return completedLines;
     }
 
+    get isPc()
+    {
+        let isPc = true
+        for (let line of this._board)
+        {               //'&& true' will make it so if it finds a line thats false it will stay false
+            isPc = line.every(idx => idx === "0") && true;
+        }
+        return isPc;
+    }
+
     copy()
     {
         let copy = new Playfield(this.width, this.height);
