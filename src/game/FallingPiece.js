@@ -50,6 +50,7 @@ class FallingPiece
         this._lockResets = 0;
     }
 
+    //gets the most right x of the piece
     get x()
     {
         return this._position.x;
@@ -60,6 +61,7 @@ class FallingPiece
         this._position.x = newX;
     }
 
+    //gets the highest y of the piece
     get y()
     {
         return this._position.y;

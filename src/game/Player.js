@@ -161,7 +161,6 @@ class Player
         if (this._AREtimer > 0)
         {
             --(this._AREtimer);
-            console.log("a")
             return;
         }
 
@@ -225,8 +224,9 @@ class Player
 
     _placeCurrentPiece()
     {
+        const spin = this._inmovableSpinDetection();
         this._lockCurrentPiece();
-        
+
         const linesClearedThisPiece = this._board.completedLines.length
         if (linesClearedThisPiece > 0)
         {
@@ -235,6 +235,20 @@ class Player
             //total lines summing each key * its value
             ++(this._stats.linesCleared[linesClearedThisPiece])
         }
+
+        if (spin > 0)
+        {
+            if (this._stats.spins == undefined)
+                this._stats.spins = {1: {}, 2: {}}
+            if (this._stats.spins[spin][this._currentPiece.type] == undefined)
+                this._stats.spins[spin][this._currentPiece.type] = {}
+            if (this._stats.spins[spin][this._currentPiece.type][linesClearedThisPiece] == undefined)
+                this._stats.spins[spin][this._currentPiece.type][linesClearedThisPiece] = 0
+            
+            ++(this._stats.spins[spin][this._currentPiece.type][linesClearedThisPiece])
+            console.log(this._stats.spins);
+        }
+
 
         for (let clearedLineY of this._board.completedLines)
             this._board.clearLine(clearedLineY);
@@ -245,7 +259,47 @@ class Player
         this._stats.piecesPlaced += 1
     }
 
-    
+    //only for t pieces
+    //0 = no spin, 1 = mini spin, 2 = full spin
+    _3cornerSpinDetection()
+    {
+        if (this._currentPiece.type !== "T")
+            return 0;
+
+        //TODO: check here if the last action was a succsessful rotation
+
+        const centerX = this._currentPiece.x - 1;
+        const centerY = this._currentPiece.y - 1;
+        
+        const ocupiedCorners = this._board.doesColide({x: centerX + 1, y: centerY + 1})
+                             + this._board.doesColide({x: centerX + 1, y: centerY - 1})
+                             + this._board.doesColide({x: centerX - 1, y: centerY + 1})
+                             + this._board.doesColide({x: centerX - 1, y: centerY - 1});
+        
+        if (ocupiedCorners >= 3)
+            return 2;
+        if (ocupiedCorners === 2)
+            return 1;
+        return 0;
+
+    }
+
+    _inmovableSpinDetection()
+    {
+        let pieceUp = this._currentPiece.copy();
+        pieceUp.y += 1;
+
+        let pieceLeft = this._currentPiece.copy();
+        pieceLeft.x -= 1;
+
+        let pieceRight = this._currentPiece.copy();
+        pieceRight.x += 1;
+
+        if (this._board.doesColide(pieceUp) && this._board.doesColide(pieceLeft) 
+                && this._board.doesColide(pieceRight))
+            return 2;
+        return 0;
+    }
 
     _lockCurrentPiece()
     {

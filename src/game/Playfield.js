@@ -50,19 +50,22 @@ class Playfield
         if (minos instanceof FallingPiece)
             minos = minos.minos;
 
-            for (let mino of minos)
-            {
-                //check if the mino is in bounds
-                if (mino.y < 0)
-                    return true;
+        if (typeof(minos) === "object" && minos.x !== undefined && minos.y !== undefined)
+            minos = [minos]
 
-                if (mino.x < 0 || mino.x >= this.width)
-                    return true;
+        for (let mino of minos)
+        {
+            //check if the mino is in bounds
+            if (mino.y < 0)
+                return true;
 
-                if (this.get(mino.x, mino.y) !== "0")
-                    return true;
-            }
-            return false;
+            if (mino.x < 0 || mino.x >= this.width)
+                return true;
+
+            if (this.get(mino.x, mino.y) !== "0")
+                return true;
+        }
+        return false;
     }
 
     get completedLines()
