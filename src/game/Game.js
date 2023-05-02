@@ -27,7 +27,7 @@ class Game extends IScene
             rotate180: new KeyDetector(app, "c"),
             hardDrop: new KeyDetector(app, " "),
         }
-        this._board = new Player();
+        this._player = new Player();
     }
 
     start()
@@ -42,14 +42,14 @@ class Game extends IScene
 
     update(delta)
     {
-        this._objects.debugText.text = this._board.time.toFixed(3);
-        this._board.tick(delta)
+        this._objects.debugText.text = this._player.time.toFixed(3);
+        this._player.tick(delta)
 
-        if (this._board.isAlive && this._board.AREtimer === 0)
+        if (this._player.isAlive && this._player.AREtimer === 0)
             this._handleKeyboard()
 
         this._drawBoard();
-        if (this._board.isAlive && this._board.AREtimer === 0)
+        if (this._player.isAlive && this._player.AREtimer === 0)
         {
             this._drawFallingPiece();
             this._drawGhostPiece();
@@ -109,13 +109,14 @@ class Game extends IScene
     {
         this._objects.board.clear();
 
-        for (let x = 0; x != 10; ++x)
+        for (let x = 0; x != this._player.board.width; ++x)
         {
-            for (let y = 0; y != 30; ++y)
+            for (let y = 0; y != this._player.board.height + 10; ++y)
             {
-                const minoType = this._board.getMinoOnBoard(x, y);
-
-                if (minoType === "0" && y >= 20)    //dont draw the background above the playfield
+                const minoType = this._player.getMinoOnBoard(x, y);
+                
+                                            //dont draw the background above the playfield
+                if (minoType === "0" && y >= this._player.board.height)   
                     continue;
 
                 const colour = minoType === "0" ? 0x111111 : pieceColours[minoType];
@@ -143,13 +144,13 @@ class Game extends IScene
 
     _drawFallingPiece()
     {
-        const piece = this._board.currentPiece;
+        const piece = this._player.currentPiece;
         this._drawPiece(piece, this._objects.fallingPiece, piece.x * 16, piece.y * -16)
     }
 
     _drawGhostPiece()
     {
-        const piece = this._board.ghostPiece
+        const piece = this._player.ghostPiece
         this._drawPiece(piece, this._objects.ghostPiece, piece.x * 16, piece.y * -16,
             {
                 transpancery: 0.3
@@ -158,21 +159,23 @@ class Game extends IScene
 
     _drawNextQueue()
     {
+        this._objects.nextQueue.position.set(16 * (this._player.board.width + 3), 
+                                            -16 * (this._player.board.height - 1))
         for (let [index, child] of this._objects.nextQueue.children.entries())
         {
-            const piece = new FallingPiece(this._board.nextQueue[index])
+            const piece = new FallingPiece(this._player.nextQueue[index])
             this._drawPiece(piece, child, 0, index * 16 * 3);
         }
     }
 
     _drawHoldPiece()
     {
-        const pieceType = this._board.holdPiece;
+        const pieceType = this._player.holdPiece;
         if(pieceType == null)
             return;
 
         this._drawPiece(new FallingPiece(pieceType), this._objects.holdPiece,
-            2 * -16, (this._board.board.height - 1) * -16, 1);
+            2 * -16, (this._player.board.height - 1) * -16, 1);
     }
 
     _handleKeyboard() 
@@ -180,29 +183,29 @@ class Game extends IScene
         if (this._keybaord.left.isDown)
         {
             if (this._keybaord.left.framesDown === 1)
-                this._board.moveCurrentPiece(-1);
+                this._player.moveCurrentPiece(-1);
             else if (this._keybaord.left.framesDown > handling.DAS)
-                this._board.moveCurrentPiece(-1 / handling.ARR);
+                this._player.moveCurrentPiece(-1 / handling.ARR);
         }
         else if (this._keybaord.right.isDown)
         {
             if (this._keybaord.right.framesDown === 1)
-                this._board.moveCurrentPiece(1);
+                this._player.moveCurrentPiece(1);
             else if (this._keybaord.right.framesDown > handling.DAS)
-                this._board.moveCurrentPiece(1 / handling.ARR);
+                this._player.moveCurrentPiece(1 / handling.ARR);
         }
 
         if (this._keybaord.hardDrop.framesDown === 1)
-            this._board.harddrop();
+            this._player.harddrop();
         if (this._keybaord.softDrop.framesDown > 0)
-            this._board.softDrop();
+            this._player.softDrop();
         if (this._keybaord.rotateClockwise.framesDown === 1)
-            this._board.rotateClockwise();
+            this._player.rotateClockwise();
         if (this._keybaord.rotateAnticlockwise.framesDown === 1)
-            this._board.rotateAnticlockwise();
+            this._player.rotateAnticlockwise();
         if (this._keybaord.rotate180.framesDown === 1)
-            this._board.rotate180();
+            this._player.rotate180();
         if (this._keybaord.hold.framesDown === 1)
-            this._board.hold();
+            this._player.hold();
     }
 }

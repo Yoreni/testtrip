@@ -4,8 +4,8 @@ class Player
     {
         this._rules = {
             board: {
-                width: 4,
-                height: 20,
+                width: 5,
+                height: 10,
             },
             pieceGeneration: sevenBag,
             rotationSystem: SRSPlusKicktable,
@@ -20,8 +20,6 @@ class Player
         this._board = new Playfield(this._rules.board.width, this._rules.board.height);
         this._nextQueue = this._rules.pieceGeneration([]);
         this._currentPiece = undefined;
-        this._hold = null;
-        this._hasHeld = false;
         this._stats = {
             start: new Date(),       //assuming the game starts as soon as the object is constructed
             perfectClears: 0,
@@ -62,7 +60,7 @@ class Player
 
     get isAlive()
     {
-        return this._alive;
+        return this._stats.end === undefined;
     }
 
     get AREtimer()
@@ -72,7 +70,9 @@ class Player
 
     get time()
     {
-        return ((new Date()) - this._stats.start) / 1000;
+        if (this.isAlive)
+            return ((new Date()) - this._stats.start) / 1000;
+        return (this._stats.end - this._stats.start) / 1000;
     }
 
     get combo()
@@ -339,9 +339,7 @@ class Player
 
         //check for topout
         if (Math.min(...this.currentPiece.minos.map(element => element.y)) >= this._board.height)
-        {
-            this._alive = false;
-        }
+            this._markTopout();
 
         let newBoard = this._board.copy();
         for (let mino of this._currentPiece.minos)
@@ -366,7 +364,7 @@ class Player
         }
 
         let newFallingPiece = new FallingPiece(type);
-        newFallingPiece.x = this.board.width / 2;
+        newFallingPiece.x = Math.ceil(this.board.width / 2);
 
         const lowestY = Math.min(...newFallingPiece.minos.map(mino => mino.y))
         //- lowestY + 1 makes the piece spawns 1 unit above the board
@@ -375,15 +373,20 @@ class Player
         //check for topout
         if (this._board.doesColide(newFallingPiece))
         {
-            this._alive = false;
+            this._markTopout();
             return;
         }
-
 
         this._currentPiece = newFallingPiece;
 
         //refill next queue
         if (this._nextQueue.length < 5)
             this._nextQueue.push(...this._rules.pieceGeneration(this._nextQueue))
+    }
+
+    _markTopout()
+    {
+        this._stats.end = new Date();
+        this._alive = false;
     }
 }
