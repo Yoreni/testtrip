@@ -24,7 +24,8 @@ class Player
         this._hasHeld = false;
         this._stats = {
             start: new Date(),       //assuming the game starts as soon as the object is constructed
-            perfectClears: 0
+            perfectClears: 0,
+            combo: 0,
         };  
         this._hold = null;
         this._holdUsed = false;
@@ -72,6 +73,11 @@ class Player
     get time()
     {
         return ((new Date()) - this._stats.start) / 1000;
+    }
+
+    get combo()
+    {
+        return this._stats.combo;
     }
 
     set board(newBoard)
@@ -256,6 +262,11 @@ class Player
             ++(this._stats.spins[spin][this._currentPiece.type][linesClearedThisPiece])
             console.log(this._stats.spins);
         }
+
+        if (linesClearedThisPiece > 0)
+            ++(this._stats.combo);
+        else
+            this._stats.combo = 0;
 
 
         for (let clearedLineY of this._board.completedLines)
