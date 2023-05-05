@@ -14,7 +14,7 @@ class Player
             gravitiy: 1 / 60,
             hold: 2,                    //0 = off, 1 = on, 2 = on (infinite hold)
             ARE: 0,
-            lineARE: 0 
+            lineARE: 60 
         }
 
         this._board = new Playfield(this._rules.board.width, this._rules.board.height);

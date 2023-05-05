@@ -4,12 +4,6 @@ const handling = {
     ARR: 1,
 }
 
-const defaultDrawPieceValues = {
-    transpancery: 1,
-    size: 16,
-    grayscale: false,
-}
-
 const showStats = ["PPS", "Time", "Pieces"]
 
 class Game extends IScene
@@ -45,26 +39,12 @@ class Game extends IScene
 
     update(delta)
     {
-        this._objects.debugText.text = this._player.time.toFixed(3);
         this._player.tick(delta)
-        this._playerRender.update(delta)
 
         if (this._player.isAlive && this._player.AREtimer === 0)
             this._handleKeyboard()
 
-        this._drawBoard();
-        if (this._player.isAlive && this._player.AREtimer === 0)
-        {
-            this._drawFallingPiece();
-            this._drawGhostPiece();
-        }
-        else
-        {
-            this._objects.fallingPiece.clear();
-            this._objects.ghostPiece.clear();
-        }
-        this._drawNextQueue();
-        this._drawHoldPiece();
+        this._playerRender.update(delta)
     }
 
     destory()
@@ -74,111 +54,11 @@ class Game extends IScene
 
     init()
     {
-        this._objects.debugText = new PIXI.Text("", {fontSize: 24,fontWeight: "bold",fontFamily: "Calibri"});
-        this._objects.debugText.position.set(10, 50);
-        this.container.addChild(this._objects.debugText);
-
-        let playField = new PIXI.Container();
-        playField.position.set(500, 500);
-
-        this._objects.board = new PIXI.Graphics();
-        playField.addChild(this._objects.board);
-
-        this._objects.fallingPiece = new PIXI.Graphics();
-        playField.addChild(this._objects.fallingPiece);
-
-        this._objects.ghostPiece = new PIXI.Graphics();
-        playField.addChild(this._objects.ghostPiece);
-
-        this._objects.nextQueue = new PIXI.Container();
-        playField.addChild(this._objects.nextQueue);
-        for (let idx= 0; idx != 5; ++idx)
-            this._objects.nextQueue.addChild(new PIXI.Graphics())
-
-        this._objects.holdPiece = new PIXI.Graphics();
-        playField.addChild(this._objects.holdPiece);
-    
-
-        this.container.addChild(playField);
-
         //add rasei
         this._objects.rasei = PIXI.Sprite.from("assets/rasei.png");
         this._objects.rasei.scale.set(0.4);
         this._objects.rasei.position.set(0, canvasSize.height - this._objects.rasei.height);
         this.container.addChild(this._objects.rasei);
-    }
-
-    _drawBoard()
-    {
-        this._objects.board.clear();
-
-        for (let x = 0; x != this._player.board.width; ++x)
-        {
-            for (let y = 0; y != this._player.board.height + 10; ++y)
-            {
-                const minoType = this._player.getMinoOnBoard(x, y);
-                
-                                            //dont draw the background above the playfield
-                if (minoType === "0" && y >= this._player.board.height)   
-                    continue;
-
-                const colour = minoType === "0" ? 0x111111 : pieceColours[minoType];
-                this._objects.board.beginFill(colour);
-                this._objects.board.drawRect(x * 16, y * -16, 16, 16);
-                this._objects.board.endFill();
-            }
-        }
-    }
-
-    _drawPiece(piece, graphics , x, y, settings = {})
-    {
-        settings = saveOptionsWithDeafults(settings, defaultDrawPieceValues);
-        graphics.clear()
-        graphics.beginFill(pieceColours[piece.type], settings.transpancery);
-        for (let mino of piece.minos)
-            // * -16 for y coordinate because of how y works in PIXI.js
-        {
-            const drawX = ((mino.x - piece.x) * 16) + x;
-            const drawY = ((mino.y - piece.y) * -16) + y;
-            graphics.drawRect(drawX, drawY, 16, 16)
-        }
-        graphics.endFill();
-    }
-
-    _drawFallingPiece()
-    {
-        const piece = this._player.currentPiece;
-        this._drawPiece(piece, this._objects.fallingPiece, piece.x * 16, piece.y * -16)
-    }
-
-    _drawGhostPiece()
-    {
-        const piece = this._player.ghostPiece
-        this._drawPiece(piece, this._objects.ghostPiece, piece.x * 16, piece.y * -16,
-            {
-                transpancery: 0.3
-            })
-    }
-
-    _drawNextQueue()
-    {
-        this._objects.nextQueue.position.set(16 * (this._player.board.width + 3), 
-                                            -16 * (this._player.board.height - 1))
-        for (let [index, child] of this._objects.nextQueue.children.entries())
-        {
-            const piece = new FallingPiece(this._player.nextQueue[index])
-            this._drawPiece(piece, child, 0, index * 16 * 3);
-        }
-    }
-
-    _drawHoldPiece()
-    {
-        const pieceType = this._player.holdPiece;
-        if(pieceType == null)
-            return;
-
-        this._drawPiece(new FallingPiece(pieceType), this._objects.holdPiece,
-            2 * -16, (this._player.board.height - 1) * -16, 1);
     }
 
     _handleKeyboard() 
