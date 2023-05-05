@@ -4,8 +4,8 @@ class Player
     {
         this._rules = {
             board: {
-                width: 5,
-                height: 10,
+                width: 10,
+                height: 20,
             },
             pieceGeneration: sevenBag,
             rotationSystem: SRSPlusKicktable,

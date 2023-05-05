@@ -10,6 +10,8 @@ const defaultDrawPieceValues = {
     grayscale: false,
 }
 
+const showStats = ["PPS", "Time", "Pieces"]
+
 class Game extends IScene
 {
     constructor()
@@ -28,6 +30,7 @@ class Game extends IScene
             hardDrop: new KeyDetector(app, " "),
         }
         this._player = new Player();
+        this._playerRender = new PlayerRenderer(this._player, this.container);
     }
 
     start()
@@ -44,6 +47,7 @@ class Game extends IScene
     {
         this._objects.debugText.text = this._player.time.toFixed(3);
         this._player.tick(delta)
+        this._playerRender.update(delta)
 
         if (this._player.isAlive && this._player.AREtimer === 0)
             this._handleKeyboard()
@@ -88,7 +92,6 @@ class Game extends IScene
 
         this._objects.nextQueue = new PIXI.Container();
         playField.addChild(this._objects.nextQueue);
-        this._objects.nextQueue.position.set(16 * 13, -16 * 19);
         for (let idx= 0; idx != 5; ++idx)
             this._objects.nextQueue.addChild(new PIXI.Graphics())
 
