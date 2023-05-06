@@ -279,6 +279,8 @@ class Player
         this._spawnNextPiece();
 
         this._stats.piecesPlaced += 1
+
+        eventManager.callEvent("onPiecePlace", {player: this})
     }
 
     //only for t pieces

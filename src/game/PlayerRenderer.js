@@ -12,7 +12,8 @@ class PlayerRenderer
         this.container = pixiContainer;
         this._objects = {}
 
-        this._setupComponents()
+        this._setupComponents();
+        this._bindEvents();
     }
 
     update(delta)
@@ -146,5 +147,13 @@ class PlayerRenderer
         this._objects.text = new PIXI.Text("", {fontSize: 24,fontWeight: "bold",fontFamily: "Calibri"});
         this._objects.text.position.set(10, 70);
         this.container.addChild(this._objects.text);
+    }
+
+    _bindEvents()
+    {
+        eventManager.addEvent("onPiecePlace", (e) =>
+        {
+            console.log("s");
+        })
     }
 }
