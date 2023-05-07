@@ -22,7 +22,7 @@ class PlayerRenderer
 
         // if (this._logicPlayer.AREtimer === 0)
         // {
-               this._drawBoard(this._logicPlayer.board);
+        //        this._drawBoard(this._logicPlayer.board);
         //     this._lastBoard = this._logicPlayer.board;
         // }
         // else
@@ -102,6 +102,7 @@ class PlayerRenderer
     {
         this._objects.nextQueue.position.set(16 * (this._logicPlayer.board.width + 3), 
                                             -16 * (this._logicPlayer.board.height - 1))
+        //console.log(this._logicPlayer.nextQueue)
         for (let [index, child] of this._objects.nextQueue.children.entries())
         {
             const piece = new FallingPiece(this._logicPlayer.nextQueue[index])
@@ -126,6 +127,7 @@ class PlayerRenderer
 
         this._objects.board = new PIXI.Graphics();
         playField.addChild(this._objects.board);
+        this._drawBoard(this._logicPlayer.board);
 
         this._objects.fallingPiece = new PIXI.Graphics();
         playField.addChild(this._objects.fallingPiece);
@@ -151,9 +153,28 @@ class PlayerRenderer
 
     _bindEvents()
     {
+        eventManager.addEvent("onPieceLock", (e) =>
+        {
+            let board = e.oldBoard;
+            for (let lineNumber of board.completedLines)
+            {
+                for (let index = 0; index != board.width; ++index)
+                {
+                    board.set(index, lineNumber, "0")
+                }
+            }
+            this._drawBoard(board);
+        })
+
+        eventManager.addEvent("AREend", (e) =>
+        {
+            this._drawBoard(e.player.board);
+        })
+
         eventManager.addEvent("onPiecePlace", (e) =>
         {
-            console.log("s");
+            if (e.player.AREtimer === 0)
+                this._drawBoard(e.player.board);
         })
     }
 }

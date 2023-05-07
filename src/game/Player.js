@@ -14,7 +14,7 @@ class Player
             gravitiy: 1 / 60,
             hold: 2,                    //0 = off, 1 = on, 2 = on (infinite hold)
             ARE: 0,
-            lineARE: 60 
+            lineARE: 0 
         }
 
         this._board = new Playfield(this._rules.board.width, this._rules.board.height);
@@ -175,6 +175,8 @@ class Player
         if (this._AREtimer > 0)
         {
             --(this._AREtimer);
+            if (this._AREtimer === 0)
+                eventManager.callEvent("AREend", {player: this})
             return;
         }
 
@@ -242,6 +244,10 @@ class Player
         this._lockCurrentPiece();
 
         const linesClearedThisPiece = this._board.completedLines.length
+        this._AREtimer = linesClearedThisPiece > 0 ? this._rules.lineARE : this._rules.ARE;
+
+        eventManager.callEvent("onPieceLock", {player: this, oldBoard: this._board.copy()})
+
         if (linesClearedThisPiece > 0)
         {
             if (this._stats.linesCleared == undefined)
@@ -275,11 +281,9 @@ class Player
         if (this._board.isPc)
             ++(this._stats.perfectClears)
 
-        this._AREtimer = linesClearedThisPiece > 0 ? this._rules.lineARE : this._rules.ARE;
         this._spawnNextPiece();
 
         this._stats.piecesPlaced += 1
-
         eventManager.callEvent("onPiecePlace", {player: this})
     }
 
