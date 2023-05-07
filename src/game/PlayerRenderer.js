@@ -4,6 +4,8 @@ const defaultDrawPieceValues = {
     grayscale: false,
 }
 
+const showStats = ["PPS", "Time", "Pieces"]
+
 class PlayerRenderer
 {
     constructor(logicPlayer, pixiContainer)
@@ -44,6 +46,7 @@ class PlayerRenderer
         }
         this._drawNextQueue();
         this._drawHoldPiece();
+        this._updateStats();
     }
 
     _drawBoard(playField)
@@ -120,6 +123,25 @@ class PlayerRenderer
             2 * -16, (this._logicPlayer.board.height - 1) * -16, 1);
     }
 
+    _updateStats()
+    {
+        for (let [index, child] of this._objects.statsDisplay.children.entries())
+        {
+            //move this block into its own function
+            let display;
+            if (showStats[index] === "PPS")
+                display = (this._logicPlayer.piecesPlaced / this._logicPlayer.time).toFixed(2);
+            if (showStats[index] === "Time")
+                display = mss000timeformat(this._logicPlayer.time);
+            if (showStats[index] === "Pieces")
+                display = this._logicPlayer.piecesPlaced;
+
+            child.nameText.text = showStats[index];
+            child.numberText.text = display;
+            child.y = index * -50
+        }
+    }
+
     _setupComponents()
     {
         let playField = new PIXI.Container();
@@ -143,6 +165,23 @@ class PlayerRenderer
         this._objects.holdPiece = new PIXI.Graphics();
         playField.addChild(this._objects.holdPiece);
     
+        this._objects.statsDisplay = new PIXI.Container();
+        this._objects.statsDisplay.x = -10
+        playField.addChild(this._objects.statsDisplay);
+        for (let idx= 0; idx != 3; ++idx)
+            this._objects.statsDisplay.addChild(new PIXI.Container())
+        for (let child of this._objects.statsDisplay.children)
+        {
+            let name = new PIXI.Text("", {fontSize: 24, fontWeight: "bold",fontFamily: "Calibri", "align": "right",});
+            let number = new PIXI.Text("", {fontSize: 24, fontWeight: "bold",fontFamily: "Calibri", "align": "right",});
+            name.y -= 20
+            name.anchor.set(1, 0)
+            number.anchor.set(1, 0)
+            child.nameText = name;
+            child.numberText = number;
+            child.addChild(name);
+            child.addChild(number)
+        }
 
         this.container.addChild(playField);
 

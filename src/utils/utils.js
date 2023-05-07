@@ -84,6 +84,18 @@ function deepCopy(object)
     return JSON.parse(JSON.stringify(object))
 }
 
+function mss000timeformat(totalSeconds)
+{
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = Math.floor(totalSeconds % 60).toString();
+    const milliseconds = Math.floor((totalSeconds % 1) * 1000).toString();
+
+    if (minutes < 100)
+        return `${minutes}:${seconds.padStart(2, '0')}.${milliseconds.padStart(3, '0')}`
+    else
+        return "99:59.999"
+}
+
 // function multiplyMatrix(materix1, materix2)
 // {
 // 	for(a = 0 ; a < 4 ; a++)

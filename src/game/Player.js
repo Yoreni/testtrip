@@ -14,7 +14,7 @@ class Player
             gravitiy: 1 / 60,
             hold: 2,                    //0 = off, 1 = on, 2 = on (infinite hold)
             ARE: 0,
-            lineARE: 0 
+            lineARE: 32 
         }
 
         this._board = new Playfield(this._rules.board.width, this._rules.board.height);
@@ -24,6 +24,7 @@ class Player
             start: new Date(),       //assuming the game starts as soon as the object is constructed
             perfectClears: 0,
             combo: 0,
+            piecesPlaced: 0,
         };  
         this._hold = null;
         this._holdUsed = false;
@@ -66,6 +67,11 @@ class Player
     get AREtimer()
     {
         return this._AREtimer;
+    }
+
+    get piecesPlaced()
+    {
+        return this._stats.piecesPlaced
     }
 
     get time()
@@ -309,7 +315,6 @@ class Player
         if (ocupiedCorners === 2)
             return 1;
         return 0;
-
     }
 
     _inmovableSpinDetection()

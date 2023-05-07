@@ -4,8 +4,6 @@ const handling = {
     ARR: 1,
 }
 
-const showStats = ["PPS", "Time", "Pieces"]
-
 class Game extends IScene
 {
     constructor()
