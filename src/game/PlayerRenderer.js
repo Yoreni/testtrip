@@ -183,6 +183,9 @@ class PlayerRenderer
             child.addChild(number)
         }
 
+        let test = new RenderedPiece(new FallingPiece("I"));
+        this.container.addChild(test);
+
         this.container.addChild(playField);
 
         this._objects.text = new PIXI.Text("", {fontSize: 24,fontWeight: "bold",fontFamily: "Calibri"});

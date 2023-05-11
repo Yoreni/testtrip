@@ -12,8 +12,6 @@ function init()
     
     //setup scene manager
     const sceneManager = new SceneManager(app);
-    //sceneManager.add("levelEditor", new LevelEditor())
-    //sceneManager.start("levelEditor")
 
     sceneManager.add("game", new Game())
     sceneManager.start("game")
@@ -56,7 +54,8 @@ function resize()
         console.log(canvasSize)
 }
 
-const textures = PIXI.Assets.load(["assets/rasei.png"])
+const textures = PIXI.Assets.load(["assets/rasei.png","assets/Z.png","assets/L.png","assets/O.png","assets/S.png"
+,"assets/I.png","assets/J.png","assets/T.png"])
     .then(function()
     {
         console.log("Textures Loaded");
