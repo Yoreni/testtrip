@@ -96,20 +96,6 @@ function mss000timeformat(totalSeconds)
         return "99:59.999"
 }
 
-// function multiplyMatrix(materix1, materix2)
-// {
-// 	for(a = 0 ; a < 4 ; a++)
-// 	{
-// 		//MATHS YAY
-// 		var x = player.pos[a].x - player.centerX;
-// 		var y = player.pos[a].y - player.centerY;
-// 		var newX = (identity[0][0] * x) + (identity[0][1] * y);
-// 		var newY = (identity[1][0] * x) + (identity[1][1] * y);
-// 		player.pos[a].x = player.centerX + newX;
-// 		player.pos[a].y = player.centerY + newY;
-// 	}
-// }
-
 /**
  * Shuffles array in place.
  * @param {Array} array items An array containing the items.

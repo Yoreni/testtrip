@@ -5,15 +5,41 @@ class RenderedPiece extends PIXI.Container
     constructor(fallingPiece)
     {
         super();
-        const texture = PIXI.Texture.from(`assets/${fallingPiece.type}.png`);
-        for (let mino of fallingPiece.minos)
+        this.updatePiece(fallingPiece);
+    }
+
+    updatePiece(newFallingPiece)
+    {
+        if (newFallingPiece == null)
         {
-            let minoSprite = RenderedPiece.pool.borrow()
-            minoSprite.texture =  texture
-            minoSprite.scale.set(16 / texture.width);
-            minoSprite.x = ((mino.x - fallingPiece.x) * 16) + 100 //+ x;
-            minoSprite.y = ((mino.y - fallingPiece.y) * -16) + 100//+ y;
-            this.addChild(minoSprite);
+            this.visible = false;
+            return;
+        }
+        this.visible = true;
+
+        const texture = PIXI.Texture.from(`assets/${newFallingPiece.type}.png`);
+        const iterations = Math.max(newFallingPiece.minos.length, this.children.length);
+
+        for (let index = 0; index !== iterations; ++index)
+        {
+            if (index >= this.children.length)              
+            {
+                this.addChild(RenderedPiece.pool.borrow());
+            }
+
+            let child = this.children[index];
+            if (index >= newFallingPiece.minos.length)
+            {
+                child.visible = false;
+                continue;
+            }
+
+            child.visible = true;
+            child.texture = texture;
+            child.scale.set(16 / texture.width);
+            let mino = newFallingPiece.minos[index];
+            child.x = ((mino.x - newFallingPiece.x) * 16);
+            child.y = ((mino.y - newFallingPiece.y) * -16);
         }
     }
 }

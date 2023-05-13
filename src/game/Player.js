@@ -172,6 +172,7 @@ class Player
         this._spawnNextPiece(oldHoldPiece);
 
         this._holdUsed = true;
+        eventManager.callEvent("onHold", {player: this})
     }
 
     tick(delta)

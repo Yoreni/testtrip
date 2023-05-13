@@ -22,18 +22,6 @@ class PlayerRenderer
     {
         this._objects.text.text = this._logicPlayer.combo;
 
-        // if (this._logicPlayer.AREtimer === 0)
-        // {
-        //        this._drawBoard(this._logicPlayer.board);
-        //     this._lastBoard = this._logicPlayer.board;
-        // }
-        // else
-        // {
-        //     for (let mino of this._logicPlayer.currentPiece.minos)
-        //         this._lastBoard.set(mino.x, mino.y, this._logicPlayer.currentPiece.type);
-        //     this._drawBoard(this._lastBoard);
-        //}
-
         if (this._logicPlayer.isAlive && this._logicPlayer.AREtimer === 0)
         {
             this._drawFallingPiece();
@@ -45,7 +33,7 @@ class PlayerRenderer
             this._objects.ghostPiece.clear();
         }
         this._drawNextQueue();
-        this._drawHoldPiece();
+        //this._drawHoldPiece();
         this._updateStats();
     }
 
@@ -162,7 +150,8 @@ class PlayerRenderer
         for (let idx= 0; idx != 5; ++idx)
             this._objects.nextQueue.addChild(new PIXI.Graphics())
 
-        this._objects.holdPiece = new PIXI.Graphics();
+        this._objects.holdPiece = new RenderedPiece(null);
+        this._objects.holdPiece.position.set((2 * -16), (this._logicPlayer.board.height - 1) * -16)
         playField.addChild(this._objects.holdPiece);
     
         this._objects.statsDisplay = new PIXI.Container();
@@ -217,6 +206,11 @@ class PlayerRenderer
         {
             if (e.player.AREtimer === 0)
                 this._drawBoard(e.player.board);
+        })
+
+        eventManager.addEvent("onHold", (e) =>
+        {
+            this._objects.holdPiece.updatePiece(new FallingPiece(e.player.holdPiece))
         })
     }
 }
