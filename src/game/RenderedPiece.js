@@ -8,6 +8,11 @@ class RenderedPiece extends PIXI.Container
         this.updatePiece(fallingPiece);
     }
 
+    clear()
+    {
+        this.updatePiece(null);
+    }
+
     updatePiece(newFallingPiece)
     {
         if (newFallingPiece == null)
@@ -16,6 +21,9 @@ class RenderedPiece extends PIXI.Container
             return;
         }
         this.visible = true;
+
+        if(typeof(newFallingPiece) === "string")
+            newFallingPiece = new FallingPiece(newFallingPiece);
 
         const texture = PIXI.Texture.from(`assets/${newFallingPiece.type}.png`);
         const iterations = Math.max(newFallingPiece.minos.length, this.children.length);

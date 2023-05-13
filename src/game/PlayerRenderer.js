@@ -77,27 +77,26 @@ class PlayerRenderer
     _drawFallingPiece()
     {
         const piece = this._logicPlayer.currentPiece;
-        this._drawPiece(piece, this._objects.fallingPiece, piece.x * 16, piece.y * -16)
+        this._objects.fallingPiece.updatePiece(piece);
+        this._objects.fallingPiece.position.set(piece.x * 16, piece.y * -16)
     }
 
     _drawGhostPiece()
     {
         const piece = this._logicPlayer.ghostPiece
-        this._drawPiece(piece, this._objects.ghostPiece, piece.x * 16, piece.y * -16,
-            {
-                transpancery: 0.3
-            })
+        this._objects.ghostPiece.updatePiece(piece);
+        this._objects.ghostPiece.position.set(piece.x * 16, piece.y * -16)
     }
 
     _drawNextQueue()
     {
         this._objects.nextQueue.position.set(16 * (this._logicPlayer.board.width + 3), 
                                             -16 * (this._logicPlayer.board.height - 1))
-        //console.log(this._logicPlayer.nextQueue)
         for (let [index, child] of this._objects.nextQueue.children.entries())
         {
             const piece = new FallingPiece(this._logicPlayer.nextQueue[index])
-            this._drawPiece(piece, child, 0, index * 16 * 3);
+            child.updatePiece(piece);
+            //this._drawPiece(piece, child, 0, index * 16 * 3);
         }
     }
 
@@ -139,16 +138,21 @@ class PlayerRenderer
         playField.addChild(this._objects.board);
         this._drawBoard(this._logicPlayer.board);
 
-        this._objects.fallingPiece = new PIXI.Graphics();
+        this._objects.fallingPiece = new RenderedPiece(this._logicPlayer.currentPiece);
         playField.addChild(this._objects.fallingPiece);
 
-        this._objects.ghostPiece = new PIXI.Graphics();
+        this._objects.ghostPiece = new RenderedPiece(null);
+        this._objects.ghostPiece.alpha = 0.3;
         playField.addChild(this._objects.ghostPiece);
 
         this._objects.nextQueue = new PIXI.Container();
         playField.addChild(this._objects.nextQueue);
         for (let idx= 0; idx != 5; ++idx)
-            this._objects.nextQueue.addChild(new PIXI.Graphics())
+        {
+            let piece = new RenderedPiece(this._logicPlayer.nextQueue[idx]);
+            piece.y = idx * 16 * 3;
+            this._objects.nextQueue.addChild(piece);
+        }
 
         this._objects.holdPiece = new RenderedPiece(null);
         this._objects.holdPiece.position.set((2 * -16), (this._logicPlayer.board.height - 1) * -16)
@@ -171,9 +175,6 @@ class PlayerRenderer
             child.addChild(name);
             child.addChild(number)
         }
-
-        let test = new RenderedPiece(new FallingPiece("I"));
-        this.container.addChild(test);
 
         this.container.addChild(playField);
 
