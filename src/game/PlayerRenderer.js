@@ -13,6 +13,7 @@ class PlayerRenderer
         this._logicPlayer = logicPlayer;
         this.container = pixiContainer;
         this._objects = {}
+        this.minoPool = new ObjectPool(logicPlayer.board.width * logicPlayer.board.height * 2);
 
         this._setupComponents();
         this._bindEvents();
@@ -55,6 +56,37 @@ class PlayerRenderer
                 this._objects.board.beginFill(colour);
                 this._objects.board.drawRect(x * 16, y * -16, 16, 16);
                 this._objects.board.endFill();
+            }
+        }
+    }
+
+    _drawBoard2(playField)
+    {
+        const iterations = playField.width * (playField.height + 10);
+        for (let index = 0; index != iterations; ++index)
+        {
+            const x = index % playField.width;
+            const y = Math.floor(index / playField.height);
+
+            if (index >= this._objects.board.children.length)
+            {
+                let child = this.minoPool.borrow();
+                child.position.set(x * 16, y * -16)
+                this._objects.board.addChild(child);
+
+            }
+
+            let child = this._objects.board.children[index];
+            const minoType = playField.get(x, y);
+
+            if (minoType === "0")
+                child.visible = false;
+            else
+            {
+                child.visible = true;
+                const texture = PIXI.Texture.from(`assets/${minoType}.png`);
+                child.texture = texture;
+                child.scale.set(16 / texture.width);
             }
         }
     }
@@ -134,9 +166,17 @@ class PlayerRenderer
         let playField = new PIXI.Container();
         playField.position.set(500, 500);
 
-        this._objects.board = new PIXI.Graphics();
+        //add a background to the board
+        let boardBackground = new PIXI.Graphics();
+        boardBackground.beginFill(0x000000);
+        boardBackground.drawRect(0, (this._logicPlayer.board.height - 1) * -16, 
+            this._logicPlayer.board.width * 16, this._logicPlayer.board.height * 16);
+        boardBackground.endFill();
+        playField.addChild(boardBackground);
+
+        this._objects.board = new PIXI.Container();
         playField.addChild(this._objects.board);
-        this._drawBoard(this._logicPlayer.board);
+        //this._drawBoard(this._logicPlayer.board);
 
         this._objects.fallingPiece = new RenderedPiece(this._logicPlayer.currentPiece);
         playField.addChild(this._objects.fallingPiece);
@@ -195,18 +235,18 @@ class PlayerRenderer
                     board.set(index, lineNumber, "0")
                 }
             }
-            this._drawBoard(board);
+            this._drawBoard2(board);
         })
 
         eventManager.addEvent("AREend", (e) =>
         {
-            this._drawBoard(e.player.board);
+            this._drawBoard2(e.player.board);
         })
 
         eventManager.addEvent("onPiecePlace", (e) =>
         {
             if (e.player.AREtimer === 0)
-                this._drawBoard(e.player.board);
+                this._drawBoard2(e.player.board);
         })
 
         eventManager.addEvent("onHold", (e) =>
