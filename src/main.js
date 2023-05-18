@@ -1,6 +1,17 @@
 "use strict";
 let canvasSize = {width: 0, height: 0}
 
+const 
+{
+    configure,
+    BlobReader,
+    BlobWriter,
+    TextReader,
+    TextWriter,
+    ZipReader,
+    ZipWriter,
+} = zip;
+
 function init() 
 {
     resize();
@@ -53,24 +64,6 @@ function resize()
         canvasSize.height = h
         console.log(canvasSize)
 }
-
-document.addEventListener('drop', (e) =>
-{
-    e.preventDefault();
-    const file = event.dataTransfer.files[0];
-    if (file.size >= 10_000_000)
-    {
-        console.log("Files under 10 megabytes only")
-        return;
-    }
-
-    console.log(file)
-});
-
-document.addEventListener('dragover', (event) => 
-{
-    event.preventDefault(); // Prevent default browser behavior
-});
 
 const textures = PIXI.Assets.load(["assets/rasei.png","assets/Z.png","assets/L.png","assets/O.png","assets/S.png"
 ,"assets/I.png","assets/J.png","assets/T.png"])

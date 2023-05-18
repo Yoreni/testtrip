@@ -129,3 +129,10 @@ function saveOptionsWithDeafults(settingsObject, defaultsObject)
 
     return object;
 }
+
+function getFileExtension(filename)
+{
+  var parts = filename.split('.');
+  var extension = parts[parts.length - 1];
+  return extension;
+}
