@@ -5,7 +5,7 @@ document.addEventListener('drop', (e) =>
     const extension = getFileExtension(file.name);
     if (file.size >= 10_000_000)
     {
-        console.log("Files under 10 megabytes only")
+        console.log("Files under 10 megabytes only");
         return;
     }
     if (extension !== "zip")
@@ -14,7 +14,12 @@ document.addEventListener('drop', (e) =>
         return;
     }
 
-    readZip(file);
+    readZip(file).then(function(data)
+    {
+        let [skinData, urls] = data;
+        console.log(skinData);
+        console.log(urls);
+    });
 });
 
 document.addEventListener('dragover', (event) => 
@@ -72,9 +77,10 @@ async function readZip(zip)
     const zipReader = new ZipReader(zipFileReader);
 
     const packJson = await getJson(zipReader, "pack.json");
-
-    const pngFile = await getPng(zipReader, "I.png");
-    let pixiPNG = await PIXI.Texture.fromURL(pngFile);
-    console.log(pixiPNG);
-    console.log(pixiPNG.width);
+    let urls = {};
+    for (let [key, imagePath] of Object.entries(packJson.skin))
+    {
+        urls[key] = await getPng(zipReader, imagePath);
+    }
+    return [packJson, urls];
 }
