@@ -34,7 +34,6 @@ class PlayerRenderer
             this._objects.ghostPiece.clear();
         }
         this._drawNextQueue();
-        //this._drawHoldPiece();
         this._updateStats();
     }
 
@@ -84,7 +83,9 @@ class PlayerRenderer
             else
             {
                 child.visible = true;
-                const texture = PIXI.Texture.from(`assets/${minoType}.png`);
+                const texture = currentSkin === null 
+                    ? PIXI.Texture.from(`assets/${minoType}.png`) 
+                    : currentSkin.getTexture(minoType);
                 child.texture = texture;
                 child.scale.set(16 / texture.width);
             }

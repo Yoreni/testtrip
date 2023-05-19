@@ -17,8 +17,9 @@ document.addEventListener('drop', (e) =>
     readZip(file).then(function(data)
     {
         let [skinData, urls] = data;
-        console.log(skinData);
-        console.log(urls);
+        let skin = new Skin(skinData, urls);
+        //while (!skin.loaded)
+        //    ;
     });
 });
 

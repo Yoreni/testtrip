@@ -1,42 +1,51 @@
+let currentSkin = null;
+
 class Skin
 {
     constructor(packJson, urls)
     {
-        this.#packData = packJson;
-        this.#urls = urls;
-        this.#textureCache = {};
+        this._packData = packJson;
+        this._urls = urls;
+        this._textureCache = {};
+        this._loaded = false;
+
+        this._loadTextures();
     }
 
     get name()
     {
-        this.#packData.name;
+        this._packData.name;
     }
 
     get author()
     {
-        this.#packData.author;
+        this._packData.author;
     }
 
     get id()
     {
-        this.#packData.internalName;
+        this._packData.internalName;
+    }
+
+    get loaded()
+    {
+        return this._loaded;
     }
 
     getTexture(minoType)
     {
-        //if we already cahced it get it from there
-        if (this.#textureCache[minoType] !== undefined)
-            return this.#textureCache[minoType];
+        if (this._textureCache[minoType] !== undefined)
+            return this._textureCache[minoType];
+        return this._textureCache["*"]
+    }
 
-        //get the urls
-        let url;
-        if (this.#urls[minoType] === undefined) //for other mino types not speified in the the skinData
-            url = this.#urls["*"]
-        else
-            url = this.#urls[minoType]
-
-        let texture = PIXI.Texture.fromURL(url).then(texture => texture);
-        this.#textureCache[minoType] = texture;
-        return texture;
+    async _loadTextures()
+    {
+        for (let [minoType, url] of Object.entries(this._urls))
+            this._textureCache[minoType] = await PIXI.Texture.fromURL(url);
+        this._loaded = true;
+        console.log(`Skin ${this.name} by ${this.author} loaded`);
+        // this is temporary skins will be changed thru a UI or when a mode says so
+        currentSkin = this;
     }
 }
