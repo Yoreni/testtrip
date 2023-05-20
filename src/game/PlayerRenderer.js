@@ -62,10 +62,11 @@ class PlayerRenderer
     _drawBoard2(playField)
     {
         const iterations = playField.width * (playField.height + 10);
+        //console.log(iterations)
         for (let index = 0; index != iterations; ++index)
         {
             const x = index % playField.width;
-            const y = Math.floor(index / playField.height);
+            const y = Math.floor(index / playField.width);
 
             if (index >= this._objects.board.children.length)
             {

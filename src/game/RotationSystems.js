@@ -60,4 +60,43 @@ const noKicktable = {
         "13": [Point(0, 0)],
         "31": [Point(0, 0)],
     }
-}  
+}
+
+const SRSXkicktable = {     //SRS-X wont work
+    "*": {
+        "01": SRSkicktable["*"]["01"],
+        "10": SRSkicktable["*"]["10"],
+        "12": SRSkicktable["*"]["12"],
+        "21": SRSkicktable["*"]["21"],
+        "23": SRSkicktable["*"]["23"],
+        "32": SRSkicktable["*"]["32"],
+        "30": SRSkicktable["*"]["30"],
+        "03": SRSkicktable["*"]["03"],
+        "02": [Point(0, 0), Point(1, 0), Point(2, 0), Point(1, 1), Point(2, 1), Point(-1, 0), Point(-2, 0), 
+               Point(-1, 1), Point(-2, 1), Point(0, -1), Point(3, 0), Point(-3, 0)],
+        "20": [Point(0, 0), Point(-1, 0), Point(-2, 0), Point(-1, -1), Point(-2, -1), Point(1, 0), Point(2, 0),
+               Point(1, -1), Point(2, -1), Point(0, 1), Point(-3, 0), Point(3, 0)],
+        "13": [Point(0, 0), Point(0, 1), Point(0, 2), Point(-1, 1), Point(-1, 2), Point(0, -1), Point(0, -2),
+               Point(-1, -1), Point(-1, -2), Point(1, 0), Point(0, 3), Point(0, -3)],
+        "31": [Point(0, 0), Point(0, 1), Point(0, 2), Point(1, 1), Point(1, 2), Point(0, -1), Point(0, -2),
+               Point(1, -1), Point(1, -2), Point(-1, 0), Point(0, 3), Point(0, -3)],
+    },
+    "I": {
+        "01": SRSkicktable["I"]["01"],
+        "10": SRSkicktable["I"]["10"],
+        "12": SRSkicktable["I"]["12"],
+        "21": SRSkicktable["I"]["21"],
+        "23": SRSkicktable["I"]["23"],
+        "32": SRSkicktable["I"]["32"],
+        "30": SRSkicktable["I"]["30"],
+        "03": SRSkicktable["I"]["03"],
+        "02": [Point(0, 0), Point(0, -1), Point(1, 0), Point(-1, 0), Point(1, 1), Point(1, -1), Point(-1, -1),
+               Point(-1, 1), Point(2, 0), Point(-2, 0)],
+        "20": [Point(0, 0), Point(0, 1), Point(1, 0), Point(-1, 0), Point(1, -1), Point(1, 1), Point(-1, 1),
+               Point(-1, -1), Point(2, 0), Point(-2, 0)],
+        "13": [Point(0, 0), Point(1, 0), Point(-1, 0), Point(0, 1), Point(0, -1), Point(1, 1), Point(-1, 1), Point(-1, -1),
+               Point(1, -1), Point(0, 2), Point(0, -2)],
+        "31": [Point(0, 0), Point(-1, 0), Point(1, 0), Point(0, 1), Point(0, -1), Point(-1, 1), Point(1, 1), Point(1, -1),
+               Point(-1, -1), Point(0, 2), Point(0, -2)],
+    }
+}

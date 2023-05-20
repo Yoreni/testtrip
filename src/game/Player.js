@@ -8,7 +8,7 @@ class Player
                 height: 20,
             },
             pieceGeneration: sevenBag,
-            rotationSystem: SRSPlusKicktable,
+            rotationSystem: SRSXkicktable,
             lockDelay: 31,
             maxLockResets: 15,
             gravitiy: 1 / 60,
