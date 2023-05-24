@@ -1,31 +1,27 @@
 class Player
 {
+    static defaultRules = {
+        board: {
+            width: 10,
+            height: 20,
+        },
+        pieceGeneration: sevenBag,
+        rotationSystem: SRSXkicktable,
+        lockDelay: 31,
+        maxLockResets: 15,
+        gravitiy: 1 / 60,
+        hold: 2,                    //0 = off, 1 = on, 2 = on (infinite hold)
+        ARE: 0,
+        lineARE: 0 
+    }
+
     constructor(rules)
     {
-        this._rules = {
-            board: {
-                width: 10,
-                height: 20,
-            },
-            pieceGeneration: sevenBag,
-            rotationSystem: SRSXkicktable,
-            lockDelay: 31,
-            maxLockResets: 15,
-            gravitiy: 1 / 60,
-            hold: 2,                    //0 = off, 1 = on, 2 = on (infinite hold)
-            ARE: 0,
-            lineARE: 32 
-        }
-
+        this._rules = saveOptionsWithDeafults(rules, Player.defaultRules)
         this._board = new Playfield(this._rules.board.width, this._rules.board.height);
         this._nextQueue = this._rules.pieceGeneration([]);
         this._currentPiece = undefined;
-        this._stats = {
-            start: new Date(),       //assuming the game starts as soon as the object is constructed
-            perfectClears: 0,
-            combo: 0,
-            piecesPlaced: 0,
-        };  
+        this._stats = this._initStats();
         this._hold = null;
         this._holdUsed = false;
         this._alive = true;
@@ -79,6 +75,15 @@ class Player
         if (this.isAlive)
             return ((new Date()) - this._stats.start) / 1000;
         return (this._stats.end - this._stats.start) / 1000;
+    }
+
+    get linesCleared()
+    {
+        return Object.entries(this._stats.linesCleared).reduce((accumlator, currcentValue) =>
+        {
+            let [numOfLines, amount] = currcentValue;
+            return accumlator + (numOfLines * amount);
+        })
     }
 
     get combo()
@@ -256,24 +261,16 @@ class Player
         eventManager.callEvent("onPieceLock", {player: this, oldBoard: this._board.copy()})
 
         if (linesClearedThisPiece > 0)
-        {
-            if (this._stats.linesCleared == undefined)
-                this._stats.linesCleared = {}
-            //total lines summing each key * its value
             ++(this._stats.linesCleared[linesClearedThisPiece])
-        }
 
         if (spin > 0)
         {
-            if (this._stats.spins == undefined)
-                this._stats.spins = {1: {}, 2: {}}
             if (this._stats.spins[spin][this._currentPiece.type] == undefined)
                 this._stats.spins[spin][this._currentPiece.type] = {}
             if (this._stats.spins[spin][this._currentPiece.type][linesClearedThisPiece] == undefined)
                 this._stats.spins[spin][this._currentPiece.type][linesClearedThisPiece] = 0
             
             ++(this._stats.spins[spin][this._currentPiece.type][linesClearedThisPiece])
-            console.log(this._stats.spins);
         }
 
         if (linesClearedThisPiece > 0)
@@ -281,16 +278,16 @@ class Player
         else
             this._stats.combo = 0;
 
+        this._stats.piecesPlaced += 1
 
         for (let clearedLineY of this._board.completedLines)
             this._board.clearLine(clearedLineY);
-        
-        if (this._board.isPc)
-            ++(this._stats.perfectClears)
 
         this._spawnNextPiece();
 
-        this._stats.piecesPlaced += 1
+        if (this._board.isPc)
+            ++(this._stats.perfectClears)
+
         eventManager.callEvent("onPiecePlace", {player: this})
     }
 
@@ -400,5 +397,24 @@ class Player
     {
         this._stats.end = new Date();
         this._alive = false;
+    }
+
+    _initStats()
+    {
+        return {
+            start: new Date(),       //assuming the game starts as soon as the object is constructed
+            perfectClears: 0,
+            combo: 0,
+            piecesPlaced: 0,
+            spins: {
+                "1": {       //mini spins 
+
+                },
+                "2": {      //normal spins
+
+                }
+            },
+            linesCleared: {},
+        };
     }
 }
