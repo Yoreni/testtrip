@@ -12,14 +12,15 @@ class Player
         gravitiy: 1 / 60,
         hold: 2,                    //0 = off, 1 = on, 2 = on (infinite hold)
         ARE: 0,
-        lineARE: 0 
+        lineARE: 0,
+        pieceRoster: ["I", "O", "T", "S", "Z", "J", "L"]
     }
 
     constructor(rules)
     {
         this._rules = saveOptionsWithDeafults(rules, Player.defaultRules)
         this._board = new Playfield(this._rules.board.width, this._rules.board.height);
-        this._nextQueue = this._rules.pieceGeneration([]);
+        this._topupNextQueue();
         this._currentPiece = undefined;
         this._stats = this._initStats();
         this._hold = null;
@@ -387,10 +388,7 @@ class Player
         }
 
         this._currentPiece = newFallingPiece;
-
-        //refill next queue
-        if (this._nextQueue.length < 5)
-            this._nextQueue.push(...this._rules.pieceGeneration(this._nextQueue))
+        this._topupNextQueue();
     }
 
     _markTopout()
@@ -416,5 +414,13 @@ class Player
             },
             linesCleared: {},
         };
+    }
+
+    _topupNextQueue()
+    {
+        if (this._nextQueue === undefined)
+            this._nextQueue = [];
+        while (this._nextQueue.length < 5)
+            this._nextQueue.push(...this._rules.pieceGeneration(this._nextQueue, this._rules.pieceRoster))
     }
 }

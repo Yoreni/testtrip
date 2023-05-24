@@ -1,13 +1,13 @@
-function sevenBag(currentQueue)
+function sevenBag(currentQueue, pieceRoster)
 {
-    let bag = Object.keys(pieces);
+    let bag = deepCopy(pieceRoster)
     shuffle(bag);
     return bag;
 }
 
-function fourteenBag(currentQueue)
+function fourteenBag(currentQueue, pieceRoster)
 {
-    let bag = Object.keys(pieces).concat(Object.keys(pieces));
+    let bag = deepCopy(pieceRoster).concat(deepCopy(pieceRoster))
     shuffle(bag);
     return bag;
 }
