@@ -29,6 +29,7 @@ class Player
         this._AREtimer = 0;
 
         this._spawnNextPiece();
+        eventManager.callEvent("onGameStart", {player: this})
     }
 
     get currentPiece()
@@ -148,7 +149,15 @@ class Player
             piece.y += kickData[attempt].y;
     
             if (!this._board.doesColide(piece))
+            {
+                eventManager.callEvent("onPieceRotate", 
+                {
+                    player: this,
+                    kickUsed: attempt,
+                    direction: direction
+                })
                 return piece;
+            }
         }
     
         //orginal piece gets returned if all kick table rotations failed
@@ -270,10 +279,6 @@ class Player
             this._board.clearLine(clearedLineY);
 
         this._spawnNextPiece();
-
-        if (this._board.isPc)
-            ++(this._stats.perfectClears)
-
         eventManager.callEvent("onPiecePlace", {player: this})
     }
 
