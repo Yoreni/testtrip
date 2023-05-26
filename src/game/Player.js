@@ -259,27 +259,12 @@ class Player
         const linesClearedThisPiece = this._board.completedLines.length
         this._AREtimer = linesClearedThisPiece > 0 ? this._rules.lineARE : this._rules.ARE;
 
-        eventManager.callEvent("onPieceLock", {player: this, oldBoard: this._board.copy()})
-
-        if (linesClearedThisPiece > 0)
-            ++(this._stats.linesCleared[linesClearedThisPiece])
-
-        if (spin > 0)
-        {
-            if (this._stats.spins[spin][this._currentPiece.type] == undefined)
-                this._stats.spins[spin][this._currentPiece.type] = {}
-            if (this._stats.spins[spin][this._currentPiece.type][linesClearedThisPiece] == undefined)
-                this._stats.spins[spin][this._currentPiece.type][linesClearedThisPiece] = 0
-            
-            ++(this._stats.spins[spin][this._currentPiece.type][linesClearedThisPiece])
-        }
-
-        if (linesClearedThisPiece > 0)
-            ++(this._stats.combo);
-        else
-            this._stats.combo = 0;
-
-        this._stats.piecesPlaced += 1
+        eventManager.callEvent("onPieceLock", {
+            player: this,
+            oldBoard: this._board.copy(),
+            clearedLines: linesClearedThisPiece,
+            spinType: spin
+        })
 
         for (let clearedLineY of this._board.completedLines)
             this._board.clearLine(clearedLineY);
@@ -424,3 +409,33 @@ class Player
             this._nextQueue.push(...this._rules.pieceGeneration(this._nextQueue, this._rules.pieceRoster))
     }
 }
+
+//this tracks basic stats
+eventManager.addEvent("onPieceLock", (e) => 
+{
+    if (e.clearedLines > 0)
+        ++(e.player._stats.linesCleared[e.clearedLines])
+
+    if (e.spin > 0)
+    {
+        if (e.player._stats.spins[spin][e.player.currentPiece.type] == undefined)
+            e.player._stats.spins[spin][e.player.currentPiece.type] = {}
+        if (e.player._stats.spins[spin][e.player.currentPiece.type][e.clearedLines] == undefined)
+            e.player._stats.spins[spin][e.player.currentPiece.type][e.clearedLines] = 0
+    
+         ++(e.player._stats.spins[spin][e.player.currentPiece.type][e.clearedLines])
+    }
+
+    if (e.clearedLines > 0)
+        ++(e.player._stats.combo);
+    else
+        e.player._stats.combo = 0;
+
+    e.player._stats.piecesPlaced += 1;
+});
+
+eventManager.addEvent("onPiecePlace", (e) => 
+{
+    if (e.player.board.isPc)
+        ++(e.player._stats.perfectClears)
+});

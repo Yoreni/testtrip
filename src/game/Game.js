@@ -21,8 +21,8 @@ class Game extends IScene
             rotate180: new KeyDetector(app, "c"),
             hardDrop: new KeyDetector(app, " "),
         }
-        this._player = new Player({pieceRoster: ["S5", "Z5", "P", "Q", "F", "E", "T5", "U", "V", "W", "X",
-                                                 "J5","L5", "R", "Y", "N", "H", "I5"]});
+        //penominos ["S5", "Z5", "P", "Q", "F", "E", "T5", "U", "V", "W", "X","J5","L5", "R", "Y", "N", "H", "I5"]
+        this._player = new Player({});
         this._playerRender = new PlayerRenderer(this._player, this.container);
     }
 
