@@ -21,9 +21,10 @@ class Game extends IScene
             rotate180: new KeyDetector(app, "c"),
             hardDrop: new KeyDetector(app, " "),
         }
+        this._players = [];
         //penominos ["S5", "Z5", "P", "Q", "F", "E", "T5", "U", "V", "W", "X","J5","L5", "R", "Y", "N", "H", "I5"]
-        this._player = new Player({});
-        this._playerRender = new PlayerRenderer(this._player, this.container);
+        this._addPlayer();
+        PlayerRenderer.addEvents();
     }
 
     start()
@@ -38,12 +39,13 @@ class Game extends IScene
 
     update(delta)
     {
-        this._player.tick(delta)
+        let player = this._players[0];
+        player.logic.tick(delta)
 
-        if (this._player.isAlive && this._player.AREtimer === 0)
+        if (player.logic.isAlive && player.logic.AREtimer === 0)
             this._handleKeyboard()
 
-        this._playerRender.update(delta)
+        player.render.update(delta)
     }
 
     destory()
@@ -60,34 +62,55 @@ class Game extends IScene
         this.container.addChild(this._objects.rasei);
     }
 
+    _addPlayer()
+    {
+        let player =  new Player({}, this._players.length);
+        //player.manager = this;
+        player.callEvent = (eventName, data = {}) => this.callEvent(eventName, player.id, data);
+        this._players.push(
+        {
+            logic: player,
+            render: new PlayerRenderer(player, this.container)
+        });
+    }
+
+    callEvent(eventName, id, data = {})
+    {
+        console.log(id);
+        data.player = this._players[id].logic;
+        data.render = this._players[id].render;
+        eventManager.callEvent(eventName, data);
+    }
+
     _handleKeyboard() 
     {
+        let player = this._players[0].logic;
         if (this._keybaord.left.isDown)
         {
             if (this._keybaord.left.framesDown === 1)
-                this._player.moveCurrentPiece(-1);
+                player.moveCurrentPiece(-1);
             else if (this._keybaord.left.framesDown > handling.DAS)
-                this._player.moveCurrentPiece(-1 / handling.ARR);
+                player.moveCurrentPiece(-1 / handling.ARR);
         }
         else if (this._keybaord.right.isDown)
         {
             if (this._keybaord.right.framesDown === 1)
-                this._player.moveCurrentPiece(1);
+                player.moveCurrentPiece(1);
             else if (this._keybaord.right.framesDown > handling.DAS)
-                this._player.moveCurrentPiece(1 / handling.ARR);
+                player.moveCurrentPiece(1 / handling.ARR);
         }
 
         if (this._keybaord.hardDrop.framesDown === 1)
-            this._player.harddrop();
+            player.harddrop();
         if (this._keybaord.softDrop.framesDown > 0)
-            this._player.softDrop();
+            player.softDrop();
         if (this._keybaord.rotateClockwise.framesDown === 1)
-            this._player.rotateClockwise();
+            player.rotateClockwise();
         if (this._keybaord.rotateAnticlockwise.framesDown === 1)
-            this._player.rotateAnticlockwise();
+            player.rotateAnticlockwise();
         if (this._keybaord.rotate180.framesDown === 1)
-            this._player.rotate180();
+            player.rotate180();
         if (this._keybaord.hold.framesDown === 1)
-            this._player.hold();
+            player.hold();
     }
 }

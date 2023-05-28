@@ -15,7 +15,7 @@ class EventManager
     callEvent(name, data)
     {
         if (this._events[name] === undefined)
-            throw `${name} is not a defined event`
+            return;
 
         let functions = this._events[name]
         for (let func of functions)

@@ -16,7 +16,6 @@ class PlayerRenderer
         this.minoPool = new ObjectPool(logicPlayer.board.width * logicPlayer.board.height * 2);
 
         this._setupComponents();
-        this._bindEvents();
     }
 
     update(delta)
@@ -38,28 +37,6 @@ class PlayerRenderer
     }
 
     _drawBoard(playField)
-    {
-        this._objects.board.clear();
-
-        for (let x = 0; x != playField.width; ++x)
-        {
-            for (let y = 0; y != playField.height + 10; ++y)
-            {
-                const minoType = playField.get(x, y);
-                
-                                            //dont draw the background above the playfield
-                if (minoType === "0" && y >= playField.height)   
-                    continue;
-
-                const colour = minoType === "0" ? 0x111111 : pieceColours[minoType];
-                this._objects.board.beginFill(colour);
-                this._objects.board.drawRect(x * 16, y * -16, 16, 16);
-                this._objects.board.endFill();
-            }
-        }
-    }
-
-    _drawBoard2(playField)
     {
         const iterations = playField.width * (playField.height + 10);
         //console.log(iterations)
@@ -225,7 +202,7 @@ class PlayerRenderer
         this.container.addChild(this._objects.text);
     }
 
-    _bindEvents()
+    static addEvents()
     {
         eventManager.addEvent("onPieceLock", (e) =>
         {
@@ -237,23 +214,23 @@ class PlayerRenderer
                     board.set(index, lineNumber, "0")
                 }
             }
-            this._drawBoard2(board);
+            e.render._drawBoard(board);
         })
 
         eventManager.addEvent("AREend", (e) =>
         {
-            this._drawBoard2(e.player.board);
+            e.render._drawBoard(e.player.board);
         })
 
         eventManager.addEvent("onPiecePlace", (e) =>
         {
             if (e.player.AREtimer === 0)
-                this._drawBoard2(e.player.board);
+                e.render._drawBoard(e.player.board);
         })
 
         eventManager.addEvent("onHold", (e) =>
         {
-            this._objects.holdPiece.updatePiece(new FallingPiece(e.player.holdPiece))
+            e.render._objects.holdPiece.updatePiece(new FallingPiece(e.player.holdPiece))
         })
     }
 }

@@ -1,5 +1,7 @@
 class Player
 {
+    #id;
+
     static defaultRules = {
         board: {
             width: 10,
@@ -16,9 +18,10 @@ class Player
         pieceRoster: ["I", "O", "T", "S", "Z", "J", "L"]
     }
 
-    constructor(rules)
+    constructor(rules, id)
     {
         this._rules = saveOptionsWithDeafults(rules, Player.defaultRules)
+        this.#id = id;
         this._board = new Playfield(this._rules.board.width, this._rules.board.height);
         this._topupNextQueue();
         this._currentPiece = undefined;
@@ -30,6 +33,11 @@ class Player
 
         this._spawnNextPiece();
         eventManager.callEvent("onGameStart", {player: this})
+    }
+
+    get id()
+    {
+        return this.#id;
     }
 
     get currentPiece()
@@ -150,9 +158,8 @@ class Player
     
             if (!this._board.doesColide(piece))
             {
-                eventManager.callEvent("onPieceRotate", 
+                this.callEvent("onPieceRotate", 
                 {
-                    player: this,
                     kickUsed: attempt,
                     direction: direction
                 })
@@ -187,7 +194,7 @@ class Player
         this._spawnNextPiece(oldHoldPiece);
 
         this._holdUsed = true;
-        eventManager.callEvent("onHold", {player: this})
+        this.callEvent("onHold")
     }
 
     tick(delta)
@@ -198,7 +205,7 @@ class Player
         {
             --(this._AREtimer);
             if (this._AREtimer === 0)
-                eventManager.callEvent("AREend", {player: this})
+                this.callEvent("AREend")
             return;
         }
 
@@ -268,8 +275,7 @@ class Player
         const linesClearedThisPiece = this._board.completedLines.length
         this._AREtimer = linesClearedThisPiece > 0 ? this._rules.lineARE : this._rules.ARE;
 
-        eventManager.callEvent("onPieceLock", {
-            player: this,
+        this.callEvent("onPieceLock", {
             oldBoard: this._board.copy(),
             clearedLines: linesClearedThisPiece,
             spinType: spin
@@ -279,7 +285,7 @@ class Player
             this._board.clearLine(clearedLineY);
 
         this._spawnNextPiece();
-        eventManager.callEvent("onPiecePlace", {player: this})
+        this.callEvent("onPiecePlace");
     }
 
     //only for t pieces
