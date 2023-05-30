@@ -20,8 +20,6 @@ class PlayerRenderer
 
     update(delta)
     {
-        this._objects.text.text = this._logicPlayer.combo;
-
         if (this._logicPlayer.isAlive && this._logicPlayer.AREtimer === 0)
         {
             this._drawFallingPiece();
@@ -137,14 +135,15 @@ class PlayerRenderer
     _setupComponents()
     {
         let playField = new PIXI.Container();
-        playField.position.set(500, 500);
+        this.container.position.set(500, 500);
 
         //add a background to the board
         let boardBackground = new PIXI.Graphics();
         boardBackground.beginFill(0x000000);
         boardBackground.drawRect(0, (this._logicPlayer.board.height - 1) * -16, 
-            this._logicPlayer.board.width * 16, this._logicPlayer.board.height * 16);
+        this._logicPlayer.board.width * 16, this._logicPlayer.board.height * 16);
         boardBackground.endFill();
+        this._objects.boardBackground = boardBackground;
         playField.addChild(boardBackground);
 
         this._objects.board = new PIXI.Container();
@@ -190,10 +189,10 @@ class PlayerRenderer
         }
 
         this.container.addChild(playField);
-
-        this._objects.text = new PIXI.Text("", {fontSize: 24,fontWeight: "bold",fontFamily: "Calibri"});
-        this._objects.text.position.set(10, 70);
-        this.container.addChild(this._objects.text);
+        //this.container.pivot.set(this.container.width * 0.5, this.container.height * -0.5);
+        //this.container.pivot.set(this.container.width * 0.5, this.container.height * -0.5);
+        //this.container.pivot.set(this.container.x * -1, this.container.y * -1);
+        //this.container.pivot.set(500, 500)
     }
 
     static addEvents()
