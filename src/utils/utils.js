@@ -136,3 +136,8 @@ function getFileExtension(filename)
   var extension = parts[parts.length - 1];
   return extension;
 }
+
+function getOrDefault(expression, diyfowt)
+{
+    return expression === undefined ? diyfowt : expression;
+}

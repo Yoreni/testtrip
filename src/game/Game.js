@@ -21,6 +21,10 @@ class Game extends IScene
             rotate180: new KeyDetector(app, "c"),
             hardDrop: new KeyDetector(app, " "),
         }
+
+        this.mode = sprint;
+        this.mode.events();
+
         this._players = [];
         //penominos ["S5", "Z5", "P", "Q", "F", "E", "T5", "U", "V", "W", "X","J5","L5", "R", "Y", "N", "H", "I5"]
         this._addPlayer();
@@ -64,19 +68,20 @@ class Game extends IScene
 
     _addPlayer()
     {
+        const Renderer = getOrDefault(this.mode.render, PlayerRenderer);
+
         let player =  new Player({}, this._players.length);
-        //player.manager = this;
         player.callEvent = (eventName, data = {}) => this.callEvent(eventName, player.id, data);
+
         this._players.push(
         {
             logic: player,
-            render: new PlayerRenderer(player, this.container)
+            render: new Renderer(player, this.container)
         });
     }
 
     callEvent(eventName, id, data = {})
     {
-        console.log(id);
         data.player = this._players[id].logic;
         data.render = this._players[id].render;
         eventManager.callEvent(eventName, data);

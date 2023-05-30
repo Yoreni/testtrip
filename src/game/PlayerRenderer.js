@@ -121,20 +121,14 @@ class PlayerRenderer
             2 * -16, (this._logicPlayer.board.height - 1) * -16, 1);
     }
 
-    _updateStats()
+    _updateStats(statsToDisplay = showStats)
     {
         for (let [index, child] of this._objects.statsDisplay.children.entries())
         {
             //move this block into its own function
-            let display;
-            if (showStats[index] === "PPS")
-                display = (this._logicPlayer.piecesPlaced / this._logicPlayer.time).toFixed(2);
-            if (showStats[index] === "Time")
-                display = mss000timeformat(this._logicPlayer.time);
-            if (showStats[index] === "Pieces")
-                display = this._logicPlayer.piecesPlaced;
+            let display = this.getPlayerStat(statsToDisplay[index]);
 
-            child.nameText.text = showStats[index];
+            child.nameText.text = statsToDisplay[index];
             child.numberText.text = display;
             child.y = index * -50
         }
@@ -232,5 +226,22 @@ class PlayerRenderer
         {
             e.render._objects.holdPiece.updatePiece(new FallingPiece(e.player.holdPiece))
         })
+    }
+
+    /**
+ * 
+ * gets a human readble format of a stat releated to a player
+ * 
+ * @param {string} statName 
+ */
+    getPlayerStat(statName)
+    {
+        if (statName === "PPS")
+            return (this._logicPlayer.piecesPlaced / this._logicPlayer.time).toFixed(2);
+        if (statName === "Time")
+            return mss000timeformat(this._logicPlayer.time);
+        if (statName === "Pieces")
+            return this._logicPlayer.piecesPlaced;
+        return "undefined";
     }
 }

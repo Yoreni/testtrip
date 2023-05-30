@@ -92,8 +92,9 @@ class Player
         return Object.entries(this._stats.linesCleared).reduce((accumlator, currcentValue) =>
         {
             let [numOfLines, amount] = currcentValue;
+            //console.log(numOfLines, "*", amount);
             return accumlator + (numOfLines * amount);
-        })
+        }, 0)
     }
 
     get combo()
@@ -425,7 +426,12 @@ class Player
 eventManager.addEvent("onPieceLock", (e) => 
 {
     if (e.clearedLines > 0)
+    {
+        let count = e.player._stats.linesCleared[e.clearedLines];
+        if (e.player._stats.linesCleared[e.clearedLines] == undefined)
+            e.player._stats.linesCleared[e.clearedLines] = 0;
         ++(e.player._stats.linesCleared[e.clearedLines])
+    }
 
     if (e.spin > 0)
     {
