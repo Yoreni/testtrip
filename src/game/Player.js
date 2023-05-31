@@ -11,7 +11,7 @@ class Player
         rotationSystem: SRSXkicktable,
         lockDelay: 31,
         maxLockResets: 15,
-        gravitiy: 1 / 60,
+        gravitiy: 0,
         hold: 2,                    //0 = off, 1 = on, 2 = on (infinite hold)
         ARE: 0,
         lineARE: 0,
@@ -282,8 +282,7 @@ class Player
             spinType: spin
         })
 
-        for (let clearedLineY of this._board.completedLines)
-            this._board.clearLine(clearedLineY);
+        this._board.clearLines(this._board.completedLines)
 
         this._spawnNextPiece();
         this.callEvent("onPiecePlace");

@@ -42,7 +42,15 @@ class Playfield
     clearLine(y)
     {
         this._board.splice(this._yToArrayIndex(y), 1);
-        this._board.unshift(Array(this._width).fill("0"))
+        this._board.push(Array(this._width).fill("0"))
+    }
+
+    clearLines(ys)
+    {
+        //sorting and reversing is important cos otherwise a splice can make all the other intended ys inacarate
+        ys = ys.sort().reverse()
+        for (let y of ys)
+            this.clearLine(y)
     }
 
     doesColide(minos)
@@ -101,10 +109,9 @@ class Playfield
         return copy;
     }
 
-    //TODO: maybe this makes things more complicated then they need to be?
     _yToArrayIndex(y)
     {
-        return this._board.length - y - 1
+        return y;
     }
 }
 

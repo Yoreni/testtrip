@@ -37,7 +37,6 @@ class PlayerRenderer
     _drawBoard(playField)
     {
         const iterations = playField.width * (playField.height + 10);
-        //console.log(iterations)
         for (let index = 0; index != iterations; ++index)
         {
             const x = index % playField.width;
@@ -46,7 +45,7 @@ class PlayerRenderer
             if (index >= this._objects.board.children.length)
             {
                 let child = this.minoPool.borrow();
-                child.position.set(x * 16, y * -16)
+                child.position.set(x * 16, (y + 1) * -16)
                 this._objects.board.addChild(child);
 
             }
@@ -87,20 +86,20 @@ class PlayerRenderer
     {
         const piece = this._logicPlayer.currentPiece;
         this._objects.fallingPiece.updatePiece(piece);
-        this._objects.fallingPiece.position.set(piece.x * 16, piece.y * -16)
+        this._objects.fallingPiece.position.set((piece.x + 0) * 16, (piece.y + 1) * -16)
     }
 
     _drawGhostPiece()
     {
         const piece = this._logicPlayer.ghostPiece
         this._objects.ghostPiece.updatePiece(piece);
-        this._objects.ghostPiece.position.set(piece.x * 16, piece.y * -16)
+        this._objects.ghostPiece.position.set((piece.x + 0) * 16, (piece.y + 1) * -16)
     }
 
     _drawNextQueue()
     {
         this._objects.nextQueue.position.set(16 * (this._logicPlayer.board.width + 3), 
-                                            -16 * (this._logicPlayer.board.height - 1))
+                                            -16 * this._logicPlayer.board.height)
         for (let [index, child] of this._objects.nextQueue.children.entries())
         {
             const piece = new FallingPiece(this._logicPlayer.nextQueue[index])
@@ -140,11 +139,13 @@ class PlayerRenderer
         //add a background to the board
         let boardBackground = new PIXI.Graphics();
         boardBackground.beginFill(0x000000);
-        boardBackground.drawRect(0, (this._logicPlayer.board.height - 1) * -16, 
+        boardBackground.drawRect(0, this._logicPlayer.board.height * -16, 
         this._logicPlayer.board.width * 16, this._logicPlayer.board.height * 16);
         boardBackground.endFill();
         this._objects.boardBackground = boardBackground;
         playField.addChild(boardBackground);
+
+        //console.log("a", (this._logicPlayer.board.height - 1) * -16))
 
         this._objects.board = new PIXI.Container();
         playField.addChild(this._objects.board);
@@ -167,11 +168,11 @@ class PlayerRenderer
         }
 
         this._objects.holdPiece = new RenderedPiece(null);
-        this._objects.holdPiece.position.set((2 * -16), (this._logicPlayer.board.height - 1) * -16)
+        this._objects.holdPiece.position.set((2 * -16), (this._logicPlayer.board.height) * -16)
         playField.addChild(this._objects.holdPiece);
     
         this._objects.statsDisplay = new PIXI.Container();
-        this._objects.statsDisplay.x = -10
+        this._objects.statsDisplay.position.set(-10, -20);
         playField.addChild(this._objects.statsDisplay);
         for (let idx= 0; idx != 3; ++idx)
             this._objects.statsDisplay.addChild(new PIXI.Container())
