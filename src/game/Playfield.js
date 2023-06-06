@@ -91,8 +91,8 @@ class Playfield
     {
         let isPc = true
         for (let line of this._board)
-        {               //'&& true' will make it so if it finds a line thats false it will stay false
-            isPc = line.every(idx => idx === "0") && true;
+        {               //'&& isPc' will make it so if it finds a line thats false it will stay false
+            isPc = line.every(idx => idx === "0") && isPc;
         }
         return isPc;
     }
