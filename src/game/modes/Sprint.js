@@ -1,8 +1,5 @@
 {
-    const test = function()
-    {
-        console.log("The test works")
-    }
+    const lineGoal = 40; 
 
     modeManager.register("sprint",
     {
@@ -12,7 +9,7 @@
             getPlayerStat(statName)
             {
                 if (statName === "Lines Remaining")
-                    return Math.max(40 - this._logicPlayer.linesCleared, 0);
+                    return Math.max(lineGoal - this._logicPlayer.linesCleared, 0);
                 return super.getPlayerStat(statName)
             }
 
@@ -43,7 +40,7 @@
             eventManager.addEvent("onPieceLock", (e) =>
             {
                 test();
-                if (e.player.linesCleared >= 40)
+                if (e.player.linesCleared >= lineGoal)
                 {
                     e.player._markTopout();
                     alert(`Pieces: ${e.player.piecesPlaced}`)
