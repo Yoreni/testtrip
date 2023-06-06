@@ -11,7 +11,7 @@ class Player
         rotationSystem: SRSXkicktable,
         lockDelay: 31,
         maxLockResets: 15,
-        gravitiy: 0,
+        gravitiy: 1/60,
         hold: 2,                    //0 = off, 1 = on, 2 = on (infinite hold)
         ARE: 0,
         lineARE: 0,

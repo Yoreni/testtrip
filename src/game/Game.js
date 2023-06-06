@@ -22,7 +22,7 @@ class Game extends IScene
             hardDrop: new KeyDetector(app, " "),
         }
 
-        this.mode = modeManager.get("tetraminoArt");
+        this.mode = modeManager.get("sprint");
         this.mode.events();
 
         this._players = [];
@@ -70,7 +70,7 @@ class Game extends IScene
     {
         const Renderer = getOrDefault(this.mode.render, PlayerRenderer);
 
-        let player =  new Player({}, this._players.length);
+        let player =  new Player(getOrDefault(this.mode.gameRules, {}), this._players.length);
         player.callEvent = (eventName, data = {}) => this.callEvent(eventName, player.id, data);
 
         let playerPixiContainer = new PIXI.Container
