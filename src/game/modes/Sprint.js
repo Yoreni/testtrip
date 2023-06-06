@@ -39,7 +39,6 @@
         {
             eventManager.addEvent("onPieceLock", (e) =>
             {
-                test();
                 if (e.player.linesCleared >= lineGoal)
                 {
                     e.player._markTopout();

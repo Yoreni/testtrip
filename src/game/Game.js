@@ -93,23 +93,42 @@ class Game extends IScene
     _handleKeyboard() 
     {
         let player = this._players[0].logic;
-        if (this._keybaord.left.isDown)
+        let keyboard = this._keybaord;
+
+        function dasRight()
         {
-            if (this._keybaord.left.framesDown === 1)
-                player.moveCurrentPiece(-1);
-            else if (this._keybaord.left.framesDown > handling.DAS)
-                player.moveCurrentPiece(-1 / handling.ARR);
-        }
-        else if (this._keybaord.right.isDown)
-        {
-            if (this._keybaord.right.framesDown === 1)
+            if (keyboard.right.framesDown === 1)
                 player.moveCurrentPiece(1);
-            else if (this._keybaord.right.framesDown > handling.DAS)
+            else if (keyboard.right.framesDown > handling.DAS)
                 player.moveCurrentPiece(1 / handling.ARR);
+        }
+
+        function dasLeft()
+        {
+            if (keyboard.left.framesDown === 1)
+                player.moveCurrentPiece(-1);
+            else if (keyboard.left.framesDown > handling.DAS)
+                player.moveCurrentPiece(-1 / handling.ARR);
         }
 
         if (this._keybaord.hardDrop.framesDown === 1)
             player.harddrop();
+        if (this._keybaord.left.framesDown > this._keybaord.right.framesDown)
+        {
+            if (this._keybaord.right.framesDown === 0)
+                dasLeft();
+            else
+                dasRight();
+        }
+        else if (this._keybaord.right.framesDown > this._keybaord.left.framesDown)
+        {
+            if (this._keybaord.left.framesDown === 0)
+                dasRight();
+            else
+                dasLeft()
+        }
+        else
+            dasLeft();
         if (this._keybaord.softDrop.framesDown > 0)
             player.softDrop();
         if (this._keybaord.rotateClockwise.framesDown === 1)
