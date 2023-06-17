@@ -24,6 +24,7 @@ class Game extends IScene
 
         this.mode = modeManager.get("sprint");
         this.mode.events();
+        addonMangaer.applyAddons(this.mode);
 
         this._players = [];
         //penominos ["S5", "Z5", "P", "Q", "F", "E", "T5", "U", "V", "W", "X","J5","L5", "R", "Y", "N", "H", "I5"]
@@ -68,9 +69,9 @@ class Game extends IScene
 
     _addPlayer()
     {
-        const Renderer = getOrDefault(this.mode.render, PlayerRenderer);
+        const Renderer = this.mode.render ?? PlayerRenderer;
 
-        let player =  new Player(getOrDefault(this.mode.gameRules, {}), this._players.length);
+        let player =  new Player(this.mode.gameRules ?? {}, this._players.length);
         player.callEvent = (eventName, data = {}) => this.callEvent(eventName, player.id, data);
 
         let playerPixiContainer = new PIXI.Container

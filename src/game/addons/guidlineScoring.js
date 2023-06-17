@@ -8,7 +8,7 @@
     const spinClears = [400, 800, 1200, 1600, 2000];
     const perfectClearAmount = 3500;
 
-    function add()
+    addonMangaer.register("guidlineScoring", () =>
     {
         eventManager.addEvent("onGameStart", (e) => e.player.score = 0);
 
@@ -36,7 +36,5 @@
             if (e.player.board.isPc)
                 e.player.score += perfectClearAmount;
         });
-    }
-
-    add();
+    })
 }
