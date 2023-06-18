@@ -13,9 +13,7 @@ class AddonMangaer
     applyAddons(mode)
     {
         for (let addonName of mode.addons)
-        {
             this.addons[addonName]()
-        }
     }
 }
 

@@ -86,14 +86,21 @@ function deepCopy(object)
 
 function mss000timeformat(totalSeconds)
 {
+    let sign = ""
+    if (totalSeconds < 0)
+    {
+        totalSeconds = Math.abs(totalSeconds);
+        sign = "-"
+    }
+
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = Math.floor(totalSeconds % 60).toString();
     const milliseconds = Math.floor((totalSeconds % 1) * 1000).toString();
 
     if (minutes < 100)
-        return `${minutes}:${seconds.padStart(2, '0')}.${milliseconds.padStart(3, '0')}`
+        return `${sign}${minutes}:${seconds.padStart(2, '0')}.${milliseconds.padStart(3, '0')}`
     else
-        return "99:59.999"
+        return `${sign}99:59.999`
 }
 
 /**

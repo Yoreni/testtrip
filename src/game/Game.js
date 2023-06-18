@@ -22,7 +22,7 @@ class Game extends IScene
             hardDrop: new KeyDetector(app, " "),
         }
 
-        this.mode = modeManager.get("sprint");
+        this.mode = modeManager.get("ultra");
         this.mode.events();
         addonMangaer.applyAddons(this.mode);
 
@@ -70,8 +70,9 @@ class Game extends IScene
     _addPlayer()
     {
         const Renderer = this.mode.render ?? PlayerRenderer;
+        const Logic = this.mode.logic ?? Player;
 
-        let player =  new Player(this.mode.gameRules ?? {}, this._players.length);
+        let player =  new Logic(this.mode.gameRules ?? {}, this._players.length);
         player.callEvent = (eventName, data = {}) => this.callEvent(eventName, player.id, data);
 
         let playerPixiContainer = new PIXI.Container
