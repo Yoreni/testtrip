@@ -127,19 +127,22 @@ class Player
     rotateClockwise()
     {
         this._currentPiece = this._rotate(1);
-        this._resetLockDelay();
+        if (this._currentPiece.x == this.ghostPiece.x)
+            this._resetLockDelay();
     }
 
     rotateAnticlockwise()
     {
         this._currentPiece = this._rotate(-1);
-        this._resetLockDelay();
+        if (this._currentPiece.x == this.ghostPiece.x)
+            this._resetLockDelay();
     }
 
     rotate180()
     {
         this._currentPiece = this._rotate(2);
-        this._resetLockDelay();
+        if (this._currentPiece.x == this.ghostPiece.x)
+            this._resetLockDelay();
     }
 
     _rotate(direction)
@@ -247,22 +250,34 @@ class Player
 
         const maxLeft = -leftToColision(this._currentPiece, this._board);
         const maxRight = rightToColision(this._currentPiece, this._board);
+        amount = Math.max(maxLeft, Math.min(amount, maxRight))
 
         let newPiece = this._currentPiece.copy();
-        newPiece.move(Math.max(maxLeft, Math.min(amount, maxRight)), 0);
+        newPiece.move(amount, 0);
         if (!this._board.doesColide(newPiece))
+        {
+            const oldX = this._currentPiece.x;
             this._currentPiece = newPiece;
-
-        this._resetLockDelay();
+            if (oldX != this._currentPiece.x)
+                this._resetLockDelay();
+        }
     }
 
-    //this resets the lock delay of a piece if it got moved whiile locking
+
+    /**
+     * this resets the lock delay of a piece if it got moved whiile locking
+     * 
+     * this also modifies the this.currentPiece object
+     * 
+     * @returns nothing
+     */
     _resetLockDelay()
     {
         if (this.currentPiece.lockTimer > 0)
         {
             this.currentPiece.lockTimer = 0;
             ++(this.currentPiece.lockResets);
+
             if (this.currentPiece.lockResets > this._rules.maxLockResets)
                 this._placeCurrentPiece();
         }
