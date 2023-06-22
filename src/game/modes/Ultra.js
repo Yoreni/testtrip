@@ -33,6 +33,6 @@
         {
 
         },
-        addons: ["guidlineScoring"],
+        addons: ["backToBack", "guidlineScoring"],
     });
 }

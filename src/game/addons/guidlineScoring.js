@@ -1,6 +1,7 @@
 {
     //TODO
     // - add B2B points
+    // - mulipliers
 
     const normalLineClears = [0, 100, 300, 500, 800];
     const miniSpinClears = [100, 200, 400, 600, 800];
@@ -26,8 +27,6 @@
             //combo points
             if(e.player.combo > 0)
                 e.player.score += 50 * (e.player.combo - 1);
-            
-            console.log(e.player.score)
         });
 
         eventManager.addEvent("onPiecePlace", (e) =>
