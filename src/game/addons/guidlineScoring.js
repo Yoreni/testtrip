@@ -17,12 +17,15 @@
             if (e.clearedLines > 4)
                 return;
 
+            //get extra points for keeping a b2b
+            const b2bMultiplyer = e.player._stats.b2b > 1 ? 1.5 : 1;
+
             if (e.spinType === 0)
-                e.player.score += normalLineClears[e.clearedLines];
+                e.player.score += normalLineClears[e.clearedLines] * b2bMultiplyer;
             if (e.spinType === 1)
-                e.player.score += miniSpinClears[e.clearedLines];
+                e.player.score += miniSpinClears[e.clearedLines] * b2bMultiplyer;
             if (e.spinType === 2)
-                e.player.score += spinClears[e.clearedLines];
+                e.player.score += spinClears[e.clearedLines] * b2bMultiplyer;
 
             //combo points
             if(e.player.combo > 0)

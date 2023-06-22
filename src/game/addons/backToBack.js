@@ -13,8 +13,6 @@
                 ++(e.player._stats.b2b);
             else
                 e.player._stats.b2b = 0;
-            
-            console.log("b2b", e.player._stats.b2b)
         });
     })
 }
