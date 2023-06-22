@@ -22,7 +22,7 @@ class Game extends IScene
             hardDrop: new KeyDetector(app, " "),
         }
 
-        this.mode = modeManager.get("sprint");
+        this.mode = modeManager.get("ultra");
         this.mode.events();
         addonMangaer.applyAddons(this.mode);
 

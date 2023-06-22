@@ -1,7 +1,6 @@
 {
     //TODO
     // - add B2B points
-    // - add softdrop and harddrop points
 
     const normalLineClears = [0, 100, 300, 500, 800];
     const miniSpinClears = [100, 200, 400, 600, 800];
@@ -35,6 +34,16 @@
         {
             if (e.player.board.isPc)
                 e.player.score += perfectClearAmount;
+        });
+
+        eventManager.addEvent("onSoftDrop", (e) => 
+        {
+            e.player.score += e.distance
+        });
+
+        eventManager.addEvent("onHardDrop", (e) => 
+        {
+            e.player.score += e.distance * 2
         });
     })
 }
