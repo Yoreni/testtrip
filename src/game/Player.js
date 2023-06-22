@@ -92,7 +92,6 @@ class Player
         return Object.entries(this._stats.linesCleared).reduce((accumlator, currcentValue) =>
         {
             let [numOfLines, amount] = currcentValue;
-            //console.log(numOfLines, "*", amount);
             return accumlator + (numOfLines * amount);
         }, 0)
     }
@@ -115,6 +114,7 @@ class Player
     softDrop()
     {
         const minSoftDrop = 1/60 * handling.SDF;
+        const oldY = this._currentPiece.y
 
         let newPiece = this._currentPiece.copy();
         newPiece.move(0, -Math.max(minSoftDrop, this._rules.gravitiy * handling.SDF));
@@ -122,6 +122,11 @@ class Player
             this._currentPiece = newPiece;
         else
             this._currentPiece = this.ghostPiece;
+        
+        this.callEvent("onSoftDrop", 
+        {
+            distance: oldY - this._currentPiece.y
+        })
     }
 
     rotateClockwise()
@@ -177,8 +182,16 @@ class Player
 
     harddrop()
     {
+        const oldY = this._currentPiece.y
         this._currentPiece = this.ghostPiece;
+        const newY = this._currentPiece.y
+
         this._placeCurrentPiece();
+
+        this.callEvent("onHardDrop", 
+        {
+            distance: oldY - newY
+        })
     }
 
     hold()
@@ -258,8 +271,16 @@ class Player
         {
             const oldX = this._currentPiece.x;
             this._currentPiece = newPiece;
+
             if (oldX != this._currentPiece.x)
+            {
                 this._resetLockDelay();
+                this.callEvent("onPieceMove", 
+                {
+                    //positive is right, negitive is left
+                    distance: this._currentPiece.x - oldX
+                });
+            }
         }
     }
 
