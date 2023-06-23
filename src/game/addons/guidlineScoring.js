@@ -1,6 +1,5 @@
 {
     //TODO
-    // - add B2B points
     // - mulipliers
 
     const normalLineClears = [0, 100, 300, 500, 800];

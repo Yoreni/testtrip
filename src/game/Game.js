@@ -30,6 +30,9 @@ class Game extends IScene
         //penominos ["S5", "Z5", "P", "Q", "F", "E", "T5", "U", "V", "W", "X","J5","L5", "R", "Y", "N", "H", "I5"]
         this._addPlayer();
         PlayerRenderer.addEvents();
+
+        if (this.mode.init !== undefined)
+            this.mode.init(this.mode.gameRules ?? Player.defaultRules);
     }
 
     start()

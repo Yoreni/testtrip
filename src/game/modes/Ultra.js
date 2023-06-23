@@ -33,6 +33,11 @@
         {
 
         },
+        init: (rules) =>
+        {
+            rules.gravitiy = 20;
+            rules.ARE = 10;
+        },
         addons: ["backToBack", "guidlineScoring"],
     });
 }
