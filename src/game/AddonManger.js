@@ -5,15 +5,33 @@ class AddonMangaer
         this.addons = {};
     }
 
-    register(name, funkshun)
+    register(name, addon)
     {
-        this.addons[name] = funkshun
+        this.addons[name] = addon
     }
 
     applyAddons(mode)
     {
+        //an array to keep track of addons added so we dont add the same one twice
+        let applied = []
+
+        const applyAddon = (name) =>
+        {
+            if (!applied.includes(name))
+            {
+                this.addons[name].onAdd();
+                applied.push(name);
+                console.info(`Addon ${name} applied`);
+            }
+        }
+
         for (let addonName of mode.addons)
-            this.addons[addonName]()
+        {
+            const dependencies = this.addons[addonName].depend ?? [];
+            for (let dependeny of dependencies)
+                applyAddon(dependeny)
+            applyAddon(addonName)
+        }
     }
 }
 
