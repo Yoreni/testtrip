@@ -1,0 +1,1 @@
+import http.serverimport socketserverimport webbrowser#this pyhton script doesnt do what it shouldPORT = 8081Handler = http.server.SimpleHTTPRequestHandlerwith socketserver.TCPServer(("", PORT), Handler) as httpd:    print("serving at port", PORT)    webbrowser.open(f"http://localhost:{PORT}")    httpd.serve_forever()

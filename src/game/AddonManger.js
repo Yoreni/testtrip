@@ -25,7 +25,8 @@ class AddonMangaer
             }
         }
 
-        for (let addonName of mode.addons)
+        const addons = mode.addons ?? []
+        for (let addonName of addons)
         {
             const dependencies = this.addons[addonName].depend ?? [];
             for (let dependeny of dependencies)
