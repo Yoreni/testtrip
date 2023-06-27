@@ -17,20 +17,29 @@
             {
                 if (e.clearedLines > 4)
                     return;
+
+                let change = 0
     
                 //get extra points for keeping a b2b
                 const b2bMultiplyer = e.player._stats.b2b > 1 ? 1.5 : 1;
     
                 if (e.spinType === 0)
-                    e.player.score += normalLineClears[e.clearedLines] * b2bMultiplyer;
+                    change += normalLineClears[e.clearedLines] * b2bMultiplyer;
                 if (e.spinType === 1)
-                    e.player.score += miniSpinClears[e.clearedLines] * b2bMultiplyer;
+                    change += miniSpinClears[e.clearedLines] * b2bMultiplyer;
                 if (e.spinType === 2)
-                    e.player.score += spinClears[e.clearedLines] * b2bMultiplyer;
+                    change += spinClears[e.clearedLines] * b2bMultiplyer;
     
                 //combo points
                 if(e.player.combo > 0)
-                    e.player.score += 50 * (e.player.combo - 1);
+                    change += 50 * (e.player.combo - 1);
+
+                e.player.score += change
+                if (change > 0)
+                {
+                    e.change = change
+                    eventManager.callEvent("onScoreChange", e);
+                }
             });
     
             eventManager.addEvent("onPiecePlace", (e) =>

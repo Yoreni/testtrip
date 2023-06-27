@@ -1,6 +1,8 @@
 {
     const timeLimit = 120; 
 
+    let oldScore = 0;
+
     modeManager.register("ultra",
     {
         render: class extends PlayerRenderer
@@ -31,7 +33,11 @@
         },
         events: () =>
         {
-
+            eventManager.addEvent("onScoreChange", (e) =>
+            {
+                const pos = Point((e.piece.x - 1) * 16, (e.piece.y + 1) * -16)
+                new NumberPopup(e.render.container, e.change, pos);
+            });
         },
         init: (rules) =>
         {
@@ -40,4 +46,25 @@
         },
         addons: ["guidlineScoring"],
     });
+
+    class NumberPopup
+    {
+        constructor(container, text, pos = Point(0, -150))
+        {
+            this.container = container
+            this.text = new PIXI.Text(text, {fontSize: 24, fontWeight: "bold",fontFamily: "Calibri", "align": "right", fill: "#EEEEEE",})
+            this.text.position.set(pos.x, pos.y);
+            this.container.addChild(this.text)
+            this.tickerFunction = this.update.bind(this)
+            app.ticker.add(this.tickerFunction)
+        }
+
+        update(delta)
+        {
+            if (this.text.alpha > 0)
+                this.text.alpha -= 0.01;
+            else
+                app.ticker.remove(this.tickerFunction)
+        }
+    }
 }

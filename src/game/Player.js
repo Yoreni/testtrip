@@ -315,7 +315,8 @@ class Player
         this.callEvent("onPieceLock", {
             oldBoard: this._board.copy(),
             clearedLines: linesClearedThisPiece,
-            spinType: spin
+            spinType: spin,
+            piece: this.currentPiece.copy()
         })
 
         this._board.clearLines(this._board.completedLines)
