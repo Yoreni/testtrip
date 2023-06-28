@@ -57,14 +57,20 @@
             this.container.addChild(this.text)
             this.tickerFunction = this.update.bind(this)
             app.ticker.add(this.tickerFunction)
+            this.count = 0;
         }
 
         update(delta)
         {
             if (this.text.alpha > 0)
+            {
                 this.text.alpha -= 0.01;
+                this.text.style.fill = this.count % 8 < 4 ? 
+                    "#AAAAAA" : "#888888";
+            }
             else
                 app.ticker.remove(this.tickerFunction)
+            ++(this.count)
         }
     }
 }

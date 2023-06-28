@@ -23,13 +23,12 @@
                 //get extra points for keeping a b2b
                 const b2bMultiplyer = e.player._stats.b2b > 1 ? 1.5 : 1;
     
-                if (e.spinType === 0)
-                    change += normalLineClears[e.clearedLines] * b2bMultiplyer;
-                if (e.spinType === 1)
+                if (e.spinType === 1 && e.piece.type == "T")    //t spin mini
                     change += miniSpinClears[e.clearedLines] * b2bMultiplyer;
-                if (e.spinType === 2)
+                else if (e.spinType === 2 && e.piece.type == "T")   //normal t spin
                     change += spinClears[e.clearedLines] * b2bMultiplyer;
-    
+                else //usual line clears
+                    change += normalLineClears[e.clearedLines] * b2bMultiplyer;
                 //combo points
                 if(e.player.combo > 0)
                     change += 50 * (e.player.combo - 1);
