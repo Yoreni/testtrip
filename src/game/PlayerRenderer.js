@@ -122,6 +122,9 @@ class PlayerRenderer
 
     _updateStats(statsToDisplay = showStats)
     {
+        while (this._objects.statsDisplay.children.length < statsToDisplay.length)
+             this._objects.statsDisplay.addChild(new InfoText(this))
+
         for (let [index, child] of this._objects.statsDisplay.children.entries())
         {
             //move this block into its own function
@@ -173,8 +176,6 @@ class PlayerRenderer
         this._objects.statsDisplay = new PIXI.Container();
         this._objects.statsDisplay.position.set(-10, -20);
         playField.addChild(this._objects.statsDisplay);
-        for (let idx= 0; idx != 3; ++idx)
-            this._objects.statsDisplay.addChild(new InfoText(this))
 
         this.container.addChild(playField);
         //this.container.pivot.set(this.container.width * 0.5, this.container.height * -0.5);
@@ -236,7 +237,6 @@ class PlayerRenderer
 class InfoText extends PIXI.Container
 {
     #stat;
-    #player;
     #render;
 
     constructor(render, stat = "")
@@ -250,7 +250,6 @@ class InfoText extends PIXI.Container
         this.addChild(this.nameText);
         this.addChild(this.numberText);
         this.stat = stat;
-        this.#player = render._logicPlayer;
         this.#render = render;
     }
 
