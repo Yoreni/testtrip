@@ -6,6 +6,7 @@ const defaultDrawPieceValues = {
 
 const showStats = ["PPS", "Time", "Pieces"]
 
+
 class PlayerRenderer
 {
     constructor(logicPlayer, pixiContainer)
@@ -14,6 +15,7 @@ class PlayerRenderer
         this.container = pixiContainer;
         this._objects = {}
         this.minoPool = new ObjectPool(logicPlayer.board.width * logicPlayer.board.height * 2);
+        //this.InfoDisplay = InfoText;
 
         this._setupComponents();
     }
@@ -123,10 +125,10 @@ class PlayerRenderer
         for (let [index, child] of this._objects.statsDisplay.children.entries())
         {
             //move this block into its own function
-            let display = this.getPlayerStat(statsToDisplay[index]);
+            if (child.stat === "")
+                child.stat = statsToDisplay[index];
 
-            child.nameText.text = statsToDisplay[index];
-            child.numberText.text = display;
+            child.update();
             child.y = index * -50
         }
     }
@@ -145,11 +147,8 @@ class PlayerRenderer
         this._objects.boardBackground = boardBackground;
         playField.addChild(boardBackground);
 
-        //console.log("a", (this._logicPlayer.board.height - 1) * -16))
-
         this._objects.board = new PIXI.Container();
         playField.addChild(this._objects.board);
-        //this._drawBoard(this._logicPlayer.board);
 
         this._objects.fallingPiece = new RenderedPiece(this._logicPlayer.currentPiece);
         playField.addChild(this._objects.fallingPiece);
@@ -175,19 +174,7 @@ class PlayerRenderer
         this._objects.statsDisplay.position.set(-10, -20);
         playField.addChild(this._objects.statsDisplay);
         for (let idx= 0; idx != 3; ++idx)
-            this._objects.statsDisplay.addChild(new PIXI.Container())
-        for (let child of this._objects.statsDisplay.children)
-        {
-            let name = new PIXI.Text("", {fontSize: 24, fontWeight: "bold",fontFamily: "Calibri", "align": "right",});
-            let number = new PIXI.Text("", {fontSize: 24, fontWeight: "bold",fontFamily: "Calibri", "align": "right",});
-            name.y -= 20
-            name.anchor.set(1, 0)
-            number.anchor.set(1, 0)
-            child.nameText = name;
-            child.numberText = number;
-            child.addChild(name);
-            child.addChild(number)
-        }
+            this._objects.statsDisplay.addChild(new InfoText(this))
 
         this.container.addChild(playField);
         //this.container.pivot.set(this.container.width * 0.5, this.container.height * -0.5);
@@ -243,5 +230,44 @@ class PlayerRenderer
         if (statName === "Pieces")
             return this._logicPlayer.piecesPlaced;
         return "undefined";
+    }
+}
+
+class InfoText extends PIXI.Container
+{
+    #stat;
+    #player;
+    #render;
+
+    constructor(render, stat = "")
+    {
+        super();
+        this.nameText = new PIXI.Text("", {fontSize: 24, fontWeight: "bold", fontFamily: "Calibri", "align": "right",});
+        this.numberText = new PIXI.Text("", {fontSize: 24, fontWeight: "bold", fontFamily: "Calibri", "align": "right",});
+        this.nameText.y -= 20
+        this.nameText.anchor.set(1, 0)
+        this.numberText.anchor.set(1, 0)
+        this.addChild(this.nameText);
+        this.addChild(this.numberText);
+        this.stat = stat;
+        this.#player = render._logicPlayer;
+        this.#render = render;
+    }
+
+    get stat()
+    {
+        return this.#stat
+    }
+
+    set stat(stat)
+    {
+        this.#stat = stat
+        this.nameText.text = this.#stat;
+    }
+
+    update(text)
+    {
+        let display = this.#render.getPlayerStat(this.stat);
+        this.numberText.text = display;
     }
 }
