@@ -10,7 +10,9 @@ const
     TextWriter,
     ZipReader,
     ZipWriter,
+    HttpReader,
 } = zip;
+//console.log(zip);
 
 function init() 
 {
@@ -28,6 +30,13 @@ function init()
     sceneManager.start("game")
 
     setup();
+
+    //loads a skin
+    readZip(new ZipReader(new HttpReader("/assets/tetrazz3.zip"))).then(function(data)
+    {
+        let [skinData, urls] = data;
+        let skin = new Skin(skinData, urls);
+    });
 }
 
 function setup() 
@@ -65,8 +74,7 @@ function resize()
         console.log(canvasSize)
 }
 
-const textures = PIXI.Assets.load(["assets/rasei.png","assets/Z.png","assets/L.png","assets/O.png","assets/S.png"
-,"assets/I.png","assets/J.png","assets/T.png"])
+const textures = PIXI.Assets.load(["assets/rasei.png"])
     .then(function()
     {
         console.log("Textures Loaded");

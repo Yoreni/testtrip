@@ -14,12 +14,10 @@ document.addEventListener('drop', (e) =>
         return;
     }
 
-    readZip(file).then(function(data)
+    readZip(fileToZipReader(file)).then(function(data)
     {
         let [skinData, urls] = data;
         let skin = new Skin(skinData, urls);
-        //while (!skin.loaded)
-        //    ;
     });
 });
 
@@ -74,14 +72,20 @@ async function getPng(zipReader, filename)
 
 async function readZip(zip)
 {
-    const zipFileReader = new BlobReader(zip);
-    const zipReader = new ZipReader(zipFileReader);
-
-    const packJson = await getJson(zipReader, "pack.json");
+    const packJson = await getJson(zip, "pack.json");
     let urls = {};
     for (let [key, imagePath] of Object.entries(packJson.skin))
-    {
-        urls[key] = await getPng(zipReader, imagePath);
-    }
+        urls[key] = await getPng(zip, imagePath);
     return [packJson, urls];
+}
+
+/**
+ * turns a File object into a ZipReader object
+ * 
+ * @param {a File object} file 
+ */
+function fileToZipReader(file)
+{
+    const zipFileReader = new BlobReader(file);
+    return new ZipReader(zipFileReader);
 }

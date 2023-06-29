@@ -1,0 +1,15 @@
+{
+	"name": "Tetarraz Skin 3",
+	"author": "FiFiZ",
+	"internalName": "tetarraz3",
+	"skin": {
+		"I": "I.png",
+		"O": "O.png",
+		"T": "T.png",
+		"S": "S.png",
+		"Z": "Z.png",
+		"L": "L.png",
+		"J": "J.png",
+		"*": "fallback.png"
+	}
+}

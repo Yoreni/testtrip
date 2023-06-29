@@ -14,17 +14,17 @@ class Skin
 
     get name()
     {
-        this._packData.name;
+        return this._packData["name"];
     }
 
     get author()
     {
-        this._packData.author;
+        return this._packData["author"];
     }
 
     get id()
     {
-        this._packData.internalName;
+        return this._packData["internalName"];
     }
 
     get loaded()

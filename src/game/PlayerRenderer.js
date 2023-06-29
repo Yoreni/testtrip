@@ -15,7 +15,6 @@ class PlayerRenderer
         this.container = pixiContainer;
         this._objects = {}
         this.minoPool = new ObjectPool(logicPlayer.board.width * logicPlayer.board.height * 2);
-        //this.InfoDisplay = InfoText;
 
         this._setupComponents();
     }
@@ -60,9 +59,7 @@ class PlayerRenderer
             else
             {
                 child.visible = true;
-                const texture = currentSkin === null 
-                    ? PIXI.Texture.from(`assets/${minoType}.png`) 
-                    : currentSkin.getTexture(minoType);
+                const texture = currentSkin.getTexture(minoType);
                 child.texture = texture;
                 child.scale.set(16 / texture.width);
             }

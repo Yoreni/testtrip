@@ -15,6 +15,9 @@ class RenderedPiece extends PIXI.Container
 
     updatePiece(newFallingPiece)
     {
+        if (currentSkin === null)
+            return;
+
         if (newFallingPiece == null)
         {
             this.visible = false;
@@ -25,9 +28,7 @@ class RenderedPiece extends PIXI.Container
         if(typeof(newFallingPiece) === "string")
             newFallingPiece = new FallingPiece(newFallingPiece);
 
-        const texture = currentSkin === null 
-                    ? PIXI.Texture.from(`assets/${newFallingPiece.type}.png`) 
-                    : currentSkin.getTexture(newFallingPiece.type);
+        const texture = currentSkin.getTexture(newFallingPiece.type);
         const iterations = Math.max(newFallingPiece.minos.length, this.children.length);
 
         for (let index = 0; index !== iterations; ++index)
