@@ -7,6 +7,8 @@
     const spinClears = [400, 800, 1200, 1600, 2000];
     const perfectClearAmount = 3500;
 
+    let changeTracker = {};
+
     const addon = 
     {
         onAdd: () =>
@@ -35,16 +37,20 @@
 
                 e.player.score += change
                 if (change > 0)
-                {
                     e.change = change
-                    eventManager.callEvent("onScoreChange", e);
-                }
+                changeTracker[e.player.id] = e;
             });
     
             eventManager.addEvent("onPiecePlace", (e) =>
             {
                 if (e.player.board.isPc)
+                {
                     e.player.score += perfectClearAmount;
+                    changeTracker[e.player.id].change += perfectClearAmount;
+                }
+
+                if (changeTracker[e.player.id].change > 0)
+                    eventManager.callEvent("onScoreChange", changeTracker[e.player.id]);
             });
     
             eventManager.addEvent("onSoftDrop", (e) => e.player.score += e.distance);
