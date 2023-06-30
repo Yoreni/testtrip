@@ -7,6 +7,7 @@
     const spinClears = [400, 800, 1200, 1600, 2000];
     const perfectClearAmount = 3500;
 
+    //used to keep track of the score keeping process for each player
     let changeTracker = {};
 
     const addon = 

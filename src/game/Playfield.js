@@ -17,6 +17,12 @@ class Playfield
         //180 spin test
         // this._board[28] = ["Y", "Y", "Y","Y", "Y", "0","Y", "Y", "Y","Y"];
         // this._board[29] = ["Y", "Y", "Y","Y", "0", "0","Y", "Y", "Y","Y"];
+
+        //tetris pc
+        // this._board[3] = ["Y", "Y", "Y","Y", "Y", "0","Y", "Y", "Y","Y"];
+        // this._board[2] = ["Y", "Y", "Y","Y", "Y", "0","Y", "Y", "Y","Y"];
+        // this._board[1] = ["Y", "Y", "Y","Y", "Y", "0","Y", "Y", "Y","Y"];
+        // this._board[0] = ["Y", "Y", "Y","Y", "Y", "0","Y", "Y", "Y","Y"];
     }
 
     get width()

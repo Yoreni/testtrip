@@ -42,7 +42,6 @@
         },
         init: (rules) =>
         {
-
         },
         addons: ["guidlineScoring"],
     });

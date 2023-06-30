@@ -5,7 +5,8 @@ const defaultDrawPieceValues = {
 }
 
 const showStats = ["PPS", "Time", "Pieces"]
-
+const greyScaleFilter = new PIXI.ColorMatrixFilter();
+greyScaleFilter.blackAndWhite();
 
 class PlayerRenderer
 {
@@ -103,18 +104,19 @@ class PlayerRenderer
         {
             const piece = new FallingPiece(this._logicPlayer.nextQueue[index])
             child.updatePiece(piece);
-            //this._drawPiece(piece, child, 0, index * 16 * 3);
         }
     }
 
     _drawHoldPiece()
     {
-        const pieceType = this._logicPlayer.holdPiece;
-        if(pieceType == null)
+        if (this._logicPlayer.holdPiece === null)
             return;
 
-        this._drawPiece(new FallingPiece(pieceType), this._objects.holdPiece,
-            2 * -16, (this._logicPlayer.board.height - 1) * -16, 1);
+        this._objects.holdPiece.updatePiece(new FallingPiece(this._logicPlayer.holdPiece))
+        if (this._logicPlayer.holdUsed)
+            this._objects.holdPiece.filters = [greyScaleFilter]
+        else
+            this._objects.holdPiece.filters = []
     }
 
     _updateStats(statsToDisplay = showStats)
@@ -194,6 +196,7 @@ class PlayerRenderer
                 }
             }
             e.render._drawBoard(board);
+            e.render._drawHoldPiece();
         })
 
         eventManager.addEvent("AREend", (e) =>
@@ -209,7 +212,7 @@ class PlayerRenderer
 
         eventManager.addEvent("onHold", (e) =>
         {
-            e.render._objects.holdPiece.updatePiece(new FallingPiece(e.player.holdPiece))
+            e.render._drawHoldPiece();
         })
     }
 
