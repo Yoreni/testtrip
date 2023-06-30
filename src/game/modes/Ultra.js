@@ -1,7 +1,5 @@
 {
-    const timeLimit = 120; 
-
-    let oldScore = 0;
+    const timeLimit = 120;
 
     modeManager.register("ultra",
     {

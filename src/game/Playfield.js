@@ -119,6 +119,15 @@ class Playfield
     {
         return y;
     }
+
+    insertLine(line, index)
+    {
+        if (line.length != this.width)
+            throw `Cant insert a line with ${line.length} items into a board that has width of ${this.width}`;
+
+        this._board.splice(index, 0, line);
+        this._board.pop();
+    }
 }
 
 function leftToColision(fallingPiece, playfield)
@@ -155,4 +164,13 @@ function rightToColision(fallingPiece, playfield)
     fallingPiece.x -= 1;             //1 above the place it would colide with other minos/bounds
     count -= 1;
     return count;
+}
+
+function addGarbage(playfield, wellColumn, amount)
+{
+    const garbageLine = Array.from({length: playfield.width}, 
+        (_, column) => column === wellColumn ? "0" : "#");
+    
+    for (let count = 0; count != amount; ++count)
+        playfield.insertLine(garbageLine, 0);
 }

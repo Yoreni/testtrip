@@ -181,6 +181,9 @@ class PlayerRenderer
         //this.container.pivot.set(this.container.width * 0.5, this.container.height * -0.5);
         //this.container.pivot.set(this.container.x * -1, this.container.y * -1);
         //this.container.pivot.set(500, 500)
+
+        //draw the board just in case the player can see the board is its not an empty board
+        this._drawBoard(this._logicPlayer.board);
     }
 
     static addEvents()

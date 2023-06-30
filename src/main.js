@@ -30,13 +30,6 @@ function init()
     sceneManager.start("game")
 
     setup();
-
-    //loads a skin
-    readZip(new ZipReader(new HttpReader("/assets/tetrazz3.zip"))).then(function(data)
-    {
-        let [skinData, urls] = data;
-        let skin = new Skin(skinData, urls);
-    });
 }
 
 function setup() 
@@ -74,8 +67,29 @@ function resize()
         console.log(canvasSize)
 }
 
+//skull
+function makePromiseWithDelay(delay) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve('Promise resolved after ' + delay + ' milliseconds');
+      }, delay);
+    });
+  }
+
 const textures = PIXI.Assets.load(["assets/rasei.png"])
     .then(function()
+    {
+        //loads a skin
+        return readZip(new ZipReader(new HttpReader("/assets/tetrazz3.zip")))
+    })
+    .then(function(data)
+    {
+        console.log(data);
+        let [skinData, urls] = data;
+        let skin = new Skin(skinData, urls);
+        return makePromiseWithDelay(1); //a hacky way to make sure the skin has loaded before contiuing
+    })
+    .then(function(promise)
     {
         console.log("Textures Loaded");
         init();
