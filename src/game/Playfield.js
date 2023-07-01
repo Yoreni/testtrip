@@ -53,8 +53,8 @@ class Playfield
 
     clearLines(ys)
     {
-        //sorting and reversing is important cos otherwise a splice can make all the other intended ys inacarate
-        ys = ys.sort().reverse()
+        //sorting is important cos otherwise a splice can make all the other intended ys inacarate
+        ys = ys.sort((a, b) => b - a)
         for (let y of ys)
             this.clearLine(y)
     }

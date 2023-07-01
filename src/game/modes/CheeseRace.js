@@ -1,6 +1,8 @@
 {
     const lineGoal = 20;
-    const cheeseHeight = 10;
+    const cheeseHeight = 1;
+
+    const inComboMinCheeseHeight = Math.min(cheeseHeight, 3)
 
     let lastWellColumn = null
     let garbageCleared = 0;
@@ -22,6 +24,15 @@
         return lastWellColumn;
     }
 
+    const replaceGarbage = function(player, amount)
+    {
+        for (let index = 0; index != amount; ++index)
+        {
+            addGarbage(player.board, newWellColumn(), 1);
+            ++currentCheeseHeight;
+        }
+    }
+
     const getLinesLeft = function()
     {
         return lineGoal - garbageCleared;
@@ -35,13 +46,15 @@
             {
                 if (statName === "Garbage Cleared")
                     return garbageCleared
+                if (statName === "Garbage Left")
+                    return Math.max(lineGoal - garbageCleared, 0)
                 return super.getPlayerStat(statName)
             }
 
             _updateStats()
             {
                 //console.log(PlayerRenderer.InfoDisplay)
-                let display = ["PPS", "Time", "Garbage Cleared"];
+                let display = ["PPS", "Time", "Garbage Left", "Pieces"];
                 super._updateStats(display);
             }
         },
@@ -56,11 +69,7 @@
         {
             eventManager.addEvent("onGameStart", (e) =>
             {
-                for(let count = 0; count != cheeseHeight; ++count)
-                {
-                    addGarbage(e.player.board, newWellColumn(), 1);
-                    ++currentCheeseHeight;
-                }
+                replaceGarbage(e.player, Math.min(cheeseHeight, lineGoal));
             });
 
             eventManager.addEvent("onPieceLock", (e) =>
@@ -75,32 +84,24 @@
                     }
                 }
 
+                if (garbageCleared >= lineGoal)
+                    e.player._markTopout();
+            });
 
-                if (garbageCleared + cheeseHeight > lineGoal)
-                    return
-
+            eventManager.addEvent("onPiecePlace", (e) =>
+            {
                 //replace garbage lines
-                let replaceAmount = Math.min(getLinesLeft(), cheeseHeight - currentCheeseHeight);
+                const garbageLeftToSpawn = Math.max(lineGoal - currentCheeseHeight - garbageCleared, 0);
+                let replaceAmount = Math.max(Math.min(garbageLeftToSpawn, cheeseHeight - currentCheeseHeight), 0);
 
                 //dont replace garbage lines if we are in a combo
                 if (e.player.combo > 0)
                 {
-
-
-                    replaceAmount = Math.max(Math.min(replaceAmount, 3 - currentCheeseHeight), 0);
-                    for (let index = 0; index != replaceAmount; ++index)
-                    {
-                        addGarbage(e.player.board, newWellColumn(), 1);
-                        ++currentCheeseHeight;
-                    }
-                    return;
+                    replaceAmount = Math.max(Math.min(replaceAmount, 
+                            inComboMinCheeseHeight - currentCheeseHeight), 0);
                 }
 
-                for (let index = 0; index != replaceAmount; ++index)
-                {
-                    addGarbage(e.player.board, newWellColumn(), 1);
-                    ++currentCheeseHeight;
-                }
+                replaceGarbage(e.player, replaceAmount);
             });
         },
     });
