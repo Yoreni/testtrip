@@ -22,7 +22,7 @@ class Game extends IScene
             hardDrop: new KeyDetector(app, " "),
         }
 
-        this.mode = modeManager.get("cheeseRace");
+        this.mode = modeManager.get("marathon");
         this.mode.events();
         addonMangaer.applyAddons(this.mode);
 

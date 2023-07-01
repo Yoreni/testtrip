@@ -1,5 +1,5 @@
 {
-    const lineGoal = 20;
+    const lineGoal = 100;
     const cheeseHeight = 10;
     const garbageMessiness = 100;
 
@@ -52,13 +52,15 @@
                     return garbageCleared
                 if (statName === "Garbage Left")
                     return Math.max(lineGoal - garbageCleared, 0)
+                if (statName === "Pace")
+                    return Math.round((this._logicPlayer.piecesPlaced / garbageCleared) * lineGoal);
                 return super.getPlayerStat(statName)
             }
 
             _updateStats()
             {
                 //console.log(PlayerRenderer.InfoDisplay)
-                let display = ["PPS", "Time", "Garbage Left", "Pieces"];
+                let display = ["PPS", "Time", "Garbage Left", "Pieces", "Pace"];
                 super._updateStats(display);
             }
         },

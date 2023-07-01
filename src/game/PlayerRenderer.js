@@ -233,6 +233,8 @@ class PlayerRenderer
             return mss000timeformat(this._logicPlayer.time);
         if (statName === "Pieces")
             return this._logicPlayer.piecesPlaced;
+        if (statName === "Lines")
+            return this._logicPlayer.linesCleared;
         return "undefined";
     }
 }

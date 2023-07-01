@@ -14,7 +14,12 @@
     {
         onAdd: () =>
         {
-            eventManager.addEvent("onGameStart", (e) => e.player.score = 0);
+            eventManager.addEvent("onGameStart", (e) => 
+            {
+                e.player.score = 0;
+                if (e.player._rules.scoreMulti === undefined)
+                    e.player._rules.scoreMulti = 1;
+            });
 
             eventManager.addEvent("onPieceLock", (e) =>
             {
@@ -36,6 +41,7 @@
                 if(e.player.combo > 0)
                     change += 50 * (e.player.combo - 1);
 
+                change = Math.round(change * e.player._rules.scoreMulti)
                 e.player.score += change
                 if (change > 0)
                     e.change = change
@@ -46,8 +52,9 @@
             {
                 if (e.player.board.isPc)
                 {
-                    e.player.score += perfectClearAmount;
-                    changeTracker[e.player.id].change += perfectClearAmount;
+                    const pointsAwarded = Math.round(perfectClearAmount * e.player._rules.scoreMulti);
+                    e.player.score += pointsAwarded;
+                    changeTracker[e.player.id].change += pointsAwarded;
                 }
 
                 if (changeTracker[e.player.id].change > 0)

@@ -9,7 +9,7 @@ class Player
         },
         pieceGeneration: sevenBag,
         rotationSystem: SRSXkicktable,
-        lockDelay: 31,
+        lockDelay: 30,
         maxLockResets: 15,
         gravitiy: 1/60,
         hold: 2,                    //0 = off, 1 = on, 2 = on (infinite hold)
