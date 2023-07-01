@@ -1,6 +1,7 @@
 {
     const lineGoal = 20;
-    const cheeseHeight = 1;
+    const cheeseHeight = 10;
+    const garbageMessiness = 100;
 
     const inComboMinCheeseHeight = Math.min(cheeseHeight, 3)
 
@@ -15,6 +16,9 @@
             lastWellColumn = randInt(0, 9);
             return lastWellColumn;
         }
+
+        if (garbageMessiness <= randInt(0, 99))
+            return lastWellColumn;
 
         let chosen = randInt(0, 9);
         while (chosen === lastWellColumn)
