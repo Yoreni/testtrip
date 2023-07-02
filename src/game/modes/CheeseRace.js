@@ -110,5 +110,9 @@
                 replaceGarbage(e.player, replaceAmount);
             });
         },
+        gameRules:
+        {
+            seed: 10
+        }
     });
 }

@@ -1,7 +1,4 @@
 {
-    //TODO
-    // - mulipliers
-
     const normalLineClears = [0, 100, 300, 500, 800];
     const miniSpinClears = [100, 200, 400, 600, 800];
     const spinClears = [400, 800, 1200, 1600, 2000];

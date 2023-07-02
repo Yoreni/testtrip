@@ -1,13 +1,13 @@
-function sevenBag(currentQueue, pieceRoster)
+function sevenBag(player)
 {
-    let bag = deepCopy(pieceRoster)
-    shuffle(bag);
+    let bag = deepCopy(player._rules.pieceRoster)
+    shuffle(bag, player.random);
     return bag;
 }
 
-function fourteenBag(currentQueue, pieceRoster)
+function fourteenBag(player)
 {
-    let bag = deepCopy(pieceRoster).concat(deepCopy(pieceRoster))
-    shuffle(bag);
+    let bag = deepCopy(player._rules.pieceRoster).concat(deepCopy(player._rules.pieceRoster))
+    shuffle(bag, player.random);
     return bag;
 }

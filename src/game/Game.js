@@ -20,9 +20,17 @@ class Game extends IScene
             hold: new KeyDetector(app, "x"),
             rotate180: new KeyDetector(app, "c"),
             hardDrop: new KeyDetector(app, " "),
+            //             left: new KeyDetector(app, "a"),
+            // right: new KeyDetector(app, "d"),
+            // softDrop: new KeyDetector(app, "s"),
+            // rotateClockwise: new KeyDetector(app, "l"),
+            // rotateAnticlockwise: new KeyDetector(app, "k"),
+            // hold: new KeyDetector(app, "Shift"),
+            // rotate180: new KeyDetector(app, ";"),
+            // hardDrop: new KeyDetector(app, "w"),
         }
 
-        this.mode = modeManager.get("marathon");
+        this.mode = modeManager.get("cheeseRace");
         this.mode.events();
         addonMangaer.applyAddons(this.mode);
 

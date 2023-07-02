@@ -21,6 +21,8 @@ class Player
     constructor(rules, id)
     {
         this._rules = saveOptionsWithDeafults(rules, Player.defaultRules)
+        console.log(rules.seed ?? new Date().getTime())
+        this.random = new Random(rules.seed ?? new Date().getTime());
         this.#id = id;
         this._board = new Playfield(this._rules.board.width, this._rules.board.height);
         this._topupNextQueue();
@@ -454,7 +456,7 @@ class Player
         if (this._nextQueue === undefined)
             this._nextQueue = [];
         while (this._nextQueue.length < 5)
-            this._nextQueue.push(...this._rules.pieceGeneration(this._nextQueue, this._rules.pieceRoster))
+            this._nextQueue.push(...this._rules.pieceGeneration(this))
     }
 }
 

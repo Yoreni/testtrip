@@ -7,6 +7,7 @@
  */
 function randInt(min, max) 
 {
+    //global
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
@@ -84,6 +85,12 @@ function deepCopy(object)
     return JSON.parse(JSON.stringify(object))
 }
 
+/**
+ * Displays a number in seconds into human readble m:ss.000 format
+ * 
+ * @param {number} totalSeconds 
+ * @returns {string}
+ */
 function mss000timeformat(totalSeconds)
 {
     let sign = ""
@@ -107,11 +114,14 @@ function mss000timeformat(totalSeconds)
  * Shuffles array in place.
  * @param {Array} array items An array containing the items.
  */
-function shuffle(array) 
+function shuffle(array, random = null) 
 {
+    console.log(random.double())
+    const randIntFunction = random instanceof Random ? random.randInt.bind(random) : randInt;
+    
     for (let index = array.length - 1; index > 0; index--) 
     {
-        let index2 = randInt(0, index);
+        let index2 = randIntFunction(0, index);
         //swap the 2 indexes around
         [array[index], array[index2]] = [array[index2], array[index]]
     }
@@ -122,8 +132,7 @@ function shuffle(array)
 function Point(x, y)
 {
     return {
-        x: x,
-        y: y
+        x, y
     }
 }
 

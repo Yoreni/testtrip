@@ -64,7 +64,7 @@ function resize()
 
         canvasSize.width = newWidth
         canvasSize.height = h
-        console.log(canvasSize)
+        console.log(`Resied to a width of ${canvasSize.width} and a height of ${canvasSize.height}`)
 }
 
 //skull
@@ -84,7 +84,6 @@ const textures = PIXI.Assets.load(["assets/rasei.png"])
     })
     .then(function(data)
     {
-        console.log(data);
         let [skinData, urls] = data;
         let skin = new Skin(skinData, urls);
         return makePromiseWithDelay(50); //a hacky way to make sure the skin has loaded before contiuing
