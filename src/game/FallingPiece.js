@@ -270,37 +270,4 @@ class FallingPiece
         this._subPosition.x = mod(this._subPosition.x, 1);
         this._subPosition.y = mod(this._subPosition.y, 1);
     }
-
-    // rotate(amount)
-    // {
-    //     let rotationMatrix = []
-    //     const newRotation = mod(this._rotation + amount, 4)
-
-    //     switch (mod(newRotation - this._rotation, 4))
-    //     {
-    //         case 0:     //no rotation
-    //             return;
-    //         case 1:     //clockwise
-    //             rotationMatrix = [[0, 1],[-1, 0]];
-    //             break;
-    //         case 2:     //180
-    //             rotationMatrix = [[0, -1],[-1, 0]]
-    //             break;
-    //         case 3:     //anti-clockwise
-    //             rotationMatrix = [[0, -1],[1, 0]]
-    //             break;
-    //     }
-        
-    //     for (let [index, mino] of this._minos.entries())
-    //     {
-    //         let newX = (rotationMatrix[0][0] * mino.x) + (rotationMatrix[0][1] * mino.y);
-    //         let newY = (rotationMatrix[1][0] * mino.x) + (rotationMatrix[1][1] * mino.y);
-    //         this._minos[index] = {
-    //             x: newX,
-    //             y: newY
-    //         };
-    //     }
-
-    //     this._rotation = newRotation;
-    // }
 }

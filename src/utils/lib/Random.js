@@ -90,6 +90,8 @@ class Random
     copy()
     {
         let copy = new Random();
+		copy.#seed = this.#seed;
+		copy.#iterations = this.#iterations
         copy.#c = this.#c;
         copy.#s0 = this.#s0;
         copy.#s1 = this.#s1;

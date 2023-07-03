@@ -24,8 +24,8 @@ class PlayerRenderer
     {
         if (this._logicPlayer.isAlive && this._logicPlayer.AREtimer === 0)
         {
-            this._drawFallingPiece();
-            this._drawGhostPiece();
+            // this._drawFallingPiece();
+            // this._drawGhostPiece();
         }
         else
         {
@@ -184,6 +184,8 @@ class PlayerRenderer
 
         //draw the board just in case the player can see the board is its not an empty board
         this._drawBoard(this._logicPlayer.board);
+        this._drawFallingPiece();
+        this._drawGhostPiece();
     }
 
     static addEvents()
@@ -209,6 +211,9 @@ class PlayerRenderer
 
         eventManager.addEvent("onPiecePlace", (e) =>
         {
+            e.render._drawFallingPiece();
+            e.render._drawGhostPiece();
+
             if (e.player.AREtimer === 0)
                 e.render._drawBoard(e.player.board);
         })
@@ -216,6 +221,19 @@ class PlayerRenderer
         eventManager.addEvent("onHold", (e) =>
         {
             e.render._drawHoldPiece();
+            e.render._drawFallingPiece();
+            e.render._drawGhostPiece();
+        })
+
+        eventManager.addEvent("onPieceRotate", (e) =>
+        {
+            e.render._drawFallingPiece();
+            e.render._drawGhostPiece();
+        })
+
+        eventManager.addEvent("onSoftDrop", (e) =>
+        {
+            e.render._drawFallingPiece();
         })
     }
 

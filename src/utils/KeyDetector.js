@@ -3,10 +3,7 @@ function KeyDetector(app, key)
     this.tick = function(delta) 
     {
         if(this.isDown)
-        {         
             this.framesDown += 1
-            this.onDown()
-        }
     } 
 
     this.isDown = false
@@ -19,7 +16,10 @@ function KeyDetector(app, key)
         if(e.key === key)
         {
             if(!this.isDown)
+            {
                 this.firstPressed = new Date().getTime()
+                this.onDown()
+            }
 
            this.isDown = true
         }

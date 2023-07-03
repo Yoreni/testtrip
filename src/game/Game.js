@@ -1,7 +1,7 @@
 const handling = {
-    DAS: 6,
+    DAS: 100,
     SDF: 1.79e308,
-    ARR: 1,
+    ARR: 16,
 }
 
 class Game extends IScene
@@ -30,7 +30,7 @@ class Game extends IScene
             // hardDrop: new KeyDetector(app, "w"),
         }
 
-        this.mode = modeManager.get("cheeseRace");
+        this.mode = modeManager.get("sprint");
         this.mode.events();
         addonMangaer.applyAddons(this.mode);
 
@@ -41,6 +41,46 @@ class Game extends IScene
 
         if (this.mode.init !== undefined)
             this.mode.init(this.mode.gameRules ?? Player.defaultRules);
+
+        const handlingCode = (dir) =>
+        {
+            let player = this._players[0].logic;
+            let render = this._players[0].render;
+
+            //-1 is left, 1 is right
+            player.moveCurrentPiece(dir);
+            render._drawFallingPiece();
+            render._drawGhostPiece();
+            const key = dir === 1 ? this._keybaord.right : this._keybaord.left
+            const otherKey = dir !== 1 ? this._keybaord.right : this._keybaord.left
+
+            setTimeout(() =>
+            {
+                //check if you are still holding the key
+                if (Math.round(key.getSecondsDown() * 1000) < handling.DAS)
+                    return;
+
+                const loop = setInterval(() => 
+                {
+                    const tapback = otherKey.getSecondsDown() > 0 
+                            && key.getSecondsDown() > otherKey.getSecondsDown()
+                    if (tapback)
+                        return;
+
+                    if (key.getSecondsDown() > 0)
+                    {
+                        player.moveCurrentPiece(dir);
+                        render._drawFallingPiece();
+                        render._drawGhostPiece();
+                    }
+                    else
+                        clearInterval(loop);
+                }, handling.ARR)
+            }, handling.DAS)
+
+        }
+        this._keybaord.left.onDown = () => handlingCode(-1)
+        this._keybaord.right.onDown = () => handlingCode(1)
     }
 
     start()
@@ -106,42 +146,9 @@ class Game extends IScene
     _handleKeyboard() 
     {
         let player = this._players[0].logic;
-        let keyboard = this._keybaord;
-
-        function dasRight()
-        {
-            if (keyboard.right.framesDown === 1)
-                player.moveCurrentPiece(1);
-            else if (keyboard.right.framesDown > handling.DAS)
-                player.moveCurrentPiece(1 / handling.ARR);
-        }
-
-        function dasLeft()
-        {
-            if (keyboard.left.framesDown === 1)
-                player.moveCurrentPiece(-1);
-            else if (keyboard.left.framesDown > handling.DAS)
-                player.moveCurrentPiece(-1 / handling.ARR);
-        }
 
         if (this._keybaord.hardDrop.framesDown === 1)
             player.harddrop();
-        if (this._keybaord.left.framesDown > this._keybaord.right.framesDown)
-        {
-            if (this._keybaord.right.framesDown === 0)
-                dasLeft();
-            else
-                dasRight();
-        }
-        else if (this._keybaord.right.framesDown > this._keybaord.left.framesDown)
-        {
-            if (this._keybaord.left.framesDown === 0)
-                dasRight();
-            else
-                dasLeft()
-        }
-        else
-            dasLeft();
         if (this._keybaord.softDrop.framesDown > 0)
             player.softDrop();
         if (this._keybaord.rotateClockwise.framesDown === 1)

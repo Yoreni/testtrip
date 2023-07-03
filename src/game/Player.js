@@ -133,21 +133,21 @@ class Player
 
     rotateClockwise()
     {
-        this._currentPiece = this._rotate(1);
+        this._rotate(1);
         if (this._currentPiece.x == this.ghostPiece.x)
             this._resetLockDelay();
     }
 
     rotateAnticlockwise()
     {
-        this._currentPiece = this._rotate(-1);
+         this._rotate(-1);
         if (this._currentPiece.x == this.ghostPiece.x)
             this._resetLockDelay();
     }
 
     rotate180()
     {
-        this._currentPiece = this._rotate(2);
+        this._rotate(2);
         if (this._currentPiece.x == this.ghostPiece.x)
             this._resetLockDelay();
     }
@@ -159,6 +159,8 @@ class Player
         const kicktableDirection = "" 
                         + this._currentPiece.rotation + mod(this._currentPiece.rotation + direction, 4);
         const kickData = this._rules.rotationSystem[kicktableType][kicktableDirection];
+
+        let success = false;
     
         for (let attempt = 0; attempt != kickData.length; ++attempt)
         {
@@ -169,12 +171,14 @@ class Player
     
             if (!this._board.doesColide(piece))
             {
+                success = true;
+                this._currentPiece = piece;
                 this.callEvent("onPieceRotate", 
                 {
                     kickUsed: attempt,
                     direction: direction
                 })
-                return piece;
+                return;
             }
         }
     
