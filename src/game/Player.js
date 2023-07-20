@@ -21,7 +21,6 @@ class Player
     constructor(rules, id)
     {
         this._rules = saveOptionsWithDeafults(rules, Player.defaultRules)
-        console.log(rules.seed ?? new Date().getTime())
         this.random = new Random(rules.seed ?? new Date().getTime());
         this.#id = id;
         this._board = new Playfield(this._rules.board.width, this._rules.board.height);
@@ -52,6 +51,11 @@ class Player
         return this._nextQueue;
     }
 
+    /**
+     * Gets the type of piece in the hold slot
+     * 
+     * @returns {string}
+     */
     get holdPiece()
     {
         return this._hold;

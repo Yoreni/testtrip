@@ -18,6 +18,7 @@ document.addEventListener('drop', (e) =>
     {
         let [skinData, urls] = data;
         let skin = new Skin(skinData, urls);
+        return skin.loadTextures();
     });
 });
 

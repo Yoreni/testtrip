@@ -12,7 +12,6 @@ const
     ZipWriter,
     HttpReader,
 } = zip;
-//console.log(zip);
 
 function init() 
 {
@@ -76,6 +75,15 @@ function makePromiseWithDelay(delay) {
     });
   }
 
+/**
+ * 
+ * @param {Player} player 
+ */
+function test(player)
+{
+    player.holdPiece
+}
+
 const textures = PIXI.Assets.load(["assets/rasei.png"])
     .then(function()
     {
@@ -86,7 +94,7 @@ const textures = PIXI.Assets.load(["assets/rasei.png"])
     {
         let [skinData, urls] = data;
         let skin = new Skin(skinData, urls);
-        return makePromiseWithDelay(50); //a hacky way to make sure the skin has loaded before contiuing
+        return skin.loadTextures();
     })
     .then(function(promise)
     {

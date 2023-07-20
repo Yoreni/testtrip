@@ -116,7 +116,6 @@ function mss000timeformat(totalSeconds)
  */
 function shuffle(array, random = null) 
 {
-    console.log(random.double())
     const randIntFunction = random instanceof Random ? random.randInt.bind(random) : randInt;
     
     for (let index = array.length - 1; index > 0; index--) 

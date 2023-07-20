@@ -23,10 +23,7 @@ class PlayerRenderer
     update(delta)
     {
         if (this._logicPlayer.isAlive && this._logicPlayer.AREtimer === 0)
-        {
-            // this._drawFallingPiece();
-            // this._drawGhostPiece();
-        }
+            this._drawFallingPiece();   //it is updated every frame because of gavity
         else
         {
             this._objects.fallingPiece.clear();
@@ -234,6 +231,12 @@ class PlayerRenderer
         eventManager.addEvent("onSoftDrop", (e) =>
         {
             e.render._drawFallingPiece();
+        })
+
+        eventManager.addEvent("onPieceMove", (e) =>
+        {
+            e.render._drawFallingPiece();
+            e.render._drawGhostPiece();
         })
     }
 
