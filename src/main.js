@@ -13,6 +13,8 @@ const
     HttpReader,
 } = zip;
 
+const SpinType = _enum("NONE", "MINI", "FULL");
+
 function init() 
 {
     resize();

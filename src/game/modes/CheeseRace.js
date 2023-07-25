@@ -37,11 +37,6 @@
         }
     }
 
-    const getLinesLeft = function()
-    {
-        return lineGoal - garbageCleared;
-    }
-
     modeManager.register("cheeseRace",
     {
         render: class extends PlayerRenderer
@@ -59,16 +54,8 @@
 
             _updateStats()
             {
-                //console.log(PlayerRenderer.InfoDisplay)
                 let display = ["PPS", "Time", "Garbage Left", "Pieces", "Pace"];
                 super._updateStats(display);
-            }
-        },
-        logic: class extends Player
-        {
-            tick(delta)
-            {
-                super.tick(delta);
             }
         },
         events: () =>

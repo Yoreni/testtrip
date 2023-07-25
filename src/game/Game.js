@@ -6,7 +6,7 @@ class Game extends IScene
         this.container = new PIXI.Container();
         this._objects = {};
 
-        this.mode = modeManager.get("cheeseRace");
+        this.mode = modeManager.get("sprint");
         this.mode.events();
         addonMangaer.applyAddons(this.mode);
 

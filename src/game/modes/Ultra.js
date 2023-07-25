@@ -16,7 +16,6 @@
 
             _updateStats()
             {
-                //console.log(PlayerRenderer.InfoDisplay)
                 let display = ["PPS", "Time", "Score"];
                 super._updateStats(display);
             }

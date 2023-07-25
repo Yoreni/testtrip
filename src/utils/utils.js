@@ -156,3 +156,11 @@ function getOrDefault(expression, diyfowt)
 {
     return expression === undefined ? diyfowt : expression;
 }
+
+function _enum(...names)
+{
+    let object = {};
+    for (const name of names) 
+        object[name] = Symbol(name);
+    return Object.freeze(object);
+}

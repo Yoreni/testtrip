@@ -1,5 +1,7 @@
 {
-    const lineGoal = 40; 
+    const lineGoal = 40;
+
+    let lppstracker = []
 
     modeManager.register("sprint",
     {
@@ -10,12 +12,15 @@
             {
                 if (statName === "Lines Remaining")
                     return Math.max(lineGoal - this._logicPlayer.linesCleared, 0);
+                if (statName === "lPPS")
+                    return  lppstracker.length === 0 ? 0 : 
+                        (lppstracker.length / (lppstracker[0] - lppstracker.at(-1))).toFixed(2);
                 return super.getPlayerStat(statName)
             }
 
             _updateStats()
             {
-                let display = ["PPS", "Time", "Lines Remaining"];
+                let display = ["PPS", "Time", "Lines Remaining", "lPPS"];
                 super._updateStats(display);
             }
 
@@ -39,6 +44,10 @@
         {
             eventManager.addEvent("onPieceLock", (e) =>
             {
+                lppstracker.unshift(new Date().getTime() / 1000)
+                if (lppstracker.length > 5)
+                    lppstracker.pop()
+
                 if (e.player.linesCleared >= lineGoal)
                 {
                     e.player._markTopout();
