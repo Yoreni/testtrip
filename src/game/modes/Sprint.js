@@ -13,7 +13,7 @@
                 if (statName === "Lines Remaining")
                     return Math.max(lineGoal - this._logicPlayer.linesCleared, 0);
                 if (statName === "lPPS")
-                    return  lppstracker.length === 0 ? 0 : 
+                    return  lppstracker.length <= 1 ? "0.00" : 
                         (lppstracker.length / (lppstracker[0] - lppstracker.at(-1))).toFixed(2);
                 return super.getPlayerStat(statName)
             }

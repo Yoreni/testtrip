@@ -28,7 +28,8 @@ function init()
     const sceneManager = new SceneManager(app);
 
     sceneManager.add("game", new Game())
-    sceneManager.start("game")
+    sceneManager.add("modeMenu", new ModeMenu())
+    sceneManager.start("modeMenu")
 
     setup();
 }
