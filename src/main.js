@@ -14,6 +14,7 @@ const
 } = zip;
 
 const SpinType = _enum("NONE", "MINI", "FULL");
+const sceneManager = new SceneManager(app);
 
 function init() 
 {
@@ -25,8 +26,6 @@ function init()
     app.renderer.view.style.position = 'absolute'
     
     //setup scene manager
-    const sceneManager = new SceneManager(app);
-
     sceneManager.add("game", new Game())
     sceneManager.add("modeMenu", new ModeMenu())
     sceneManager.start("modeMenu")

@@ -135,6 +135,13 @@ function Point(x, y)
     }
 }
 
+/**
+ * set default values of an object if a value for an attribute is not given
+ * 
+ * @param {object} settingsObject 
+ * @param {object} defaultsObject 
+ * @returns {object}
+ */
 function saveOptionsWithDeafults(settingsObject, defaultsObject)
 {
     let object = Object.create(defaultsObject);
