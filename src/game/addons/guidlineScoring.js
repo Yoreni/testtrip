@@ -13,6 +13,7 @@
         {
             eventManager.addEvent("onGameStart", (e) => 
             {
+                changeTracker = {}
                 e.player.score = 0;
                 if (e.player._rules.scoreMulti === undefined)
                     e.player._rules.scoreMulti = 1;
@@ -55,7 +56,10 @@
                 }
 
                 if (changeTracker[e.player.id].change > 0)
+                {
                     eventManager.callEvent("onScoreChange", changeTracker[e.player.id]);
+                    //console.log(changeTracker);
+                }
             });
     
             eventManager.addEvent("onSoftDrop", (e) => e.player.score += e.distance);

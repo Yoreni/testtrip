@@ -1,5 +1,5 @@
 {
-    const timeLimit = 120;
+    const timeLimit = 10;
 
     modeManager.register("ultra",
     {
@@ -31,11 +31,16 @@
         },
         events: () =>
         {
-            eventManager.addEvent("onScoreChange", (e) =>
+            let ids = []
+
+            ids.push(eventManager.addEvent("onScoreChange", (e) =>
             {
+                console.log("change");
                 const pos = Point((e.piece.x - 1) * 16, (e.piece.y + 1) * -16)
                 new NumberPopup(e.render.container, e.change, pos);
-            });
+            }));
+
+            return ids;
         },
         init: (rules) =>
         {

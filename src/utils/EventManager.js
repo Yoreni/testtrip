@@ -1,5 +1,7 @@
 class EventManager
 {
+    static #eventIdCounter = 0;
+
     constructor()
     {
         this._events = {}
@@ -7,9 +9,13 @@ class EventManager
 
     addEvent(name, func)
     {
+        const eventId = EventManager.#eventIdCounter++
+
         if (this._events[name] === undefined)
             this._events[name] = []
-        this._events[name].push(func)
+        this._events[name].push({func, eventId})
+
+        return eventId;
     }
 
     callEvent(name, data)
@@ -17,11 +23,21 @@ class EventManager
         if (this._events[name] === undefined)
             return;
 
-        let functions = this._events[name]
-        for (let func of functions)
+        let events = this._events[name]
+        for (let event of events)
         {
-            func(data)
+            event.func(data)
         }
+    }
+
+    /**
+     * 
+     * @param  {...Number} idsToRemove 
+     */
+    removeEvent(...idsToRemove)
+    {
+        for (let [trigger, events] of Object.entries(this._events))
+            this._events[trigger] = events.filter((_event) => !idsToRemove.includes(_event.eventId));
     }
 }
 

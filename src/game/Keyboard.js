@@ -31,6 +31,9 @@ class Keyboard
         //thank you zztetris
         const handlingCode = (dir) =>
         {
+            if (this.#player === undefined || !this.#player.isAlive)
+                return;
+
             //-1 is left, 1 is right
             this.#player.moveCurrentPiece(dir);
             const key = dir === 1 ? this.#keys.right : this.#keys.left;

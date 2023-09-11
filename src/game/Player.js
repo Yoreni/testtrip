@@ -71,6 +71,11 @@ class Player
         return this._board;
     }
 
+    /**
+     * true if the player is still playing.
+     * 
+     * @returns {boolean}
+     */
     get isAlive()
     {
         return this._stats.end === undefined;

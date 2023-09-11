@@ -34,6 +34,11 @@ class AddonMangaer
             applyAddon(addonName)
         }
     }
+
+    removeAllAddons()
+    {
+        //TODO implement this. this removes addons events
+    }
 }
 
 const addonMangaer = new AddonMangaer();

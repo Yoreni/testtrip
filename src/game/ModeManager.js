@@ -9,9 +9,11 @@ class ModeManager
         this.#modes = {};
     }
 
-    get(mode)
+    get(modeName)
     {
-        return this.#modes[mode];
+        let a = this.#modes[modeName];
+        a.name = modeName;
+        return a;
     }
 
     register(name, modeData)
