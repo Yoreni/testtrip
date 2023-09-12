@@ -132,15 +132,13 @@
                 super._updateStats(display);
             }
         },
-        events: () =>
+        events:
         {
-            eventManager.addEvent("onPiecePlace", (e) =>
+            onPiecePlace: (e) =>
             {
                 if (artConditions[making](e.player.board))
-                {
-                    alert("You did it")
-                }
-            })
+                    alert("You did it");
+            }
         },
         gameRules:
         {

@@ -38,25 +38,22 @@
                 super._updateStats(display);
             }
         },
-        events: () =>
+        events: 
         {
-
-            eventManager.addEvent("onGameStart", (e) =>
+            onGameStart: (e) =>
             {
                 e.player.level = startingLevel;
                 e.player._rules.gravitiy = gravitys[startingLevel - 1];
                 e.player._rules.lockDelay = lockDelays[startingLevel - 1];
                 e.player._rules.scoreMulti = startingLevel;
-            });
-
-            eventManager.addEvent("onScoreChange", (e) =>
+            },
+            onScoreChange: (e) =>
             {
                 console.log("change")
                 const pos = Point((e.piece.x - 1) * 16, (e.piece.y + 1) * -16)
                 new NumberPopup(e.render.container, e.change.toLocaleString(), pos);
-            });
-
-            eventManager.addEvent("onPiecePlace", (e) =>
+            },
+            onPiecePlace: (e) =>
             {
                 const level = Math.floor(e.player.linesCleared / 10) + startingLevel;
 
@@ -67,7 +64,8 @@
                     e.player._rules.lockDelay = lockDelays[level - 1];
                     e.player._rules.scoreMulti = level;
                 }
-            });
+            }
+
         },
         init: (rules) =>
         {

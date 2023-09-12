@@ -58,14 +58,10 @@
                 super._updateStats(display);
             }
         },
-        events: () =>
+        events: 
         {
-            eventManager.addEvent("onGameStart", (e) =>
-            {
-                replaceGarbage(e.player, Math.min(cheeseHeight, lineGoal));
-            });
-
-            eventManager.addEvent("onPieceLock", (e) =>
+            onGameStart: (e) => replaceGarbage(e.player, Math.min(cheeseHeight, lineGoal)),
+            onPieceLock: (e) =>
             {
                 for (let line of e.oldBoard.completedLines)
                 {
@@ -79,9 +75,8 @@
 
                 if (garbageCleared >= lineGoal)
                     e.player._markTopout();
-            });
-
-            eventManager.addEvent("onPiecePlace", (e) =>
+            },
+            onPiecePlace: (e) =>
             {
                 //replace garbage lines
                 const garbageLeftToSpawn = Math.max(lineGoal - currentCheeseHeight - garbageCleared, 0);
@@ -95,7 +90,7 @@
                 }
 
                 replaceGarbage(e.player, replaceAmount);
-            });
+            }
         },
         gameRules:
         {

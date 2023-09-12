@@ -40,9 +40,9 @@
                 // ++(this.count);
             }
         },
-        events: () =>
+        events: 
         {
-            eventManager.addEvent("onPieceLock", (e) =>
+            onPieceLock: (e) =>
             {
                 lppstracker.unshift(new Date().getTime() / 1000)
                 if (lppstracker.length > 5)
@@ -53,8 +53,7 @@
                     e.player._markTopout();
                     alert(`Pieces: ${e.player.piecesPlaced}`)
                 }
-            })
-        },
-        addons: ["guidlineScoring"]
+            }
+        }
     });
 }

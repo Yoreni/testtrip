@@ -9,6 +9,7 @@ class GameManager
     {
         this.#players = [];
         this.#container = container;
+        this.modeEventIds = [];
     }
 
     get mode()
@@ -25,7 +26,16 @@ class GameManager
     {
         this.#mode = modeName;
         this.#mode = modeManager.get(modeName);
-        this.modeEventIds = this.#mode.events();
+        if (typeof(this.#mode.events) === "function")
+            this.modeEventIds = this.#mode.events();
+        else
+        {
+            for (const [trigger, func] of Object.entries(this.#mode.events))
+            {
+                const eventId = eventManager.addEvent(trigger, func)
+                this.modeEventIds.push(eventId)
+            }
+        }
         addonMangaer.applyAddons(this.#mode);
 
         if (this.#mode.init !== undefined)
@@ -53,6 +63,7 @@ class GameManager
         this.#container.removeChild(this.#playerSubContainers[0]);
 
         this.#mode = null;
+        this.modeEventIds = [];
     }
 
     _addPlayer()

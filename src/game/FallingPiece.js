@@ -127,6 +127,9 @@ class FallingPiece
 {
     constructor(type)
     {
+        if (type === undefined || type === null)
+            throw `${type} is an invalid type`;
+            
         this._minos = deepCopy(pieces[type]);
         this._rotation = 0;
         this._type = type;

@@ -29,7 +29,6 @@ class PlayerRenderer
             this._objects.fallingPiece.clear();
             this._objects.ghostPiece.clear();
         }
-        this._drawNextQueue();
         this._updateStats();
     }
 
@@ -97,10 +96,15 @@ class PlayerRenderer
     {
         this._objects.nextQueue.position.set(16 * (this._logicPlayer.board.width + 3), 
                                             -16 * this._logicPlayer.board.height)
+        console.log(this._logicPlayer.nextQueue)
         for (let [index, child] of this._objects.nextQueue.children.entries())
         {
-            const piece = new FallingPiece(this._logicPlayer.nextQueue[index])
-            child.updatePiece(piece);
+            const pieceType = this._logicPlayer.nextQueue[index];
+            if (pieceType !== undefined)
+            {
+                const piece = new FallingPiece(pieceType);
+                child.updatePiece(piece);
+            }
         }
     }
 
@@ -183,6 +187,7 @@ class PlayerRenderer
         this._drawBoard(this._logicPlayer.board);
         this._drawFallingPiece();
         this._drawGhostPiece();
+        this._drawNextQueue();
     }
 
     destory()
@@ -217,6 +222,7 @@ class PlayerRenderer
         {
             e.render._drawFallingPiece();
             e.render._drawGhostPiece();
+            e.render._drawNextQueue();
 
             if (e.player.AREtimer === 0)
                 e.render._drawBoard(e.player.board);
@@ -247,7 +253,7 @@ class PlayerRenderer
         })
     }
 
-    /**
+/**
  * 
  * gets a human readble format of a stat releated to a player
  * 
