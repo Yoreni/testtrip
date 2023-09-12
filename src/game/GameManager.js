@@ -41,16 +41,15 @@ class GameManager
 
         this.#players = [];
         this._addPlayer();
-        console.log(eventManager._events)
     }
 
     unload()
     {
         for (let player of this.#players)
-        {
             player.render.destory();
-        }
-        eventManager.removeEvent(...this.modeEventIds)
+        
+        eventManager.removeEvent(...this.modeEventIds)  //TODO this line can be handled by ModeManger
+        addonMangaer.removeAllAddons();  //TODO this line can be handled by ModeManger
         this.#container.removeChild(this.#playerSubContainers[0]);
 
         this.#mode = null;

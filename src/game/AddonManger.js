@@ -1,8 +1,11 @@
 class AddonMangaer
 {
+    #addonEventIds
+
     constructor()
     {
         this.addons = {};
+        this.#addonEventIds = [];
     }
 
     register(name, addon)
@@ -20,6 +23,15 @@ class AddonMangaer
             if (!applied.includes(name))
             {
                 this.addons[name].onAdd();
+
+                //add events
+                const events = Object.entries(this.addons[name].events) ?? []
+                for (let [trigger, func] of events)
+                {
+                    const eventId = eventManager.addEvent(trigger, func);
+                    this.#addonEventIds.push(eventId);
+                }
+
                 applied.push(name);
                 console.info(`Addon ${name} applied`);
             }
@@ -38,6 +50,8 @@ class AddonMangaer
     removeAllAddons()
     {
         //TODO implement this. this removes addons events
+        eventManager.removeEvent(...this.#addonEventIds)
+        this.#addonEventIds = [];
     }
 }
 

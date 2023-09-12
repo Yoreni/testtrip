@@ -1,5 +1,5 @@
 {
-    const timeLimit = 10;
+    const timeLimit = 120;
 
     modeManager.register("ultra",
     {

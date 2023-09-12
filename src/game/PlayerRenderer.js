@@ -10,24 +10,18 @@ greyScaleFilter.blackAndWhite();
 
 class PlayerRenderer
 {
-    #alive;
-
     constructor(logicPlayer, pixiContainer)
     {
         this._logicPlayer = logicPlayer;
         this.container = pixiContainer;
         this._objects = {}
         this.minoPool = new ObjectPool(logicPlayer.board.width * logicPlayer.board.height * 2);
-        this.#alive = true;
 
         this._setupComponents();
     }
 
     update(delta)
     {
-        if (!this.#alive)
-            return;
-
         if (this._logicPlayer.isAlive && this._logicPlayer.AREtimer === 0)
             this._drawFallingPiece();   //it is updated every frame because of gavity
         else
@@ -41,9 +35,6 @@ class PlayerRenderer
 
     _drawBoard(playField)
     {
-        if (!this.#alive)
-            return;
-
         const iterations = playField.width * (playField.height + 10);
         for (let index = 0; index != iterations; ++index)
         {
@@ -75,9 +66,6 @@ class PlayerRenderer
 
     _drawPiece(piece, graphics , x, y, settings = {})
     {
-        if (!this.#alive)
-            return;
-
         settings = saveOptionsWithDeafults(settings, defaultDrawPieceValues);
         graphics.clear()
         graphics.beginFill(pieceColours[piece.type], settings.transpancery);
@@ -93,9 +81,6 @@ class PlayerRenderer
 
     _drawFallingPiece()
     {
-        if (!this.#alive)
-            return;
-    
         const piece = this._logicPlayer.currentPiece;
         this._objects.fallingPiece.updatePiece(piece);
         this._objects.fallingPiece.position.set((piece.x + 0) * 16, (piece.y + 1) * -16)
@@ -103,9 +88,6 @@ class PlayerRenderer
 
     _drawGhostPiece()
     {
-        if (!this.#alive)
-            return;
-
         const piece = this._logicPlayer.ghostPiece
         this._objects.ghostPiece.updatePiece(piece);
         this._objects.ghostPiece.position.set((piece.x + 0) * 16, (piece.y + 1) * -16)
@@ -113,9 +95,6 @@ class PlayerRenderer
 
     _drawNextQueue()
     {
-        if (!this.#alive)
-            return;
-
         this._objects.nextQueue.position.set(16 * (this._logicPlayer.board.width + 3), 
                                             -16 * this._logicPlayer.board.height)
         for (let [index, child] of this._objects.nextQueue.children.entries())
@@ -127,9 +106,6 @@ class PlayerRenderer
 
     _drawHoldPiece()
     {
-        if (!this.#alive)
-            return;
-
         if (this._logicPlayer.holdPiece === null)
             return;
 
@@ -212,7 +188,8 @@ class PlayerRenderer
     destory()
     {
         this.container.visible = false;
-        this.#alive = false;
+        this.container.removeChildren();
+        //this.container.destory();
     }
 
     static addEvents()
