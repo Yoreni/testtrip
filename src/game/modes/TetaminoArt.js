@@ -142,7 +142,9 @@
         },
         gameRules:
         {
-            gravity: 0
+            gravity: 0,
+            // lockDelay: 10000,
+            // maxLockResets: 999999999999999
         }
     });
 }

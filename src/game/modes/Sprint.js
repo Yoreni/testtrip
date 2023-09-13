@@ -7,7 +7,6 @@
     {
         render: class extends PlayerRenderer
         {
-            
             getPlayerStat(statName)
             {
                 if (statName === "Lines Remaining")

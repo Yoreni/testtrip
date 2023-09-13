@@ -33,7 +33,7 @@ class RenderedPiece extends PIXI.Container
 
         for (let index = 0; index !== iterations; ++index)
         {
-            if (index >= this.children.length)              
+            if (index >= this.children.length)   //TODO we need to return them as well           
                 this.addChild(RenderedPiece.pool.borrow());
 
             let child = this.children[index];

@@ -11,3 +11,8 @@ function fourteenBag(player)
     shuffle(bag, player.random);
     return bag;
 }
+
+function tonly(player)
+{
+    return ["T"]
+}

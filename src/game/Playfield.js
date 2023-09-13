@@ -15,8 +15,9 @@ class Playfield
         // this._board[29] = ["Y", "Y", "Y","Y", "Y", "0","Y", "Y", "Y","Y"];
 
         //180 spin test
-        // this._board[28] = ["Y", "Y", "Y","Y", "Y", "0","Y", "Y", "Y","Y"];
-        // this._board[29] = ["Y", "Y", "Y","Y", "0", "0","Y", "Y", "Y","Y"];
+        this._board[2] = ["Y", "Y", "Y","Y", "Y", "0","Y", "Y", "Y","Y"];
+        this._board[1] = ["Y", "Y", "Y","Y", "Y", "0","Y", "Y", "Y","Y"];
+        this._board[0] = ["Y", "Y", "Y","Y", "0", "0","Y", "Y", "Y","Y"];
 
         //tetris pc
         // this._board[3] = ["Y", "Y", "Y","Y", "Y", "0","Y", "Y", "Y","Y"];
@@ -37,17 +38,17 @@ class Playfield
 
     get(x, y)
     {
-        return this._board[this._yToArrayIndex(y)][x]
+        return this._board[y][x]
     }
 
     set(x, y, mino)
     {
-        this._board[this._yToArrayIndex(y)][x] = mino;
+        this._board[y][x] = mino;
     }
 
     clearLine(y)
     {
-        this._board.splice(this._yToArrayIndex(y), 1);
+        this._board.splice(y, 1);
         this._board.push(Array(this._width).fill("0"))
     }
 
@@ -59,25 +60,46 @@ class Playfield
             this.clearLine(y)
     }
 
-    doesColide(minos)
+    doesColide(minos, debug = false)
     {
+        if (minos === undefined)
+            return;
+
         if (minos instanceof FallingPiece)
             minos = minos.minos;
 
         if (typeof(minos) === "object" && minos.x !== undefined && minos.y !== undefined)
             minos = [minos]
 
+        // if (debug)
+        //     console.log(minos)
+
+            let idx = 0
         for (let mino of minos)
         {
             //check if the mino is in bounds
             if (mino.y < 0)
+            {
+                // if (debug)
+                //     console.log("at check 1, mino " + idx + `(${mino.x}), ${mino.y}`)
                 return true;
+            }
 
             if (mino.x < 0 || mino.x >= this.width)
+            {
+                // if (debug)
+                // console.log("at check 2, mino " + idx + `(${mino.x}), ${mino.y}`)
                 return true;
+            }
 
             if (this.get(mino.x, mino.y) !== "0")
+            {
+                // if (debug)
+                // console.log("at check 3, mino " + idx + `(${mino.x}), ${mino.y}`)
                 return true;
+            }
+
+            ++idx
         }
         return false;
     }
@@ -88,7 +110,7 @@ class Playfield
         for (let [y, line] of this._board.entries())
         {
             if (line.indexOf("0") === -1)
-                completedLines.push(this._yToArrayIndex(y))
+                completedLines.push(y)
         }
         return completedLines;
     }
@@ -113,11 +135,6 @@ class Playfield
         }
 
         return copy;
-    }
-
-    _yToArrayIndex(y)
-    {
-        return y;
     }
 
     insertLine(line, index)

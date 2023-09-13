@@ -1,138 +1,15 @@
-const pieces = {
-    //Tetraminos
-    I: [[0, 0, 0, 0],
-        [1, 1, 1, 1],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0]],
-    J: [[1, 0, 0],
-        [1, 1, 1],
-        [0, 0, 0]],
-    L: [[0, 0, 1],
-        [1, 1, 1],
-        [0, 0, 0]],
-    O: [[1, 1],
-        [1, 1]],
-    S: [[0, 1, 1],
-        [1, 1, 0],
-        [0, 0, 0]],
-    T: [[0, 1, 0],
-        [1, 1, 1],
-        [0, 0, 0]],
-    Z: [[1, 1, 0],
-        [0, 1, 1],
-        [0, 0, 0]],
-    //Pentaminos
-    S5: [[0, 1, 1],
-         [0, 1, 0],
-         [1, 1, 0]], 
-    Z5: [[1, 1, 0],
-         [0, 1, 0],
-         [0, 1, 1]],
-    P:  [[0, 1, 1],
-         [1, 1, 1],
-         [0, 0, 0]],
-    Q:  [[1, 1, 0],
-         [1, 1, 1],
-         [0, 0, 0]],
-    F : [[0, 1, 0],
-         [1, 1, 1],
-         [0, 0, 1]],
-    E : [[0, 1, 0],
-         [1, 1, 1],
-         [1, 0, 0]],
-    T5: [[0, 1, 0],
-         [0, 1, 0],
-         [1, 1, 1]],
-    U:  [[1, 0, 1],
-         [1, 1, 1],
-         [0, 0, 0]],
-    V:  [[1, 0, 0],
-         [1, 0, 0],
-         [1, 1, 1]],
-    W:  [[1, 0, 0],
-         [1, 1, 0],
-         [0, 1, 1]],
-    X:  [[0, 1, 0],
-         [1, 1, 1],
-         [0, 1, 0]],
-    J5: [[0, 0, 0, 0],
-         [1, 0, 0, 0],
-         [1, 1, 1, 1],
-         [0, 0, 0, 0]],
-    L5: [[0, 0, 0, 0],
-         [0, 0, 0, 1],
-         [1, 1, 1, 1],
-         [0, 0, 0, 0]],
-    R:  [[0, 0, 0, 0],
-         [0, 0, 1, 0],
-         [1, 1, 1, 1],
-         [0, 0, 0, 0]],
-    Y:  [[0, 0, 0, 0],
-         [0, 1, 0, 0],
-         [1, 1, 1, 1],
-         [0, 0, 0, 0]],
-    N:  [[0, 0, 0, 0],
-         [1, 1, 0, 0],
-         [0, 1, 1, 1],
-         [0, 0, 0, 0]],
-    H:  [[0, 0, 0, 0],
-         [0, 0, 1, 1],
-         [1, 1, 1, 0],
-         [0, 0, 0, 0]],
-    I5:  [[0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0],
-          [1, 1, 1, 1, 1],
-          [0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0]],
-    //M123
-    1: [[1]],
-    I2: [[1, 1],
-         [0, 0]],
-    I3: [[0, 0, 0],
-         [1, 1, 1],
-         [0, 0, 0]],
-    C: [[1, 0],
-        [1, 1]],
-    //Wired Pieces
-    O8: [[1, 1, 1],
-         [1, 0, 1],
-         [1, 1, 1]],
-    I10: [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-          [1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
-    rH: [[1, 0, 1],
-         [1, 1, 1],
-         [1, 0, 1]],
-}
-
-const pieceColours = {
-    I: 0x3ffff2,
-    J: 0x1928fc,
-    L: 0xff7f1e,
-    O: 0xffff21,
-    S: 0x6bff21,
-    T: 0xa32ae0,
-    Z: 0xff2121,
-    Y: 0x9faa66,
-}
-
 class FallingPiece
 {
+    #type;
+
     constructor(type)
     {
         if (type === undefined || type === null)
             throw `${type} is an invalid type`;
             
-        this._minos = deepCopy(pieces[type]);
+        this._minos = this.#processShape(pieces[type].shape);
         this._rotation = 0;
-        this._type = type;
+        this.#type = type;
         this._position = Point(0, 0)
         this._subPosition = Point(0, 0)
         this._lockTimer = 0;
@@ -163,7 +40,7 @@ class FallingPiece
 
     get type()
     {
-        return this._type;
+        return this.#type;
     }
 
     get rotation()
@@ -193,23 +70,36 @@ class FallingPiece
 
     get minos()
     {
+        const center = pieces[this.type].center
+
+        return this._minos.map(mino => 
+            Point(Math.ceil(mino.x + this.x - center.x) - 1, 
+                  Math.ceil(mino.y + this.y - center.y)));
+    }
+
+    /**
+     * takes a 2D array and turns it into an array of positons for each mino
+     * 
+     * @param {Array} shape 
+     * @returns {Array}
+     */
+    #processShape(shape)
+    {
         let minos = [];
 
-        //geting how much we need to move it by so its center is at 0, 0
-        const centerTranslationY = Math.ceil(this._minos.length / 2);
-        const centerTranslationX = Math.ceil(this._minos[0].length / 2);
-
-        for (const [yIndex, yElement] of this._minos.entries())
+        for (const [yIndex, yElement] of shape.entries())
         {
             for (const [xIndex, xElement] of yElement.entries())
             {
                 if (xElement === 1)
-                    //this._minos.length - 1 for y is to fix for the piece to be unsidedown
+                    //shape.length - 1 for y is to fix for the piece being upsidedown
                     //that is caused by how arrays are indexed
-                    minos.push({
-                        x: xIndex - centerTranslationX + this.x,
-                        y: this._minos.length - 1 - yIndex - centerTranslationY + this.y
-                    });
+                    minos.push(Point(
+                        // xIndex - centerTranslationX,
+                        // shape.length - 1 - yIndex - centerTranslationY
+                        xIndex,
+                        shape.length - 1 - yIndex
+                    ));
             }
         }
 
@@ -228,6 +118,41 @@ class FallingPiece
     }
 
     rotate(amount)
+    {
+        let rotationMatrix = []
+        const newRotation = mod(this._rotation + amount, 4)
+     
+        switch (mod(newRotation - this._rotation, 4))
+        {
+           case 0:     //no rotation
+                 return;
+           case 1:     //clockwise
+                 rotationMatrix = [[0, 1],[-1, 0]];
+                 break;
+           case 2:     //180
+                 rotationMatrix = [[-1, 0],[0, -1]]
+                 break;
+           case 3:     //anti-clockwise
+                 rotationMatrix = [[0, -1],[1, 0]]
+                 break;
+        }
+
+        this._minos = this._minos.map(mino => 
+        {
+            const center = pieces[this.type].center;
+            const x = mino.x - center.x;
+            const y = mino.y - center.y;
+            const rotation = Point(
+            (rotationMatrix[0][0] * x) + (rotationMatrix[0][1] * y),
+            (rotationMatrix[1][0] * x) + (rotationMatrix[1][1] * y))
+            const result = Point(rotation.x + center.x, rotation.y + center.y);
+            return result;
+        })
+
+        this._rotation = newRotation;
+    }
+
+    rotate2(amount)
     {
         amount = mod(amount, 4);
         if (amount === 0)            //no rotation

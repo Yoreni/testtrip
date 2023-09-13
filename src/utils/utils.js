@@ -128,6 +128,14 @@ function shuffle(array, random = null)
     return array;
 }
 
+/**
+ * puts your specified x and y cords into an object with
+ * x and y attributes
+ * 
+ * @param {Number} x 
+ * @param {Number} y 
+ * @returns {Object{Number, Number}
+ */
 function Point(x, y)
 {
     return {

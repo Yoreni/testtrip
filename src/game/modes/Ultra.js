@@ -29,18 +29,14 @@
                 super.tick(delta);
             }
         },
-        events: () =>
+        events: 
         {
-            let ids = []
-
-            ids.push(eventManager.addEvent("onScoreChange", (e) =>
+            onScoreChange: (e) =>
             {
                 console.log("change");
                 const pos = Point((e.piece.x - 1) * 16, (e.piece.y + 1) * -16)
                 new NumberPopup(e.render.container, e.change, pos);
-            }));
-
-            return ids;
+            }
         },
         init: (rules) =>
         {

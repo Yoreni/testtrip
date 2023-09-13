@@ -81,6 +81,9 @@ class PlayerRenderer
     _drawFallingPiece()
     {
         const piece = this._logicPlayer.currentPiece;
+        if (piece === undefined)
+            return;
+
         this._objects.fallingPiece.updatePiece(piece);
         this._objects.fallingPiece.position.set((piece.x + 0) * 16, (piece.y + 1) * -16)
     }
@@ -96,7 +99,7 @@ class PlayerRenderer
     {
         this._objects.nextQueue.position.set(16 * (this._logicPlayer.board.width + 3), 
                                             -16 * this._logicPlayer.board.height)
-        console.log(this._logicPlayer.nextQueue)
+
         for (let [index, child] of this._objects.nextQueue.children.entries())
         {
             const pieceType = this._logicPlayer.nextQueue[index];
@@ -233,6 +236,7 @@ class PlayerRenderer
             e.render._drawHoldPiece();
             e.render._drawFallingPiece();
             e.render._drawGhostPiece();
+            e.render._drawNextQueue();
         })
 
         eventManager.addEvent("onPieceRotate", (e) =>

@@ -11,7 +11,7 @@ class Player
         rotationSystem: SRSXkicktable,
         lockDelay: 30,
         maxLockResets: 15,
-        gravitiy: 1/60,
+        gravitiy: 0,//1/60,
         hold: 2,                    //0 = off, 1 = on, 2 = on (infinite hold)
         ARE: 0,
         lineARE: 0,
@@ -169,18 +169,19 @@ class Player
                         + this._currentPiece.rotation + mod(this._currentPiece.rotation + direction, 4);
         const kickData = this._rules.rotationSystem[kicktableType][kicktableDirection];
 
-        let success = false;
+        // let success = false;
     
         for (let attempt = 0; attempt != kickData.length; ++attempt)
         {
+            console.log("hi")
             let piece = this._currentPiece.copy();
             piece.rotate(direction);
             piece.x += kickData[attempt].x;
             piece.y += kickData[attempt].y;
-    
-            if (!this._board.doesColide(piece))
+            
+            if (!this._board.doesColide(piece, true))
             {
-                success = true;
+                // success = true;
                 this._currentPiece = piece;
                 this.callEvent("onPieceRotate", 
                 {
@@ -381,6 +382,11 @@ class Player
         return 0;
     }
 
+    /**
+     * This function puts the piece on the playfield
+     * 
+     * @returns nothing
+     */
     _lockCurrentPiece()
     {
         if (this.currentPiece === undefined)
