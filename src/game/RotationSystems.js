@@ -62,7 +62,7 @@ const noKicktable = {
     }
 }
 
-const SRSXkicktable = {     //SRS-X wont work
+const SRSXkicktable = {     //SRS-X might not work because the sign of the numbers is wrong
     "*": {
         "01": SRSkicktable["*"]["01"],
         "10": SRSkicktable["*"]["10"],
@@ -71,17 +71,13 @@ const SRSXkicktable = {     //SRS-X wont work
         "23": SRSkicktable["*"]["23"],
         "32": SRSkicktable["*"]["32"],
         "30": SRSkicktable["*"]["30"],
-        "03": SRSkicktable["*"]["03"],
-        "02": [Point(0, 0), Point(1, 0), Point(2, 0), Point(1, 1), Point(2, 1), Point(-1, 0), Point(-2, 0), 
-               Point(-1, 1), Point(-2, 1), Point(0, -1), Point(3, 0), Point(-3, 0)],
-        "20": [Point(0, 0), Point(-1, 0), Point(-2, 0), Point(-1, -1), Point(-2, -1), Point(1, 0), Point(2, 0),
-               Point(1, -1), Point(2, -1), Point(0, 1), Point(-3, 0), Point(3, 0)],
-        "13": [Point(0, 0), Point(0, 1), Point(0, 2), Point(-1, 1), Point(-1, 2), Point(0, -1), Point(0, -2),
-               Point(-1, -1), Point(-1, -2), Point(1, 0), Point(0, 3), Point(0, -3)],
-        "31": [Point(0, 0), Point(0, 1), Point(0, 2), Point(1, 1), Point(1, 2), Point(0, -1), Point(0, -2),
-               Point(1, -1), Point(1, -2), Point(-1, 0), Point(0, 3), Point(0, -3)],
+        "03": SRSkicktable["*"]["03"],  
+        "02": [Point(0, 0), Point(-1, 0), Point(1, 0), Point(0, -1), Point(0, 1)], 
+        "20": [Point(0, 0), Point(1, 0), Point(-1, 0), Point(0, -1), Point(0, 1)],
+        "13": [Point(0, 0), Point(0, -1), Point(-1, 0), Point(1, 0), Point(0, 1)],
+        "31": [Point(0, 0), Point(0, -1), Point(-1, 0), Point(1, 0), Point(0, 1)],
     },
-    "I": {
+    "I": {  //im unsure about the I piece
         "01": SRSkicktable["I"]["01"],
         "10": SRSkicktable["I"]["10"],
         "12": SRSkicktable["I"]["12"],
