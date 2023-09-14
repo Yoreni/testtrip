@@ -100,3 +100,7 @@ const SRSXkicktable = {
                Point(-1, 1), Point(0, -2), Point(0, 2)],
     }
 }
+
+const NRSkicktable = {
+        
+}

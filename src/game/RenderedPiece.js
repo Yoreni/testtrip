@@ -2,10 +2,32 @@ class RenderedPiece extends PIXI.Container
 {
     static pool = new ObjectPool(100 * 4);
 
+    #size
+
     constructor(fallingPiece)
     {
         super();
+        this.#size = 16;
         this.updatePiece(fallingPiece);
+    }
+
+    get size()
+    {
+        return this.#size;
+    }
+
+    /**
+     * @param {Number} newSize Number > 0
+     */
+    set size(newSize)
+    {
+        if (newSize <= 0)
+        {
+            console.error(`can not set size to ${newSize}`)
+            return;
+        }
+
+        this.#size = newSize;
     }
 
     clear()
@@ -45,10 +67,10 @@ class RenderedPiece extends PIXI.Container
 
             child.visible = true;
             child.texture = texture;
-            child.scale.set(16 / texture.width);
+            child.scale.set(this.#size / texture.width);
             let mino = newFallingPiece.minos[index];
-            child.x = ((mino.x - newFallingPiece.x) * 16);
-            child.y = ((mino.y - newFallingPiece.y) * -16);
+            child.x = ((mino.x - newFallingPiece.x) * this.#size);
+            child.y = ((mino.y - newFallingPiece.y) * -this.#size);
         }
     }
 }

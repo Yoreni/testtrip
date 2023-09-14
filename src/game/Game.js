@@ -10,7 +10,7 @@ class Game extends IScene {
 
     start() {
         this.container.visible = true
-        this.gameManager.load("tetraminoArt");
+        this.gameManager.load("sprint");
         this.gameManager.start();
     }
 
