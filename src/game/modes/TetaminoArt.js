@@ -136,15 +136,16 @@
         {
             onPiecePlace: (e) =>
             {
+                console.log(e.player._rules.gravity);
                 if (artConditions[making](e.player.board))
                     alert("You did it");
             }
         },
         gameRules:
         {
-            gravity: 0,
+            gravitiy: 0,
             // lockDelay: 10000,
             // maxLockResets: 999999999999999
-        }
+        }   
     });
 }

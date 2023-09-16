@@ -90,6 +90,8 @@
                 }
 
                 replaceGarbage(e.player, replaceAmount);
+                e.render._drawBoard(e.player.board);
+                e.render._drawGhostPiece();
             }
         },
         gameRules:

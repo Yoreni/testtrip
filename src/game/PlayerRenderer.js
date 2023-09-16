@@ -205,13 +205,6 @@ class PlayerRenderer
         eventManager.addEvent("onPieceLock", (e) =>
         {
             let board = e.oldBoard;
-            for (let lineNumber of board.completedLines)
-            {
-                for (let index = 0; index != board.width; ++index)
-                {
-                    board.set(index, lineNumber, "0")
-                }
-            }
             e.render._drawBoard(board);
             e.render._drawHoldPiece();
         })
@@ -219,6 +212,7 @@ class PlayerRenderer
         eventManager.addEvent("AREend", (e) =>
         {
             e.render._drawBoard(e.player.board);
+            e.render._drawGhostPiece();
         })
 
         eventManager.addEvent("onPiecePlace", (e) =>
