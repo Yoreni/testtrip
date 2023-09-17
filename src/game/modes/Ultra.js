@@ -25,7 +25,10 @@
             tick(delta)
             {
                 if (this.time >= timeLimit && this.isAlive)
+                {
+                    alert(this.score.toLocaleString())
                     this._markTopout();
+                }
                 super.tick(delta);
             }
         },

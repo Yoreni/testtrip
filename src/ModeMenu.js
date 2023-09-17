@@ -56,7 +56,7 @@ class ModeMenu extends IScene
     {
         for (let index = 0; index != ModeMenu.gameModes.length; ++index)
         {
-            let button = new Button(ModeMenu.gameModes[index])
+            let button = new Button(ModeMenu.gameModes[index], {width: 200, height: 40, fixed: true})
             button.position.set(10, 50 * index + 10);
             container.addChild(button)
             button.onClick = () => selectedMode = ModeMenu.gameModes[index];
