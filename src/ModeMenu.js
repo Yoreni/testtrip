@@ -19,8 +19,12 @@ class ModeMenu extends IScene
         this._objects.play = new Button("Play", {colour: 0x00FF00});
         this._objects.play.position.set(app.view.width / 2, app.view.height - this._objects.play.height);
         this._objects.play.onClick = () => sceneManager.start("game");
-
         this.container.addChild(this._objects.play)
+
+        this._objects.settings = new Button("Settings");
+        this._objects.settings.position.set(app.view.width - 100, 10);
+        this._objects.settings.onClick = () => sceneManager.start("settings");
+        this.container.addChild(this._objects.settings)
     }
 
     start()

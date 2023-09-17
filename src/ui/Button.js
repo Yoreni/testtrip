@@ -54,8 +54,9 @@ class Button extends PIXI.Container
         text.pivot.x = text.width / 2;
         this.text = text;
 
-        const width = this.#settings.fixed || text.width + 10 < this.#settings.width ? this.#settings.width : text.width + 10
-        const height = this.#settings.fixed ||  text.height + 10 < this.#settings.height ? this.#settings.height :  text.height + 10
+        const calcDimension = (textDim, setDim) => this.#settings.fixed || textDim + 10 < setDim ? setDim : textDim + 10
+        const width = calcDimension(text.width, this.#settings.width)
+        const height = calcDimension(text.height, this.#settings.height)
         text.position.set(width / 2, 5);
 
         let background = new PIXI.Graphics();

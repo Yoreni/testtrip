@@ -28,6 +28,7 @@ function init()
     //setup scene manager
     sceneManager.add("game", new Game())
     sceneManager.add("modeMenu", new ModeMenu())
+    sceneManager.add("settings", new SettingsScreen())
     sceneManager.start("modeMenu")
 
     setup();
