@@ -195,6 +195,12 @@ class PlayerRenderer
 
     destory()
     {
+        this._objects.holdPiece.destroy();
+        this._objects.ghostPiece.destroy();
+        this._objects.fallingPiece.destroy();
+        for (const nextPiece of this._objects.nextQueue.children)
+            nextPiece.destroy();
+
         this.container.visible = false;
         this.container.removeChildren();
         //this.container.destory();

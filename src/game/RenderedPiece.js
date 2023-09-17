@@ -73,4 +73,11 @@ class RenderedPiece extends PIXI.Container
             child.y = ((mino.y - newFallingPiece.y) * -this.#size);
         }
     }
+
+    destroy()
+    {
+        for (const child of this.children)
+            RenderedPiece.pool.return(child);
+        this.removeChildren();
+    }
 }
