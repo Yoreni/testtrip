@@ -67,8 +67,8 @@
             }
 
         },
-        init: (rules) =>
-        {
+        gameRules: {
+            hold: 1
         },
         addons: ["guidlineScoring"],
     });
