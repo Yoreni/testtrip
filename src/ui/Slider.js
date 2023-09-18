@@ -1,12 +1,14 @@
 class Slider extends PIXI.Container 
 {
     #settings;
+    #values;
 
     static defaultSettings = {
         // colour: 0xBBBBBB,
         // borderColour: 0x000000,
         whileChanging: (value) => {},
-        min: -25,
+        valueDisplay: (value) => value,
+        min: 0,
         max: 100,
         default: 50,
         step: 25,
@@ -23,7 +25,14 @@ class Slider extends PIXI.Container
         console.log(this.#settings)
         this.elements = {};
         this.interactive = true;
+        this.#values = {};              //values that dont change that often but used fequently in calculations
+        this.#values.valueRange = this.#settings.max - this.#settings.min;
 
+        this.#draw();
+    }
+
+    #draw()
+    {
         this.elements.valueText = new PIXI.Text(this.#settings.default, {fontSize: 24, fontWeight: "bold", fontFamily: "Calibri", "align": "center",})
         this.elements.valueText.y = -this.elements.valueText.height - 10;
         this.elements.valueText.pivot.x = this.elements.valueText.width / 2;
@@ -36,18 +45,55 @@ class Slider extends PIXI.Container
         track.endFill();
         this.addChild(track);
 
+        if (this.#settings.label !== "")    //dont bother with the label text if label is nothing
+        {
+            this.elements.labelText = new PIXI.Text(this.#settings.label, {fontSize: 24, fontWeight: "bold", fontFamily: "Calibri", "align": "center",})
+            this.elements.labelText.x = -5;
+            this.elements.labelText.pivot.x = this.elements.labelText.width;
+            this.addChild(this.elements.labelText);
+        }
+
         this.#makeKnob();
+        this.setSlider(this.#settings.default)
+    }
+
+    /**
+     * sets the slider to a value
+     * 
+     * @param {Number} value 
+     */
+    setSlider(value)
+    {
+        this.#setSlider((value - this.#settings.min) / this.#values.valueRange)
+    }
+
+    #setSlider(rawProgress)
+    {
+        let value = (this.#values.valueRange * rawProgress) + this.#settings.min;
+        //aply step
+        value = Math.round(value * (1 / this.#settings.step)) /(1 / this.#settings.step)
+        value = clamp(value, this.#settings.min, this.#settings.max);
+        const progress = (value - this.#settings.min) / this.#values.valueRange;
+
+        this.elements.knob.x = this.#values.maxX * progress;
+
+        this.elements.valueText.text = this.#settings.valueDisplay(value);
+        this.elements.valueText.pivot.x = this.elements.valueText.width / 2;
+        this.elements.valueText.x = this.elements.knob.x
+        this.#settings.whileChanging(value);
     }
 
     #makeKnob()
     {
-        let knob = new PIXI.Graphics();
+        this.elements.knob = new PIXI.Graphics();
+        let knob = this.elements.knob;
         knob.lineStyle(4, 0x777777, 1);
         knob.beginFill(0xc1bfc0);
         knob.drawRect(0, 0, 10, this.#settings.height + 10);
         knob.endFill();
         knob.pivot.y = knob.height / 2; //put the knob in the middle of the track
         knob.y = knob.height / 3;
+        this.#values.maxX = this.#settings.width - (this.elements.knob.width / 2);
 
         const onDragStart = (event, sprite) =>
         {
@@ -66,21 +112,9 @@ class Slider extends PIXI.Container
             {
                 // let y = sprite.y = event.data.global.y - sprite.localY
 
-                const maxX = this.#settings.width - (sprite.width / 2);
-                const x = clamp(event.data.global.x - sprite.localX, 0, maxX);
-                const rawProgress = x / maxX;
-
-                let value = ((this.#settings.max - this.#settings.min) * rawProgress) + this.#settings.min;
-                //aply step
-                value = Math.round(value * (1 / this.#settings.step)) /(1 / this.#settings.step)
-                value = clamp(value, this.#settings.min, this.#settings.max);
-                const progress = (value - this.#settings.min) / (this.#settings.max - this.#settings.min);
-
-                sprite.x = maxX * progress;
-
-                this.elements.valueText.text = value;
-                this.elements.valueText.pivot.x = this.elements.valueText.width / 2;
-                this.elements.valueText.x = sprite.x
+                const x = clamp(event.data.global.x - sprite.localX, 0, this.#values.maxX);
+                const rawProgress = x / this.#values.maxX;
+                this.#setSlider(rawProgress);
             }
         }
     
@@ -94,10 +128,6 @@ class Slider extends PIXI.Container
         
         knob.interactive = true
         knob.dragAndDropEnabled = true
-        // knob.on('mousedown', (e) => onDragStart(e, knob));
-        // knob.on('mousemove',  (e) => onMouseMove(e, knob));
-        // knob.on('mouseup', (e) => onDragEnd(e, knob));
-        // knob.on('mouseupoutside', (e) => onDragEnd(e, knob));
 
         knob.on('pointerdown', (e) => onDragStart(e, knob))
             .on('pointerup', (e) => onDragEnd(e, knob))
