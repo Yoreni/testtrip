@@ -179,3 +179,17 @@ function _enum(...names)
         object[name] = Symbol(name);
     return Object.freeze(object);
 }
+
+/**
+ * 
+ * sets a number to be in the bounds of min and max
+ * 
+ * @param {Number} number 
+ * @param {Number} min 
+ * @param {Number} max 
+ * @returns {Number}
+ */
+function clamp(number, min, max)
+{
+    return Math.max(min, Math.min(max, number))
+}

@@ -11,6 +11,10 @@ class SettingsScreen extends IScene
         this._objects.back.position.set(8, app.view.height - this._objects.back.height - 5);
         this._objects.back.onClick = () => sceneManager.start("modeMenu");
         this.container.addChild(this._objects.back)
+
+        this._objects.dasSlider = new Slider({width: 200, height: 20});
+        this._objects.dasSlider.position.set(100, 100);
+        this.container.addChild(this._objects.dasSlider)
     }
 
     start()
