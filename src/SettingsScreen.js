@@ -18,7 +18,8 @@ class SettingsScreen extends IScene
             ...dimensions,
             label: "DAS", 
             min: 17, 
-            max: 333, 
+            max: 333,
+            default: handling.DAS,
             step: 16,
             valueDisplay: (value) => `${value}ms`,
             whileChanging: (value) => handling.DAS = value,
@@ -31,6 +32,7 @@ class SettingsScreen extends IScene
             label: "ARR", 
             min: 0, 
             max: 83,
+            default: handling.ARR,
             step: 1,
             valueDisplay: (value) => `${value}ms`,
             whileChanging: (value) => handling.ARR = value,
@@ -39,11 +41,11 @@ class SettingsScreen extends IScene
         this.container.addChild(this._objects.arrSlider)
 
         this._objects.sdfSlider = new Slider({
-            width: 200,
-            height: 15, 
-            label: "ARR", 
+            ...dimensions,
+            label: "SDF", 
             min: 5, 
             max: 41,
+            default: handling.SDF,
             step: 1,
             valueDisplay: (value) => `x${value === 41 ? "∞" : value}`,
             whileChanging: (value) => handling.SDF = value === 41 ? 1.79e308 : value,

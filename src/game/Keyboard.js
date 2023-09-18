@@ -45,6 +45,10 @@ class Keyboard
                 if (Math.round(key.getSecondsDown() * 1000) < handling.DAS)
                     return;
 
+                //if 0 ARR just teleport it to one of the sides and be done
+                if (handling.ARR === 0)
+                    this.#player.moveCurrentPiece(dir * 1.79e308)
+
                 const loop = setInterval(() => 
                 {
                     const tapback = otherKey.getSecondsDown() > 0 
