@@ -22,7 +22,6 @@ class Slider extends PIXI.Container
     {
         super();
         this.#settings = saveOptionsWithDeafults(settings, Slider.defaultSettings);
-        console.log(this.#settings)
         this.elements = {};
         this.interactive = true;
         this.#values = {};              //values that dont change that often but used fequently in calculations

@@ -51,7 +51,13 @@ class SettingsScreen extends IScene
             whileChanging: (value) => handling.SDF = value === 41 ? 1.79e308 : value,
         });
         this._objects.sdfSlider.position.set(100, 200);
-        this.container.addChild(this._objects.sdfSlider)
+        this.container.addChild(this._objects.sdfSlider);
+
+        this._objects.keyBinder = new KeyBinder({
+            onKeybindChange: (key) => console.log("changed key to " + key)
+        });
+        this._objects.keyBinder.position.set(400, 100);
+        this.container.addChild(this._objects.keyBinder);
     }
 
     start()
