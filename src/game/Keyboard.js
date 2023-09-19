@@ -27,6 +27,7 @@ const controls = {
     hardDrop: " ",
     reset: "r",
 }
+KeyBinder.controlsObject = controls;
 
 class Keyboard 
 {

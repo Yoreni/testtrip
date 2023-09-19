@@ -53,8 +53,8 @@ class SettingsScreen extends IScene
         this._objects.sdfSlider.position.set(100, 200);
         this.container.addChild(this._objects.sdfSlider);
 
+        // make keybind buttons
         Object.keys(controls).forEach((key, index) => {
-            console.log(index, key)
             let keybinder =  this.#makeKeybindButton(controlDisplayNames[key], key);
             keybinder.position.set(600, 100 + (index * 40));
             this.container.addChild(keybinder);
