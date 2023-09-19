@@ -1,4 +1,4 @@
-function KeyDetector(app, key)
+function KeyDetector(key)
 {
     this.tick = function(delta) 
     {

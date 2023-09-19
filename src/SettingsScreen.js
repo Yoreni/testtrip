@@ -53,11 +53,12 @@ class SettingsScreen extends IScene
         this._objects.sdfSlider.position.set(100, 200);
         this.container.addChild(this._objects.sdfSlider);
 
-        this._objects.keyBinder = new KeyBinder({
-            onKeybindChange: (key) => console.log("changed key to " + key)
-        });
-        this._objects.keyBinder.position.set(400, 100);
-        this.container.addChild(this._objects.keyBinder);
+        Object.keys(controls).forEach((key, index) => {
+            console.log(index, key)
+            let keybinder =  this.#makeKeybindButton(controlDisplayNames[key], key);
+            keybinder.position.set(600, 100 + (index * 40));
+            this.container.addChild(keybinder);
+        })
     }
 
     start()
@@ -83,5 +84,27 @@ class SettingsScreen extends IScene
     init()
     {
 
+    }
+
+    /**
+     * 
+     * @param {String} displayName 
+     * @param {String} control
+     */
+    #makeKeybindButton(displayName, control)
+    {
+        let container = new PIXI.Container();
+        let keyBinder = new KeyBinder({
+            onKeybindChange: (key) => controls[control] = key,
+            default: controls[control],
+        });
+        container.addChild(keyBinder);
+
+        let label = new PIXI.Text(displayName, {fontSize: 24, fontWeight: "bold", fontFamily: "Calibri", "align": "center",});
+        label.pivot.x = label.width;
+        label.x = -5;
+        container.addChild(label);
+
+        return container;
     }
 }

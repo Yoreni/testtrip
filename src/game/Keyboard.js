@@ -4,6 +4,30 @@ const handling = {
     ARR: 16,
 }
 
+const controlDisplayNames = {
+    left: "Move Left",
+    right: "Move Right",
+    softDrop: "Softdrop",
+    rotateClockwise: "Rotate Clockwise",
+    rotateAnticlockwise: "Rotate Anti-Clockwise",
+    hold: "Hold",
+    rotate180: "Rotate 180",
+    hardDrop: "Harddrop",
+    reset: "Reset",
+}
+
+const controls = {
+    left: "ArrowLeft",
+    right: "ArrowRight",
+    softDrop: "ArrowDown",
+    rotateClockwise: "ArrowUp",
+    rotateAnticlockwise: "z",
+    hold: "x",
+    rotate180: "c",
+    hardDrop: " ",
+    reset: "r",
+}
+
 class Keyboard 
 {
     #player;
@@ -18,14 +42,14 @@ class Keyboard
         this.#player = player;
         this.#keys = 
         {
-            left: new KeyDetector(app, "ArrowLeft"),
-            right: new KeyDetector(app, "ArrowRight"),
-            softDrop: new KeyDetector(app, "ArrowDown"),
-            rotateClockwise: new KeyDetector(app, "ArrowUp"),
-            rotateAnticlockwise: new KeyDetector(app, "z"),
-            hold: new KeyDetector(app, "x"),
-            rotate180: new KeyDetector(app, "c"),
-            hardDrop: new KeyDetector(app, " "),
+            left: new KeyDetector(controls.left),
+            right: new KeyDetector(controls.right),
+            softDrop: new KeyDetector(controls.softDrop),
+            rotateClockwise: new KeyDetector(controls.rotateClockwise),
+            rotateAnticlockwise: new KeyDetector(controls.rotateAnticlockwise),
+            hold: new KeyDetector(controls.hold),
+            rotate180: new KeyDetector(controls.rotate180),
+            hardDrop: new KeyDetector(controls.hardDrop),
         }
 
         //thank you zztetris

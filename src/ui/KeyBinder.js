@@ -46,7 +46,7 @@ class KeyBinder extends Button
     constructor(settings = {})
     {
         settings = saveOptionsWithDeafults(settings, KeyBinder.defaultSettings)
-        super(settings.default, {
+        super(keyCodesToPrettySymbols[settings.default] ?? settings.default, {
             colour: settings.colour,
             borderColour: settings.borderColour,
             width: settings.size,
