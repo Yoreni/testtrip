@@ -8,7 +8,9 @@ class Game extends IScene {
         this.gameManager = new GameManager(this.container);
     }
 
-    start() {
+    start() 
+    {
+        this.resetKey = new KeyDetector(controls.reset);
         this.container.visible = true
         this.gameManager.load(selectedMode);
         this.gameManager.start();
@@ -135,7 +137,8 @@ class Game extends IScene {
         }
     }
 
-    update(delta) {
+    update(delta) 
+    {
         let player = this.gameManager.players[0];
 
         if (player === null || player === undefined)
@@ -154,9 +157,14 @@ class Game extends IScene {
 
             player.render.update(delta);
         }
+
+        //reset game
+        if (this.resetKey.framesDown === 30)
+            this.gameManager.restartGame();
     }
 
-    destory() {
+    destory() 
+    {
 
     }
 

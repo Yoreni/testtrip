@@ -53,6 +53,28 @@ class GameManager
         this._addPlayer();
     }
 
+    restartGame()
+    {
+        const Logic = this.#mode.logic ?? Player;
+        for (const player of this.#players)
+        {
+            //reset the player to a new game
+            player.logic = new Logic(this.#mode.gameRules ?? {}, player.logic.id);
+            player.logic.callEvent = (eventName, data = {}) => this.callEvent(eventName, player.logic.id, data);
+
+            //inform the render and input about the new player object
+            player.render._logicPlayer = player.logic;
+            player.input = new Keyboard(player.logic);
+
+            //redraw some stuff so it shows that the game restarted
+            player.render._drawBoard(player.logic.board);
+            player.render._drawHoldPiece();
+            player.render._drawNextQueue();
+            player.render._drawGhostPiece();
+            player.render._drawFallingPiece();
+        }
+    }
+
     unload()
     {
         for (let player of this.#players)
@@ -74,7 +96,7 @@ class GameManager
         let player =  new Logic(this.#mode.gameRules ?? {}, this.#players.length);
         player.callEvent = (eventName, data = {}) => this.callEvent(eventName, player.id, data);
 
-        let playerPixiContainer = new PIXI.Container
+        let playerPixiContainer = new PIXI.Container()
         this.#container.addChild(playerPixiContainer)
         this.#playerSubContainers.push(playerPixiContainer);
 

@@ -60,7 +60,15 @@
         },
         events: 
         {
-            onGameStart: (e) => replaceGarbage(e.player, Math.min(cheeseHeight, lineGoal)),
+            onGameStart: (e) =>
+            {
+                //resets the varibles when the player restarts the game
+                lastWellColumn = null;
+                garbageCleared = 0;
+                currentCheeseHeight = 0;
+
+                replaceGarbage(e.player, Math.min(cheeseHeight, lineGoal));
+            },
             onPieceLock: (e) =>
             {
                 for (let line of e.oldBoard.completedLines)
