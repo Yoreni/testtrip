@@ -9,7 +9,11 @@ class SettingsScreen extends IScene
 
         this._objects.back = new Button("Back", {colour: 0xFF5959});
         this._objects.back.position.set(8, app.view.height - this._objects.back.height - 5);
-        this._objects.back.onClick = () => sceneManager.start("modeMenu");
+        this._objects.back.onClick = () => 
+        {
+            saveSettingsToLocalStorange();
+            sceneManager.start("modeMenu");
+        }
         this.container.addChild(this._objects.back)
 
         const dimensions = {width: 200, height: 15}
