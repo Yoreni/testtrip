@@ -21,7 +21,7 @@ class CircleBar extends PIXI.Container
         this.label = new PIXI.Text(this.#settings.label);
         this.label.pivot.x = this.label.width / 2;
         this.label.pivot.y = this.label.height / 2;
-        this.label.zIndex = 1
+        this.label.zIndex = 1           // stops the circle covering the text.
         this.addChild(this.label);
     }
 

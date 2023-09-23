@@ -1,7 +1,9 @@
 PlayerRenderer.addEvents();
 
-class Game extends IScene {
-    constructor() {
+class Game extends IScene 
+{
+    constructor() 
+    {
         super();
         this.container = new PIXI.Container();
         this._objects = {};
@@ -159,6 +161,9 @@ class Game extends IScene {
         }
 
         //reset game
+        this._objects.resetIndicator.visible = this.resetKey.framesDown > 0 && this.resetKey.framesDown < 30;
+        if (this._objects.resetIndicator.visible)
+            this._objects.resetIndicator.draw(this.resetKey.framesDown / 30)
         if (this.resetKey.framesDown === 30)
             this.gameManager.restartGame();
     }
@@ -174,5 +179,9 @@ class Game extends IScene {
         this._objects.rasei.scale.set(0.4);
         this._objects.rasei.position.set(0, canvasSize.height - this._objects.rasei.height);
         this.container.addChild(this._objects.rasei);
+
+        this._objects.resetIndicator =  new CircleBar(0, {label: "Restart", colour: 0xf4ae09});
+        this._objects.resetIndicator.position.set(300, 300)
+        this.container.addChild(this._objects.resetIndicator);
     }
 }

@@ -54,7 +54,6 @@
         if (changeTracker[e.player.id].change > 0)
         {
             eventManager.callEvent("onScoreChange", changeTracker[e.player.id]);
-            //console.log(changeTracker);
         }
     }
 

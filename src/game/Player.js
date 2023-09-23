@@ -179,11 +179,11 @@ class Player
                     kickUsed: attempt,
                     direction: direction
                 })
-                return;
+                return true;
             }
         }
 
-        console.log("Rotation failed");
+        return false;
     }
 
     harddrop()
