@@ -1,3 +1,5 @@
+let hello = 0;
+
 class SettingsScreen extends IScene
 {
     constructor()
@@ -63,6 +65,11 @@ class SettingsScreen extends IScene
             keybinder.position.set(600, 100 + (index * 40));
             this.container.addChild(keybinder);
         })
+
+        let test = new CircleBar(0, {label: "Test"});
+        this.bob = test;
+        test.position.set(50, 50)
+        this.container.addChild(test);
     }
 
     start()
@@ -77,7 +84,8 @@ class SettingsScreen extends IScene
 
     update(delta)
     {
-
+        this.bob.draw(hello % 1);
+        hello += 0.01 * Math.pow(1.2, Math.floor(hello));
     }
 
     destory()

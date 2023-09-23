@@ -117,11 +117,6 @@ class Player
         this._board = newBoard;
     }
 
-    getMinoOnBoard(x, y)
-    {
-        return this._board.get(x, y);
-    }
-
     softDrop()
     {
         const minSoftDrop = 1/60 * handling.SDF;
@@ -169,8 +164,6 @@ class Player
                         + this._currentPiece.rotation + mod(this._currentPiece.rotation + direction, 4);
         const kickData = this._rules.rotationSystem[kicktableType][kicktableDirection];
     
-        // console.log(`Attempting kick table ${kicktableType + kicktableDirection}`);
-        // console.log(kickData);
         for (let attempt = 0; attempt != kickData.length; ++attempt)
         {
             let piece = this._currentPiece.copy();
@@ -178,11 +171,8 @@ class Player
             piece.x += kickData[attempt].x;
             piece.y += kickData[attempt].y;
             
-            // console.log(`Attempt ${attempt}, offset (${kickData[attempt].x}, ${kickData[attempt].y})`)
             if (!this._board.doesColide(piece, true))
             {
-                // console.log("Rotation succeesed");
-                // success = true;
                 this._currentPiece = piece;
                 this.callEvent("onPieceRotate", 
                 {
@@ -191,8 +181,6 @@ class Player
                 })
                 return;
             }
-            // else
-                // console.log("Failed")
         }
 
         console.log("Rotation failed");
