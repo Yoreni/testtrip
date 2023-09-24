@@ -32,7 +32,7 @@ class Slider extends PIXI.Container
 
     #draw()
     {
-        this.elements.valueText = new PIXI.Text(this.#settings.default, {fontSize: 24, fontWeight: "bold", fontFamily: "Calibri", "align": "center",})
+        this.elements.valueText = new PIXI.Text(this.#settings.default, textStyle())
         this.elements.valueText.y = -this.elements.valueText.height - 10;
         this.elements.valueText.pivot.x = this.elements.valueText.width / 2;
         this.addChild(this.elements.valueText);
@@ -46,7 +46,7 @@ class Slider extends PIXI.Container
 
         if (this.#settings.label !== "")    //dont bother with the label text if label is nothing
         {
-            this.elements.labelText = new PIXI.Text(this.#settings.label, {fontSize: 24, fontWeight: "bold", fontFamily: "Calibri", "align": "center",})
+            this.elements.labelText = new PIXI.Text(this.#settings.label, textStyle())
             this.elements.labelText.x = -5;
             this.elements.labelText.pivot.x = this.elements.labelText.width;
             this.addChild(this.elements.labelText);

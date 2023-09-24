@@ -285,8 +285,8 @@ class InfoText extends PIXI.Container
     constructor(render, stat = "")
     {
         super();
-        this.nameText = new PIXI.Text("", {fontSize: 24, fontWeight: "bold", fontFamily: "Calibri", "align": "right",});
-        this.numberText = new PIXI.Text("", {fontSize: 24, fontWeight: "bold", fontFamily: "Calibri", "align": "right",});
+        this.nameText = new PIXI.Text("", textStyle());
+        this.numberText = new PIXI.Text("", textStyle());
         this.nameText.y -= 20
         this.nameText.anchor.set(1, 0)
         this.numberText.anchor.set(1, 0)

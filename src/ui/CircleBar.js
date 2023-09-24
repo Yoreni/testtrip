@@ -18,7 +18,7 @@ class CircleBar extends PIXI.Container
         this.draw(progress)
         this.circle.rotation = -Math.PI / 2;
 
-        this.label = new PIXI.Text(this.#settings.label);
+        this.label = new PIXI.Text(this.#settings.label, textStyle());
         this.label.pivot.x = this.label.width / 2;
         this.label.pivot.y = this.label.height / 2;
         this.label.zIndex = 1           // stops the circle covering the text.

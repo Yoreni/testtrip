@@ -104,7 +104,7 @@ class SettingsScreen extends IScene
         });
         container.addChild(keyBinder);
 
-        let label = new PIXI.Text(displayName, {fontSize: 24, fontWeight: "bold", fontFamily: "Calibri", "align": "center",});
+        let label = new PIXI.Text(displayName, textStyle());
         label.pivot.x = label.width;
         label.x = -5;
         container.addChild(label);

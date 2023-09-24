@@ -50,7 +50,7 @@ class Button extends PIXI.Container
         this.removeChildren();
         if (writing == null) 
             writing = this.writing;
-        let text = new PIXI.Text(writing, {fontSize: 24, fontWeight: "bold", fontFamily: "Calibri", "align": "center",});
+        let text = new PIXI.Text(writing, textStyle());
         text.pivot.x = text.width / 2;
         this.text = text;
 

@@ -193,3 +193,13 @@ function clamp(number, min, max)
 {
     return Math.max(min, Math.min(max, number))
 }
+
+function textStyle(size = 24)
+{
+    return {
+        fontSize: size,
+        // fontWeight: "bold", 
+        fontFamily: "Calibri", 
+        "align": "center",
+    }
+}
