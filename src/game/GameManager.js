@@ -55,8 +55,10 @@ class GameManager
             throw "No mode set";
 
         this.#players = [];
-        this._addPlayer();
-        this._addPlayer();
+        this.numOfPlayers = 2;
+        for (let index = 0; index != this.numOfPlayers; ++index)
+            this._addPlayer();
+
     }
 
     restartGame()
@@ -104,7 +106,7 @@ class GameManager
         player.callEvent = (eventName, data = {}) => this.callEvent(eventName, player.id, data);
 
         let playerPixiContainer = new PIXI.Container()
-        const position = boardPositons[2][player.id];
+        const position = boardPositons[this.numOfPlayers][player.id];
         playerPixiContainer.position.set(position.x, position.y);
         this.#container.addChild(playerPixiContainer)
         this.#playerSubContainers.push(playerPixiContainer);
@@ -113,7 +115,7 @@ class GameManager
         {
             logic: player,
             render: new Renderer(player, playerPixiContainer),
-            input: new Keyboard(player)
+            input: player.id === 1 ? new Keyboard(player) : new NoInput(),
         });
     }
 

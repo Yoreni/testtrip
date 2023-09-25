@@ -1,0 +1,7 @@
+class NoInput
+{
+    inputs()
+    {
+        
+    }
+}
