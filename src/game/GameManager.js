@@ -1,3 +1,8 @@
+const boardPositons = {
+    1: [Point(500, 500)],
+    2: [Point(300, 500), Point(700, 500)]
+}
+
 class GameManager
 {
     #mode;
@@ -51,6 +56,7 @@ class GameManager
 
         this.#players = [];
         this._addPlayer();
+        this._addPlayer();
     }
 
     restartGame()
@@ -82,7 +88,8 @@ class GameManager
         
         eventManager.removeEvent(...this.modeEventIds)  //TODO this line can be handled by ModeManger
         addonMangaer.removeAllAddons();  //TODO this line can be handled by ModeManger
-        this.#container.removeChild(this.#playerSubContainers[0]);
+        for (const playerContainer of this.#playerSubContainers)
+            this.#container.removeChild(playerContainer);
 
         this.#mode = null;
         this.modeEventIds = [];
@@ -97,6 +104,8 @@ class GameManager
         player.callEvent = (eventName, data = {}) => this.callEvent(eventName, player.id, data);
 
         let playerPixiContainer = new PIXI.Container()
+        const position = boardPositons[2][player.id];
+        playerPixiContainer.position.set(position.x, position.y);
         this.#container.addChild(playerPixiContainer)
         this.#playerSubContainers.push(playerPixiContainer);
 

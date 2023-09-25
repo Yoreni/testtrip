@@ -203,3 +203,15 @@ function textStyle(size = 24)
         "align": "center",
     }
 }
+
+function countOccrences(array, elementToFind)
+{
+    let count = 0;
+    for (const element of array)
+    {
+        if (element === elementToFind)
+            ++count;
+    }
+
+    return count;
+}

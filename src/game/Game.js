@@ -141,23 +141,27 @@ class Game extends IScene
 
     update(delta) 
     {
-        let player = this.gameManager.players[0];
+        for (const player of this.gameManager.players)
+        {
+            if (player === null || player === undefined)
+                return;
 
-        if (player === null || player === undefined)
-            return;
+            if (player.logic.isAlive) 
+            {
+                player.logic.tick(delta)
 
+                if (player.logic.AREtimer === 0)
+                    player.input.inputs();
 
-        if (!player.logic.isAlive) {
+                player.render.update(delta);
+            }
+        }
+
+        const alivePlayers = countOccrences(this.gameManager.players.map((player) => player.logic.isAlive), true);
+        if (alivePlayers === 0)
+        {
             this.gameManager.unload();
             sceneManager.start("modeMenu");
-        }
-        else {
-            player.logic.tick(delta)
-
-            if (player.logic.AREtimer === 0)
-                player.input.inputs();
-
-            player.render.update(delta);
         }
 
         //reset game

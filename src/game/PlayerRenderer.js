@@ -142,7 +142,6 @@ class PlayerRenderer
     _setupComponents()
     {
         let playField = new PIXI.Container();
-        this.container.position.set(500, 500);
 
         //add a background to the board
         let boardBackground = new PIXI.Graphics();
