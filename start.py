@@ -1,1 +1,17 @@
-import http.serverimport socketserverimport webbrowserimport os# Get the directory of the scriptscript_dir = os.path.dirname(os.path.abspath(__file__))# Set the directory to serve files fromos.chdir(script_dir)# Specify the port to usePORT = 8081# Create a custom handler classclass MyHandler(http.server.SimpleHTTPRequestHandler):    def translate_path(self, path):        # Get the absolute path of the file to serve        path = super().translate_path(path)        return os.path.join(script_dir, path)# Create an instance of the custom handlerHandler = MyHandler# Start the serverwith socketserver.TCPServer(("", PORT), Handler) as httpd:    print("serving at port", PORT)    webbrowser.open(f"http://localhost:{PORT}")    httpd.serve_forever()
+import http.server
+import socketserver
+import webbrowser
+import os
+
+# Specify the port to use
+PORT = 8081
+
+# Set the directory to serve files from
+script_dir = os.path.dirname(os.path.abspath(__file__))
+os.chdir(script_dir)
+
+# Start the server
+with socketserver.TCPServer(("", PORT), http.server.SimpleHTTPRequestHandler) as httpd:
+    print(f"serving at port {PORT}")
+    webbrowser.open(f"http://localhost:{PORT}")             # open the game in the browser
+    httpd.serve_forever()
