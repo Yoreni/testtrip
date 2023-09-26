@@ -71,33 +71,18 @@ class Playfield
         if (typeof(minos) === "object" && minos.x !== undefined && minos.y !== undefined)
             minos = [minos]
 
-        // if (debug)
-        //     console.log(minos)
-
             let idx = 0
         for (let mino of minos)
         {
             //check if the mino is in bounds
             if (mino.y < 0)
-            {
-                // if (debug)
-                //     console.log("at check 1, mino " + idx + `(${mino.x}), ${mino.y}`)
                 return true;
-            }
 
             if (mino.x < 0 || mino.x >= this.width)
-            {
-                // if (debug)
-                // console.log("at check 2, mino " + idx + `(${mino.x}), ${mino.y}`)
                 return true;
-            }
 
             if (this.get(mino.x, mino.y) !== "0")
-            {
-                // if (debug)
-                // console.log("at check 3, mino " + idx + `(${mino.x}), ${mino.y}`)
                 return true;
-            }
 
             ++idx
         }
@@ -183,16 +168,20 @@ function rightToColision(fallingPiece, playfield)
     return count;
 }
 
-/**
- * 
+/** 
  * adds garbage to a board
  * 
  * @param {Playfield} playfield 
- * @param {Number} wellColumn a number between and the playfield width
+ * @param {Number} wellColumn a number between 0 and the playfield width
  * @param {Number} amount (number of garbge to send) a number >= 0
  */
 function addGarbage(playfield, wellColumn, amount)
 {
+    if (wellColumn < 0 && wellColumn >= playfield.width)
+        throw `Cant place garbage in column ${wellColumn} of the board`
+    if (amount < 0)
+        throw `Cant add negitive amounts of garbage (${amount}) to the board`
+
     const garbageLine = Array.from({length: playfield.width}, 
         (_, column) => column === wellColumn ? "0" : "#");
     

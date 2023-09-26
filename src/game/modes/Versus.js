@@ -14,6 +14,13 @@
     const garbageCap = 6;
     const incomingAttackColours = [0xFF0000, 0xf9f90e, 0x24f204, 0x04e6f2, 0x0f07f9, 0xef04e7]
 
+    const absorbIncomingAttack = (player, amount) =>
+    {
+        const remainingAttack = Math.max(0, amount - player.garbageIncoming);
+        player.garbageIncoming = Math.max(0, player.garbageIncoming - amount);
+        return remainingAttack;
+    }
+
     modeManager.register("versus",
     {
         render: class extends PlayerRenderer
@@ -75,36 +82,40 @@
         {
             onGameStart: (e) =>
             {
-                // console.log(e.players)
-                // console.log(e)
                 e.player.otherPlayers = e.players.filter((player) => e.player.id !== player.logic.id)
-
                 e.player._stats.attack = 0;
-                e.player.garbageIncoming = 0;
+                e.player.garbageIncoming = 10;
+                e.render.drawIncomingAttack();
             },
             onPieceLock: (e) =>
             {
                 const completedLines = e.oldBoard.completedLines.length
-                let linesToSend = 0;
 
                 if (completedLines > 0)
                 {
                     const query = completedLines + "line" + (e.spinType === SpinType.FULL ? "TS" : "");
-                    linesToSend = attackTable[query] 
-                        + e.player.combo < comboTable.length ? comboTable[e.player.combo] : comboTable.at(-1)      //combo bonus
-                        + (e.player._stats.b2b > 1 ? 1 : 0)                                                        //b2b bonus
+                    let attack = attackTable[query]
+                        + (e.player.combo < comboTable.length ? comboTable[e.player.combo] : comboTable.at(-1))   //combo bonus
+                        + (e.player._stats.b2b > 1 ? 1 : 0);                                                      //b2b bonus
+                    e.player._stats.attack += attack;                       //update attack stat
 
+                    //attack removes our own incoming attack first
+                    if (e.player.garbageIncoming > 0)
+                    {
+                        attack = absorbIncomingAttack(e.player, attack);
+                        e.render.drawIncomingAttack();
+                    }
+
+                    //send the reset to other players
                     const target = e.player.otherPlayers[randInt(0, e.player.otherPlayers.length - 1)]
-                    e.player._stats.attack += linesToSend;
-                    target.logic.garbageIncoming += linesToSend;
+                    target.logic.garbageIncoming += attack;
                     target.render.drawIncomingAttack();
                 }
-
-                if (e.player.garbageIncoming > 0)
+                else if (e.player.garbageIncoming > 0)
                 {
                     const amountToAdd = Math.min(e.player.garbageIncoming, garbageCap)
                     e.player.garbageIncoming -= amountToAdd;
-                    addGarbage(e.player.board, randInt(0, e.player.board.width), amountToAdd)
+                    addGarbage(e.player.board, randInt(0, e.player.board.width - 1), amountToAdd)
                     e.render.drawIncomingAttack();
                 }
             }
