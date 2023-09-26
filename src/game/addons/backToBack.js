@@ -5,7 +5,7 @@
         if (e.clearedLines == 0)
             return;
 
-        if (e.clearedLines >= 4 || e.spinType > 0)
+        if (e.clearedLines >= 4 || e.spinType != SpinType.NONE)
             ++(e.player._stats.b2b);
         else
             e.player._stats.b2b = 0;
