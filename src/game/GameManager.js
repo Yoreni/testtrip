@@ -93,7 +93,7 @@ class GameManager
             eventManager.callEvent("onGameStart", {
                 player: player.logic,
                 render: player.render,
-                players: this.players,//this.players.filter((player2) => player.logic.id === player2.logic.id)
+                players: this.players,
             })
         }
     }
