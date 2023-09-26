@@ -183,6 +183,14 @@ function rightToColision(fallingPiece, playfield)
     return count;
 }
 
+/**
+ * 
+ * adds garbage to a board
+ * 
+ * @param {Playfield} playfield 
+ * @param {Number} wellColumn a number between and the playfield width
+ * @param {Number} amount (number of garbge to send) a number >= 0
+ */
 function addGarbage(playfield, wellColumn, amount)
 {
     const garbageLine = Array.from({length: playfield.width}, 

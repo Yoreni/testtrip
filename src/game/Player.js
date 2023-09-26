@@ -33,7 +33,6 @@ class Player
         this._AREtimer = 0;
 
         this._spawnNextPiece();
-        eventManager.callEvent("onGameStart", {player: this})
     }
 
     get id()
@@ -368,8 +367,8 @@ class Player
 
         if (this._board.doesColide(pieceUp) && this._board.doesColide(pieceLeft) 
                 && this._board.doesColide(pieceRight))
-            return 2;
-        return 0;
+            return SpinType.FULL;
+        return SpinType.NONE;
     }
 
     /**

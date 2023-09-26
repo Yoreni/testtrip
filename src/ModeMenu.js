@@ -2,7 +2,7 @@ let selectedMode;
 
 class ModeMenu extends IScene
 {
-    static gameModes = ["marathon", "sprint", "ultra", "cheeseRace", "tetraminoArt"];
+    static gameModes = ["marathon", "sprint", "ultra", "cheeseRace", "tetraminoArt", "versus"];
 
     constructor()
     {

@@ -59,6 +59,7 @@ class GameManager
         for (let index = 0; index != this.numOfPlayers; ++index)
             this._addPlayer();
 
+        this.#callOnGameStartEventForEachPlayer();
     }
 
     restartGame()
@@ -80,6 +81,20 @@ class GameManager
             player.render._drawNextQueue();
             player.render._drawGhostPiece();
             player.render._drawFallingPiece();
+        }
+
+        this.#callOnGameStartEventForEachPlayer();
+    }
+
+    #callOnGameStartEventForEachPlayer()
+    {
+        for (const player of this.#players)
+        {
+            eventManager.callEvent("onGameStart", {
+                player: player.logic,
+                render: player.render,
+                players: this.players,//this.players.filter((player2) => player.logic.id === player2.logic.id)
+            })
         }
     }
 
