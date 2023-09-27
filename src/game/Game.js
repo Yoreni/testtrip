@@ -157,8 +157,7 @@ class Game extends IScene
             }
         }
 
-        const alivePlayers = countOccrences(this.gameManager.players.map((player) => player.logic.isAlive), true);
-        if (alivePlayers === 0)
+        if (this.gameManager.hasEnded())
         {
             this.gameManager.unload();
             sceneManager.start("modeMenu");

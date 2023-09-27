@@ -162,6 +162,7 @@
             hold: 1
         },
         addons: ["backToBack"],
+        endCondition: (alivePlayers) => alivePlayers === 1,
     });
 
     class NumberPopup

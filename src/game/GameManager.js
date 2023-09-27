@@ -55,7 +55,7 @@ class GameManager
             throw "No mode set";
 
         this.#players = [];
-        this.numOfPlayers = 2;
+        this.numOfPlayers = this.#mode.name === "versus" ? 2 : 1; //lazy xD
         for (let index = 0; index != this.numOfPlayers; ++index)
             this._addPlayer();
 
@@ -132,6 +132,15 @@ class GameManager
             render: new Renderer(player, playerPixiContainer),
             input: player.id === 1 ? new Keyboard(player) : new NoInput(),
         });
+    }
+
+    hasEnded()
+    {
+        const alivePlayers = countOccrences(this.players.map((player) => player.logic.isAlive), true);
+        const defaultCheck = (alivePlayers) => alivePlayers === 0;
+
+        const check =  this.#mode.endCondition ?? defaultCheck
+        return check(alivePlayers);
     }
 
     callEvent(eventName, id, data = {})
