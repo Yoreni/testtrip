@@ -129,6 +129,9 @@
                 }
             }
         },
+        gameRules: {
+            hold: 1
+        },
         addons: ["backToBack"],
     });
 
