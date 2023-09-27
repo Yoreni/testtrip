@@ -34,6 +34,8 @@
                 this._objects.incomingAttack.visible = true;
                 this.playField.addChild(this._objects.incomingAttack)
 
+                this._objects.attackIndicator = null;
+
                 this._objects.statsDisplay.x -= 12
             }
 
@@ -85,6 +87,7 @@
                 e.player.otherPlayers = e.players.filter((player) => e.player.id !== player.logic.id)
                 e.player._stats.attack = 0;
                 e.player.garbageIncoming = 0;
+                e.player.currentSpike = 0;
                 e.render.drawIncomingAttack();
             },
             onPieceLock: (e) =>
@@ -117,7 +120,16 @@
                         target.logic.garbageIncoming += linesToSend;
                         target.render.drawIncomingAttack();
 
-                        new NumberPopup(e.render.container, linesToSend, 0xf4f007, picePosition);
+                        if (e.player._stats.lastAttack === undefined || new Date() - e.player._stats.lastAttack > 2000)
+                            e.player.currentSpike = linesToSend;
+                        else
+                        {
+                            e.player.currentSpike += linesToSend;
+                            e.render._objects.attackIndicator.text.alpha = 0;
+                        }
+                        e.player._stats.lastAttack = new Date();
+
+                        e.render._objects.attackIndicator = new NumberPopup(e.render.container, e.player.currentSpike, 0xf4f007, picePosition);
                     }
                 }
                 else if (e.player.garbageIncoming > 0)
