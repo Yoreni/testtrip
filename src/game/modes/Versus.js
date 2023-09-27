@@ -21,6 +21,39 @@
         return remainingAttack;
     }
 
+    const calculateDamgeDealt = (event) =>
+    {
+        const completedLines = event.oldBoard.completedLines.length
+
+        const query = completedLines + "line" + (event.spinType === SpinType.FULL ? "TS" : "");
+        return attackTable[query]
+            + (event.player.combo < comboTable.length ? comboTable[event.player.combo] : comboTable.at(-1))   //combo bonus
+            + (event.player._stats.b2b > 0 ? 1 : 0);                                                          //b2b bonus
+    }
+
+    const handleAttack = (player, target, amount) =>
+    {
+        player._stats.attack += amount;                       //update attack stat
+
+        //attack removes our own incoming attack first
+        const absorbed = amount - absorbIncomingAttack(player, amount);
+        const sent = amount - absorbed;
+
+        if (sent > 0)
+        {
+            target.logic.garbageIncoming += sent;
+
+            //spike counter
+            if (player._stats.lastAttack === undefined || new Date() - player._stats.lastAttack > 2000)
+                player.currentSpike = sent;
+            else
+                player.currentSpike += sent;
+            player._stats.lastAttack = new Date();
+       }
+
+        return {absorbed, sent}
+    }
+
     modeManager.register("versus",
     {
         render: class extends PlayerRenderer
@@ -96,40 +129,24 @@
 
                 if (completedLines > 0)
                 {
-                    const query = completedLines + "line" + (e.spinType === SpinType.FULL ? "TS" : "");
-                    let attack = attackTable[query]
-                        + (e.player.combo < comboTable.length ? comboTable[e.player.combo] : comboTable.at(-1))   //combo bonus
-                        + (e.player._stats.b2b > 0 ? 1 : 0);                                                      //b2b bonus
-                    e.player._stats.attack += attack;                       //update attack stat
+                    let attack = calculateDamgeDealt(e);
 
-                    let linesToSend = attack;
-                    const picePosition =  Point((e.player.currentPiece.x - 1) * 16, (e.player.currentPiece.y + 1) * -16)
-                    //attack removes our own incoming attack first
-                    if (e.player.garbageIncoming > 0)
+                    const target = e.player.otherPlayers[randInt(0, e.player.otherPlayers.length - 1)]
+                    let {absorbed, sent} = handleAttack(e.player, target, attack);
+                    const picePosition = Point((e.player.currentPiece.x - 1) * 16, (e.player.currentPiece.y + 1) * -16)
+
+                    if (absorbed > 0)
                     {
-                        const absorbed = attack - absorbIncomingAttack(e.player, attack);
                         e.render.drawIncomingAttack();
-                        linesToSend -= absorbed;
                         new NumberPopup(e.render.container, absorbed, 0x07a9f4, picePosition);
                     }
-
-                    if (linesToSend > 0)
+                    if (sent > 0)
                     {
-                        //send the reset to other players
-                        const target = e.player.otherPlayers[randInt(0, e.player.otherPlayers.length - 1)]
-                        target.logic.garbageIncoming += linesToSend;
                         target.render.drawIncomingAttack();
-
-                        if (e.player._stats.lastAttack === undefined || new Date() - e.player._stats.lastAttack > 2000)
-                            e.player.currentSpike = linesToSend;
-                        else
-                        {
-                            e.player.currentSpike += linesToSend;
+                        if (sent != e.player.currentSpike)          // delete the old damage indicater if we are in the same spike
                             e.render._objects.attackIndicator.text.alpha = 0;
-                        }
-                        e.player._stats.lastAttack = new Date();
-
-                        e.render._objects.attackIndicator = new NumberPopup(e.render.container, e.player.currentSpike, 0xf4f007, picePosition);
+                        e.render._objects.attackIndicator = 
+                            new NumberPopup(e.render.container, e.player.currentSpike, 0xf4f007, picePosition);
                     }
                 }
                 else if (e.player.garbageIncoming > 0)
