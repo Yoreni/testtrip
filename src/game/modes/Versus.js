@@ -84,7 +84,7 @@
             {
                 e.player.otherPlayers = e.players.filter((player) => e.player.id !== player.logic.id)
                 e.player._stats.attack = 0;
-                e.player.garbageIncoming = 10;
+                e.player.garbageIncoming = 0;
                 e.render.drawIncomingAttack();
             },
             onPieceLock: (e) =>
@@ -96,20 +96,29 @@
                     const query = completedLines + "line" + (e.spinType === SpinType.FULL ? "TS" : "");
                     let attack = attackTable[query]
                         + (e.player.combo < comboTable.length ? comboTable[e.player.combo] : comboTable.at(-1))   //combo bonus
-                        + (e.player._stats.b2b > 1 ? 1 : 0);                                                      //b2b bonus
+                        + (e.player._stats.b2b > 0 ? 1 : 0);                                                      //b2b bonus
                     e.player._stats.attack += attack;                       //update attack stat
 
+                    let linesToSend = attack;
+                    const picePosition =  Point((e.player.currentPiece.x - 1) * 16, (e.player.currentPiece.y + 1) * -16)
                     //attack removes our own incoming attack first
                     if (e.player.garbageIncoming > 0)
                     {
-                        attack = absorbIncomingAttack(e.player, attack);
+                        const absorbed = attack - absorbIncomingAttack(e.player, attack);
                         e.render.drawIncomingAttack();
+                        linesToSend -= absorbed;
+                        new NumberPopup(e.render.container, absorbed, 0x07a9f4, picePosition);
                     }
 
-                    //send the reset to other players
-                    const target = e.player.otherPlayers[randInt(0, e.player.otherPlayers.length - 1)]
-                    target.logic.garbageIncoming += attack;
-                    target.render.drawIncomingAttack();
+                    if (linesToSend > 0)
+                    {
+                        //send the reset to other players
+                        const target = e.player.otherPlayers[randInt(0, e.player.otherPlayers.length - 1)]
+                        target.logic.garbageIncoming += linesToSend;
+                        target.render.drawIncomingAttack();
+
+                        new NumberPopup(e.render.container, linesToSend, 0xf4f007, picePosition);
+                    }
                 }
                 else if (e.player.garbageIncoming > 0)
                 {
@@ -122,4 +131,36 @@
         },
         addons: ["backToBack"],
     });
+
+    class NumberPopup
+    {
+        constructor(container, text, fillColour, pos = Point(0, -150))
+        {
+            this.container = container
+            this.text = new PIXI.Text(text, textStyle(30))
+            this.text.style.fill = fillColour;
+            this.text.position.set(pos.x, pos.y);
+            this.container.addChild(this.text)
+            this.tickerFunction = this.update.bind(this)
+            app.ticker.add(this.tickerFunction)
+            this.count = 0;
+            
+            const direction = Math.random() * Math.PI * 2;
+            this.xVel = Math.sin(direction) * 1.5;
+            this.yVel = Math.cos(direction) * 1.5;
+        }
+
+        update(delta)
+        {
+            if (this.text.alpha > 0)
+            {
+                this.text.alpha -= 0.01;
+                this.text.x += this.xVel;
+                this.text.y += this.yVel;
+            }
+            else
+                app.ticker.remove(this.tickerFunction)
+            ++(this.count)
+        }
+    }
 }
