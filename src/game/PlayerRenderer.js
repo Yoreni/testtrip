@@ -114,9 +114,13 @@ class PlayerRenderer
     _drawHoldPiece()
     {
         if (this._logicPlayer.holdPiece === null)
+        {
+            this._objects.holdPiece.visible = false;
             return;
+        }
 
         this._objects.holdPiece.updatePiece(new FallingPiece(this._logicPlayer.holdPiece))
+        this._objects.holdPiece.visible = true;
         if (this._logicPlayer.holdUsed)
             this._objects.holdPiece.filters = [greyScaleFilter]
         else

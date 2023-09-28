@@ -65,6 +65,9 @@
                 e.player.currentCheeseHeight = 0;
 
                 replaceGarbage(e.player, Math.min(cheeseHeight, lineGoal));
+
+                e.render._drawBoard(e.player.board);
+                e.render._drawGhostPiece();
             },
             onPieceLock: (e) =>
             {

@@ -44,7 +44,7 @@ class GameManager
         addonMangaer.applyAddons(this.#mode);
 
         if (this.#mode.init !== undefined)
-            this.#mode.init(this.#mode.gameRules ?? Player.defaultRules);
+            this.#mode.init(this.#mode.gameRules ?? PlayerLogic.defaultRules);
 
         this.#playerSubContainers = [];
     }
@@ -64,7 +64,7 @@ class GameManager
 
     restartGame()
     {
-        const Logic = this.#mode.logic ?? Player;
+        const Logic = this.#mode.logic ?? PlayerLogic;
         for (const player of this.#players)
         {
             //reset the player to a new game
@@ -73,14 +73,14 @@ class GameManager
 
             //inform the render and input about the new player object
             player.render._logicPlayer = player.logic;
-            player.input = new Keyboard(player.logic);
+            player.input.logic = player.logic;
 
             //redraw some stuff so it shows that the game restarted
             player.render._drawBoard(player.logic.board);
-            player.render._drawHoldPiece();
             player.render._drawNextQueue();
             player.render._drawGhostPiece();
             player.render._drawFallingPiece();
+            player.render._drawHoldPiece();
         }
 
         this.#callOnGameStartEventForEachPlayer();
@@ -115,7 +115,7 @@ class GameManager
     _addPlayer()
     {
         const Renderer = this.#mode.render ?? PlayerRenderer;
-        const Logic = this.#mode.logic ?? Player;
+        const Logic = this.#mode.logic ?? PlayerLogic;
 
         let player =  new Logic(this.#mode.gameRules ?? {}, this.#players.length);
         player.callEvent = (eventName, data = {}) => this.callEvent(eventName, player.id, data);
@@ -130,7 +130,7 @@ class GameManager
         {
             logic: player,
             render: new Renderer(player, playerPixiContainer),
-            input: player.id === 1 ? new Keyboard(player) : new NoInput(),
+            input: player.id === 0 ? new Keyboard(player) : new NoInput(),
         });
     }
 

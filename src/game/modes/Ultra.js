@@ -20,7 +20,7 @@
                 super._updateStats(display);
             }
         },
-        logic: class extends Player
+        logic: class extends PlayerLogic
         {
             tick(delta)
             {

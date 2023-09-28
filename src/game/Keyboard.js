@@ -89,4 +89,17 @@ class Keyboard
         if (this.#keys.hold.framesDown === 1)
             this.#player.hold();
     }
+
+    get logic()
+    {
+        return this.#player
+    }
+
+    set logic(logicPlayer)
+    {
+        if (logicPlayer instanceof PlayerLogic)
+            this.#player = logicPlayer
+        else
+            throw "The argument provided is not a logic player";
+    }
 }

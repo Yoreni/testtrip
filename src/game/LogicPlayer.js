@@ -1,4 +1,4 @@
-class Player
+class PlayerLogic
 {
     #id;
 
@@ -20,7 +20,7 @@ class Player
 
     constructor(rules, id)
     {
-        this._rules = saveOptionsWithDeafults(rules, Player.defaultRules)
+        this._rules = saveOptionsWithDeafults(rules, PlayerLogic.defaultRules)
         this.random = new Random(rules.seed ?? new Date().getTime());
         this.#id = id;
         this._board = new Playfield(this._rules.board.width, this._rules.board.height);
