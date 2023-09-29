@@ -36,9 +36,8 @@
         {
             onScoreChange: (e) =>
             {
-                console.log("change");
                 const pos = Point((e.piece.x - 1) * 16, (e.piece.y + 1) * -16)
-                new NumberPopup(e.render.container, e.change, pos);
+                new NumberPopup(e.player.render.container, e.change, pos);
             }
         },
         init: (rules) =>

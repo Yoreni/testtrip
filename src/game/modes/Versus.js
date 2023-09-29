@@ -21,14 +21,12 @@
         return remainingAttack;
     }
 
-    const calculateDamgeDealt = (event) =>
+    const calculateDamgeDealt = (logicPlayer, linesCleared, spinType) =>
     {
-        const completedLines = event.oldBoard.completedLines.length
-
-        const query = completedLines + "line" + (event.spinType === SpinType.FULL ? "TS" : "");
+        const query = linesCleared + "line" + (spinType === SpinType.FULL ? "TS" : "");
         return attackTable[query]
-            + (event.player.combo < comboTable.length ? comboTable[event.player.combo] : comboTable.at(-1))   //combo bonus
-            + (event.player._stats.b2b > 0 ? 1 : 0);                                                          //b2b bonus
+            + (logicPlayer.combo < comboTable.length ? comboTable[logicPlayer.combo] : comboTable.at(-1))   //combo bonus
+            + (logicPlayer._stats.b2b > 0 ? 1 : 0);                                                          //b2b bonus
     }
 
     const handleAttack = (player, target, amount) =>
@@ -52,6 +50,13 @@
        }
 
         return {absorbed, sent}
+    }
+
+    const reciveIncomingGarbage = (logicPlayer) =>
+    {
+        const amountToAdd = Math.min(logicPlayer.garbageIncoming, garbageCap)
+        logicPlayer.garbageIncoming -= amountToAdd;
+        addGarbage(logicPlayer.board, randInt(0, logicPlayer.board.width - 1), amountToAdd)
     }
 
     modeManager.register("versus",
@@ -117,44 +122,44 @@
         {
             onGameStart: (e) =>
             {
-                e.player.otherPlayers = e.players.filter((player) => e.player.id !== player.logic.id)
-                e.player._stats.attack = 0;
-                e.player.garbageIncoming = 0;
-                e.player.currentSpike = 0;
-                e.render.drawIncomingAttack();
+                e.player.otherPlayers = e.players.filter((player) => e.player.logic.id !== player.logic.id)
+                e.player.logic._stats.attack = 0;
+                e.player.logic.garbageIncoming = 0;
+                e.player.logic.currentSpike = 0;
+                e.player.render.drawIncomingAttack();
             },
             onPieceLock: (e) =>
             {
                 const completedLines = e.oldBoard.completedLines.length
+                const logicPlayer = e.player.logic;
+                const render = e.player.render
 
                 if (completedLines > 0)
                 {
-                    let attack = calculateDamgeDealt(e);
+                    let attack = calculateDamgeDealt(logicPlayer, completedLines, e.spinType);
 
                     const target = e.player.otherPlayers[randInt(0, e.player.otherPlayers.length - 1)]
-                    let {absorbed, sent} = handleAttack(e.player, target, attack);
-                    const picePosition = Point((e.player.currentPiece.x - 1) * 16, (e.player.currentPiece.y + 1) * -16)
+                    let {absorbed, sent} = handleAttack(logicPlayer, target, attack);
+                    const picePosition = Point((logicPlayer.currentPiece.x - 1) * 16, (logicPlayer.currentPiece.y + 1) * -16)
 
                     if (absorbed > 0)
                     {
-                        e.render.drawIncomingAttack();
-                        new NumberPopup(e.render.container, absorbed, 0x07a9f4, picePosition);
+                        render.drawIncomingAttack();
+                        new NumberPopup(render.container, absorbed, 0x07a9f4, picePosition);
                     }
                     if (sent > 0)
                     {
                         target.render.drawIncomingAttack();
-                        if (sent != e.player.currentSpike)          // delete the old damage indicater if we are in the same spike
-                            e.render._objects.attackIndicator.text.alpha = 0;
-                        e.render._objects.attackIndicator = 
-                            new NumberPopup(e.render.container, e.player.currentSpike, 0xf4f007, picePosition);
+                        if (sent != logicPlayer.currentSpike)          // delete the old damage indicater if we are in the same spike
+                            render._objects.attackIndicator.text.alpha = 0;
+                        render._objects.attackIndicator = 
+                            new NumberPopup(render.container, logicPlayer.currentSpike, 0xf4f007, picePosition);
                     }
                 }
-                else if (e.player.garbageIncoming > 0)
+                else if (logicPlayer.garbageIncoming > 0)
                 {
-                    const amountToAdd = Math.min(e.player.garbageIncoming, garbageCap)
-                    e.player.garbageIncoming -= amountToAdd;
-                    addGarbage(e.player.board, randInt(0, e.player.board.width - 1), amountToAdd)
-                    e.render.drawIncomingAttack();
+                    reciveIncomingGarbage(logicPlayer);
+                    render.drawIncomingAttack();
                 }
             }
         },

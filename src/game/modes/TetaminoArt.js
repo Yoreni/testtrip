@@ -136,8 +136,7 @@
         {
             onPiecePlace: (e) =>
             {
-                console.log(e.player._rules.gravity);
-                if (artConditions[making](e.player.board))
+                if (artConditions[making](e.player.logic.board))
                     alert("You did it");
             }
         },

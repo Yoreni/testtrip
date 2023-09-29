@@ -60,46 +60,47 @@
             onGameStart: (e) =>
             {
                 //resets the varibles when the player restarts the game
-                e.player.lastWellColumn = null;
-                e.player.garbageCleared = 0;
-                e.player.currentCheeseHeight = 0;
+                e.player.logic.lastWellColumn = null;
+                e.player.logic.garbageCleared = 0;
+                e.player.logic.currentCheeseHeight = 0;
 
-                replaceGarbage(e.player, Math.min(cheeseHeight, lineGoal));
+                replaceGarbage(e.player.logic, Math.min(cheeseHeight, lineGoal));
 
-                e.render._drawBoard(e.player.board);
-                e.render._drawGhostPiece();
+                e.player.render._drawBoard(e.player.logic.board);
+                e.player.render._drawGhostPiece();
             },
             onPieceLock: (e) =>
             {
+                const logicPlayer = e.player.logic;
+
                 for (let line of e.oldBoard.completedLines)
                 {
                     //if the line is a garbageLine
                     if (e.oldBoard.get(0, line) === "#" || e.oldBoard.get(1, line) === "#")
                     {
-                        ++(e.player.garbageCleared);
-                        --(e.player.currentCheeseHeight);    
+                        ++(logicPlayer.garbageCleared);
+                        --(logicPlayer.currentCheeseHeight);    
                     }
-
-                    console.log(e.player.garbageCleared, e.player.currentCheeseHeight)
                 }
 
-                if (e.player.garbageCleared >= lineGoal)
-                    e.player._markTopout();
+                if (logicPlayer.garbageCleared >= lineGoal)
+                    logicPlayer._markTopout();
             },
             onPiecePlace: (e) =>
             {
+                const logicPlayer = e.player.logic;
+
                 //replace garbage lines
-                const garbageLeftToSpawn = Math.max(lineGoal - e.player.currentCheeseHeight - e.player.garbageCleared, 0);
-                let replaceAmount = clamp(garbageLeftToSpawn, 0, cheeseHeight - e.player.currentCheeseHeight);
+                const garbageLeftToSpawn = Math.max(lineGoal - logicPlayer.currentCheeseHeight - logicPlayer.garbageCleared, 0);
+                let replaceAmount = clamp(garbageLeftToSpawn, 0, cheeseHeight - logicPlayer.currentCheeseHeight);
 
                 //dont replace garbage lines if we are in a combo
-                if (e.player.combo > 0)
-                    replaceAmount = clamp(replaceAmount, inComboMinCheeseHeight - e.player.currentCheeseHeight, 0);
+                if (logicPlayer.combo > 0)
+                    replaceAmount = clamp(replaceAmount, inComboMinCheeseHeight - logicPlayer.currentCheeseHeight, 0);
 
-                console.log(replaceAmount)    
-                replaceGarbage(e.player, replaceAmount);
-                e.render._drawBoard(e.player.board);
-                e.render._drawGhostPiece();
+                replaceGarbage(logicPlayer, replaceAmount);
+                e.player.render._drawBoard(logicPlayer.board);
+                e.player.render._drawGhostPiece();
             }
         },
         gameRules:

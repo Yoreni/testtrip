@@ -214,50 +214,57 @@ class PlayerRenderer
     {
         eventManager.addEvent("onPieceLock", (e) =>
         {
+            const render = e.player.render;
             let board = e.oldBoard;
-            e.render._drawBoard(board);
-            e.render._drawHoldPiece();
+            render._drawBoard(board);
+            render._drawHoldPiece();
         })
 
         eventManager.addEvent("AREend", (e) =>
         {
-            e.render._drawBoard(e.player.board);
-            e.render._drawGhostPiece();
+            const render = e.player.render;
+            render._drawBoard(e.player.board);
+            render._drawGhostPiece();
         })
 
         eventManager.addEvent("onPiecePlace", (e) =>
         {
-            e.render._drawFallingPiece();
-            e.render._drawGhostPiece();
-            e.render._drawNextQueue();
+            const render = e.player.render;
+            render._drawFallingPiece();
+            render._drawGhostPiece();
+            render._drawNextQueue();
 
-            if (e.player.AREtimer === 0)
-                e.render._drawBoard(e.player.board);
+            if (e.player.logic.AREtimer === 0)
+                render._drawBoard(e.player.logic.board);
         })
 
         eventManager.addEvent("onHold", (e) =>
         {
-            e.render._drawHoldPiece();
-            e.render._drawFallingPiece();
-            e.render._drawGhostPiece();
-            e.render._drawNextQueue();
+            const render = e.player.render;
+            render._drawHoldPiece();
+            render._drawFallingPiece();
+            render._drawGhostPiece();
+            render._drawNextQueue();
         })
 
         eventManager.addEvent("onPieceRotate", (e) =>
         {
-            e.render._drawFallingPiece();
-            e.render._drawGhostPiece();
+            const render = e.player.render;
+            render._drawFallingPiece();
+            render._drawGhostPiece();
         })
 
         eventManager.addEvent("onSoftDrop", (e) =>
         {
-            e.render._drawFallingPiece();
+            const render = e.player.render;
+            render._drawFallingPiece();
         })
 
         eventManager.addEvent("onPieceMove", (e) =>
         {
-            e.render._drawFallingPiece();
-            e.render._drawGhostPiece();
+            const render = e.player.render;
+            render._drawFallingPiece();
+            render._drawGhostPiece();
         })
     }
 

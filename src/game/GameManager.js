@@ -91,8 +91,7 @@ class GameManager
         for (const player of this.#players)
         {
             eventManager.callEvent("onGameStart", {
-                player: player.logic,
-                render: player.render,
+                player,
                 players: this.players,
             })
         }
@@ -145,8 +144,7 @@ class GameManager
 
     callEvent(eventName, id, data = {})
     {
-        data.player = this.#players[id].logic;
-        data.render = this.#players[id].render;
+        data.player = this.#players[id];
         eventManager.callEvent(eventName, data);
     }
 }

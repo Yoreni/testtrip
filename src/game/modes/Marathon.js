@@ -42,26 +42,29 @@
         {
             onGameStart: (e) =>
             {
-                e.player.level = startingLevel;
-                e.player._rules.gravitiy = gravitys[startingLevel - 1];
-                e.player._rules.lockDelay = lockDelays[startingLevel - 1];
-                e.player._rules.scoreMulti = startingLevel;
+                const logicPlayer = e.player.logic;
+                
+                logicPlayer.level = startingLevel;
+                logicPlayer._rules.gravitiy = gravitys[startingLevel - 1];
+                logicPlayer._rules.lockDelay = lockDelays[startingLevel - 1];
+                logicPlayer._rules.scoreMulti = startingLevel;
             },
             onScoreChange: (e) =>
             {
                 const pos = Point((e.piece.x - 1) * 16, (e.piece.y + 1) * -16)
-                new NumberPopup(e.render.container, e.change.toLocaleString(), pos);
+                new NumberPopup(e.player.render.container, e.change.toLocaleString(), pos);
             },
             onPiecePlace: (e) =>
             {
-                const level = Math.floor(e.player.linesCleared / 10) + startingLevel;
+                const logicPlayer = e.player.logic;
+                const level = Math.floor(logicPlayer.linesCleared / 10) + startingLevel;
 
-                if (level != e.player.level)
+                if (level != logicPlayer.level)
                 {
-                    e.player.level = level;
-                    e.player._rules.gravitiy = gravitys[level - 1];
-                    e.player._rules.lockDelay = lockDelays[level - 1];
-                    e.player._rules.scoreMulti = level;
+                    logicPlayer.level = level;
+                    logicPlayer._rules.gravitiy = gravitys[level - 1];
+                    logicPlayer._rules.lockDelay = lockDelays[level - 1];
+                    logicPlayer._rules.scoreMulti = level;
                 }
             }
 

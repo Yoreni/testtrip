@@ -47,10 +47,10 @@
                 if (lppstracker.length > 5)
                     lppstracker.pop()
 
-                if (e.player.linesCleared >= lineGoal)
+                if (e.player.logic.linesCleared >= lineGoal)
                 {
-                    e.player._markTopout();
-                    alert(`Pieces: ${e.player.piecesPlaced}`)
+                    e.player.logic._markTopout();
+                    alert(`Pieces: ${e.player.logic.piecesPlaced}`)
                 }
             }
         }

@@ -468,37 +468,38 @@ class PlayerLogic
     }
 }
 
-//this tracks basic stats
+//this tracks types of lines cleared
 eventManager.addEvent("onPieceLock", (e) => 
 {
+    const logicPlayer = e.player.logic;
     if (e.clearedLines > 0)
     {
-        let count = e.player._stats.linesCleared[e.clearedLines];
-        if (e.player._stats.linesCleared[e.clearedLines] == undefined)
-            e.player._stats.linesCleared[e.clearedLines] = 0;
-        ++(e.player._stats.linesCleared[e.clearedLines])
+        if (logicPlayer._stats.linesCleared[e.clearedLines] == undefined)
+            logicPlayer._stats.linesCleared[e.clearedLines] = 0;
+        ++(logicPlayer._stats.linesCleared[e.clearedLines])
     }
 
     if (e.spin > 0)
     {
-        if (e.player._stats.spins[spin][e.player.currentPiece.type] == undefined)
-            e.player._stats.spins[spin][e.player.currentPiece.type] = {}
-        if (e.player._stats.spins[spin][e.player.currentPiece.type][e.clearedLines] == undefined)
-            e.player._stats.spins[spin][e.player.currentPiece.type][e.clearedLines] = 0
+        if (logicPlayer._stats.spins[spin][logicPlayer.currentPiece.type] == undefined)
+            logicPlayer._stats.spins[spin][logicPlayer.currentPiece.type] = {}
+        if (logicPlayer._stats.spins[spin][logicPlayer.currentPiece.type][e.clearedLines] == undefined)
+            logicPlayer._stats.spins[spin][logicPlayer.currentPiece.type][e.clearedLines] = 0
     
-         ++(e.player._stats.spins[spin][e.player.currentPiece.type][e.clearedLines])
+         ++(logicPlayer._stats.spins[spin][logicPlayer.currentPiece.type][e.clearedLines])
     }
 
     if (e.clearedLines > 0)
-        ++(e.player._stats.combo);
+        ++(logicPlayer._stats.combo);
     else
-        e.player._stats.combo = 0;
+        logicPlayer._stats.combo = 0;
 
-    e.player._stats.piecesPlaced += 1;
+    logicPlayer._stats.piecesPlaced += 1;
 });
 
 eventManager.addEvent("onPiecePlace", (e) => 
 {
-    if (e.player.board.isPc)
-        ++(e.player._stats.perfectClears)
+    const logicPlayer = e.player.logic;
+    if (logicPlayer.board.isPc)
+        ++(logicPlayer._stats.perfectClears)
 });

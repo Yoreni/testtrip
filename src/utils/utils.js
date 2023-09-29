@@ -198,7 +198,6 @@ function textStyle(size = 24)
 {
     return {
         fontSize: size,
-        // fontWeight: "bold", 
         fontFamily: "Calibri", 
         "align": "center",
     }
