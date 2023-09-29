@@ -42,7 +42,7 @@
             target.logic.garbageIncoming += sent;
 
             //spike counter
-            if (player._stats.lastAttack === undefined || new Date() - player._stats.lastAttack > 2000)
+            if (player._stats.lastAttack === undefined || new Date() - player._stats.lastAttack > 1500)
                 player.currentSpike = sent;
             else
                 player.currentSpike += sent;
@@ -50,6 +50,26 @@
        }
 
         return {absorbed, sent}
+    }
+
+    const updateRendersAfterAttack = (attacker, target, attack) =>
+    {
+        const {absorbed, sent} = attack;
+        const picePosition = Point((attacker.logic.currentPiece.x - 1) * 16, (attacker.logic.currentPiece.y + 1) * -16);
+
+        if (absorbed > 0)
+        {
+            attacker.render.drawIncomingAttack();
+            new NumberPopup(attacker.render.container, absorbed, 0x07a9f4, picePosition);
+        }
+        if (sent > 0)
+        {
+            target.render.drawIncomingAttack();
+            if (sent != attacker.logic.currentSpike)          // hide the old damage indicater if we are in the same spike
+                attacker.logic._objects.attackIndicator.text.alpha = 0;
+            attacker.logic._objects.attackIndicator = 
+                new NumberPopup(attacker.logic.container, attacker.logic.currentSpike, 0xf4f007, picePosition);
+        }
     }
 
     const reciveIncomingGarbage = (logicPlayer) =>
@@ -137,24 +157,9 @@
                 if (completedLines > 0)
                 {
                     let attack = calculateDamgeDealt(logicPlayer, completedLines, e.spinType);
-
                     const target = e.player.otherPlayers[randInt(0, e.player.otherPlayers.length - 1)]
-                    let {absorbed, sent} = handleAttack(logicPlayer, target, attack);
-                    const picePosition = Point((logicPlayer.currentPiece.x - 1) * 16, (logicPlayer.currentPiece.y + 1) * -16)
-
-                    if (absorbed > 0)
-                    {
-                        render.drawIncomingAttack();
-                        new NumberPopup(render.container, absorbed, 0x07a9f4, picePosition);
-                    }
-                    if (sent > 0)
-                    {
-                        target.render.drawIncomingAttack();
-                        if (sent != logicPlayer.currentSpike)          // delete the old damage indicater if we are in the same spike
-                            render._objects.attackIndicator.text.alpha = 0;
-                        render._objects.attackIndicator = 
-                            new NumberPopup(render.container, logicPlayer.currentSpike, 0xf4f007, picePosition);
-                    }
+                    const attackResult = handleAttack(logicPlayer, target, attack);
+                    updateRendersAfterAttack(logicPlayer, target, attackResult)
                 }
                 else if (logicPlayer.garbageIncoming > 0)
                 {
