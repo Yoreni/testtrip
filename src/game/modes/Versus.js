@@ -159,7 +159,7 @@
                     let attack = calculateDamgeDealt(logicPlayer, completedLines, e.spinType);
                     const target = e.player.otherPlayers[randInt(0, e.player.otherPlayers.length - 1)]
                     const attackResult = handleAttack(logicPlayer, target, attack);
-                    updateRendersAfterAttack(logicPlayer, target, attackResult)
+                    updateRendersAfterAttack(logicPlayer, target, attackResult);
                 }
                 else if (logicPlayer.garbageIncoming > 0)
                 {

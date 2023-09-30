@@ -1,5 +1,5 @@
 class Playfield
-{obj
+{
     constructor(width, height)
     {
         this._width = width;
@@ -71,7 +71,6 @@ class Playfield
         if (typeof(minos) === "object" && minos.x !== undefined && minos.y !== undefined)
             minos = [minos]
 
-            let idx = 0
         for (let mino of minos)
         {
             //check if the mino is in bounds
@@ -83,8 +82,6 @@ class Playfield
 
             if (this.get(mino.x, mino.y) !== "0")
                 return true;
-
-            ++idx
         }
         return false;
     }
