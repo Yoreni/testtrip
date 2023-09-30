@@ -59,3 +59,74 @@ function getPossibleMoves(board, piece)
 
     return outcomes;
 }
+
+/**
+ * the lower the number the better it is
+ * 
+ * @param {Playfield} board 
+ */
+function rateBoardState(board)
+{
+    const stackHeightDiffence = findStackHeightDiffence(board)
+    return countHoles(board) + (stackHeightDiffence * (stackHeightDiffence < 3 ? 1 : stackHeightDiffence === 3 ? 2 : 3))
+}
+
+/**
+ * 
+ * @param {Playfield} board 
+ */
+function findMaxHeightOfEachColumn(board)
+{
+    let maxHeights = new Array(board.width);
+
+    for (let column = 0; column != board.width; ++column)
+    {
+        let highestRow = -1;
+        for (let row = 0; row != board.height; ++row)
+        {
+            if (board.get(column, row) !== "0")
+                highestRow = row;
+        }
+        maxHeights[column] = highestRow;
+    }
+
+    return maxHeights;
+}
+
+/**
+ * 
+ * @param {Playfield} board 
+ */
+function countHoles(board)
+{
+    const heights = findMaxHeightOfEachColumn(board)
+    let holes = 0;
+
+    for (let column = 0; column != board.width; ++column)
+    {
+        for (let row = 0; row != heights[column]; ++row)
+        {
+            if (board.get(column, row) !== "0")
+                ++holes;
+        }
+    }
+
+    return holes;
+}
+
+/**
+ * 
+ * @param {Playfield} board 
+ */
+function findStackHeightDiffence(board)
+{
+    const heights = findMaxHeightOfEachColumn(board).sort();
+
+    // heights[0] is the well so the lowest part of the stack is heights[1]
+    const lowestPartofTheStack = heights[1];
+    const heighestPartOfTheStack = heights.at(-1);
+    const heightDiffence = heighestPartOfTheStack - lowestPartofTheStack;
+    return heightDiffence;
+}
+
+//next score each outcome based on how good the stack is

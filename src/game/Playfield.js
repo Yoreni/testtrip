@@ -36,11 +36,25 @@ class Playfield
         return this._height;
     }
 
+    /**
+     * gets the mino type of a cell in the board
+     * 
+     * @param {Number} x 
+     * @param {Number} y 
+     * @returns {String}
+     */
     get(x, y)
     {
         return this._board[y][x]
     }
 
+    /**
+     * sets a cell in the board
+     * 
+     * @param {Number} x 
+     * @param {Number} y 
+     * @param {String} mino 
+     */
     set(x, y, mino)
     {
         this._board[y][x] = mino;
