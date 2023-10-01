@@ -2,6 +2,58 @@ let testBoard = new Playfield(10, 20)
 let piece = new FallingPiece("T")
 piece.y = 20
 piece.x = 5;
+class SimpleBot
+{
+    #player;
+    #chosenMove;
+
+    /**
+     * 
+     * @param {PlayerLogic} logicPlayer 
+     */
+    constructor(logicPlayer)
+    {
+        this.logic = logicPlayer;
+        this.#chosenMove = null;
+    }
+
+    inputs()
+    {
+        if (this.#chosenMove === null)
+        {
+            this.#chosenMove = chooseMove(this.#player);
+            console.log(this.#chosenMove.rating)
+        }
+
+        const piece = this.#player.currentPiece;
+
+        if (piece.rotation !== this.#chosenMove.rotation)
+            this.#player.rotateClockwise();
+        else if (piece.x !== this.#chosenMove.x)
+            this.#player.moveCurrentPiece(Math.sign(this.#chosenMove.x - piece.x))
+        else
+        {
+            this.#player.harddrop();
+            this.#chosenMove = null;
+        }
+    }
+
+    get logic()
+    {
+        return this.#player
+    }
+
+    set logic(logicPlayer)
+    {
+        if (logicPlayer instanceof PlayerLogic)
+            this.#player = logicPlayer
+        else
+        {
+            console.log(logicPlayer)
+            throw "The argument provided is not a logic player";
+        }
+    }
+}
 
 /**
  * hard drops a piece for bots
@@ -61,6 +113,20 @@ function getPossibleMoves(board, piece)
 }
 
 /**
+ * 
+ * @param {PlayerLogic} logicPlayer 
+ * @returns {Object}
+ */
+function chooseMove(logicPlayer)
+{
+    let possibleMoves = getPossibleMoves(logicPlayer.board, logicPlayer.currentPiece);
+    possibleMoves.map(state => state.rating = rateBoardState(state.board));
+    possibleMoves.sort((state1, state2) => state1.rating - state2.rating);
+    console.log(possibleMoves)
+    return possibleMoves[0];
+}
+
+/**
  * the lower the number the better it is
  * 
  * @param {Playfield} board 
@@ -104,6 +170,9 @@ function countHoles(board)
 
     for (let column = 0; column != board.width; ++column)
     {
+        if (heights[column] === -1)
+            continue
+
         for (let row = 0; row != heights[column]; ++row)
         {
             if (board.get(column, row) !== "0")
