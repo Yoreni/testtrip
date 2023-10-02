@@ -177,7 +177,7 @@ function countHoles(board)
 
         for (let row = 0; row != heights[column]; ++row)
         {
-            if (board.get(column, row) !== "0")
+            if (board.get(column, row) === "0")
                 ++holes;
         }
     }
