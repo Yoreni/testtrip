@@ -135,7 +135,7 @@ function rateBoardState(state)
 {
     const stackHeightDiffence = findStackHeightDiffence(state.board)
     return countHoles(state.board) 
-        + (stackHeightDiffence * (stackHeightDiffence < 3 ? 1 : stackHeightDiffence === 3 ? 2 : 3))
+        + (stackHeightDiffence * (stackHeightDiffence < 3 ? 1 : stackHeightDiffence === 3 ? 2 : 5))
         + (state.y > 4 ? state.y : 0) * 4
 }
 
