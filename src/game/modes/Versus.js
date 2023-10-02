@@ -66,9 +66,9 @@
         {
             target.render.drawIncomingAttack();
             if (sent != attacker.logic.currentSpike)          // hide the old damage indicater if we are in the same spike
-                attacker.logic._objects.attackIndicator.text.alpha = 0;
-            attacker.logic._objects.attackIndicator = 
-                new NumberPopup(attacker.logic.container, attacker.logic.currentSpike, 0xf4f007, picePosition);
+                attacker.render._objects.attackIndicator.text.alpha = 0;
+            attacker.render._objects.attackIndicator = 
+                new NumberPopup(attacker.render.container, attacker.logic.currentSpike, 0xf4f007, picePosition);
         }
     }
 

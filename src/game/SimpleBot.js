@@ -22,7 +22,7 @@ class SimpleBot
         if (this.#chosenMove === null)
         {
             this.#chosenMove = chooseMove(this.#player);
-            console.log(this.#chosenMove.rating)
+            // console.log(this.#chosenMove.rating)
         }
 
         const piece = this.#player.currentPiece;
@@ -120,9 +120,9 @@ function getPossibleMoves(board, piece)
 function chooseMove(logicPlayer)
 {
     let possibleMoves = getPossibleMoves(logicPlayer.board, logicPlayer.currentPiece);
-    possibleMoves.map(state => state.rating = rateBoardState(state.board));
+    possibleMoves.map(state => state.rating = rateBoardState(state));
     possibleMoves.sort((state1, state2) => state1.rating - state2.rating);
-    console.log(possibleMoves)
+    // console.log(possibleMoves)
     return possibleMoves[0];
 }
 
@@ -131,10 +131,12 @@ function chooseMove(logicPlayer)
  * 
  * @param {Playfield} board 
  */
-function rateBoardState(board)
+function rateBoardState(state)
 {
-    const stackHeightDiffence = findStackHeightDiffence(board)
-    return countHoles(board) + (stackHeightDiffence * (stackHeightDiffence < 3 ? 1 : stackHeightDiffence === 3 ? 2 : 3))
+    const stackHeightDiffence = findStackHeightDiffence(state.board)
+    return countHoles(state.board) 
+        + (stackHeightDiffence * (stackHeightDiffence < 3 ? 1 : stackHeightDiffence === 3 ? 2 : 3))
+        + (state.y > 4 ? state.y : 0) * 4
 }
 
 /**
