@@ -22,7 +22,7 @@ class SimpleBot
         if (this.#chosenMove === null)
         {
             this.#chosenMove = chooseMove(this.#player);
-            // console.log(this.#chosenMove.rating)
+            console.log(countHoles(this.#chosenMove.board))
         }
 
         const piece = this.#player.currentPiece;
@@ -32,9 +32,14 @@ class SimpleBot
         else if (piece.x !== this.#chosenMove.x)
             this.#player.moveCurrentPiece(Math.sign(this.#chosenMove.x - piece.x))
         else
-        {
-            this.#player.harddrop();
-            this.#chosenMove = null;
+        {   if (this.delay > 0)
+                --(this.delay)
+            else
+            {            
+                this.#player.harddrop();
+                this.#chosenMove = null;
+                this.delay = 0 * 60;
+            }
         }
     }
 
@@ -122,7 +127,7 @@ function chooseMove(logicPlayer)
     let possibleMoves = getPossibleMoves(logicPlayer.board, logicPlayer.currentPiece);
     possibleMoves.map(state => state.rating = rateBoardState(state));
     possibleMoves.sort((state1, state2) => state1.rating - state2.rating);
-    // console.log(possibleMoves)
+    console.log(possibleMoves)
     return possibleMoves[0];
 }
 
@@ -134,9 +139,10 @@ function chooseMove(logicPlayer)
 function rateBoardState(state)
 {
     const stackHeightDiffence = findStackHeightDiffence(state.board)
-    return countHoles(state.board) 
-        + (stackHeightDiffence * (stackHeightDiffence < 3 ? 1 : stackHeightDiffence === 3 ? 2 : 5))
-        + (state.y > 4 ? state.y : 0) * 4
+    return countHoles(state.board) * 20
+        + (stackHeightDiffence * (stackHeightDiffence < 3 ? 1 : stackHeightDiffence === 3 ? 4 : 8))
+        + (state.y > 4 ? state.y : 0) * 2
+        - state.board.completedLines.length * 10
 }
 
 /**
@@ -200,4 +206,3 @@ function findStackHeightDiffence(board)
     return heightDiffence;
 }
 
-//next score each outcome based on how good the stack is

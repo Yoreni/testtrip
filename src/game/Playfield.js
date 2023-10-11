@@ -100,6 +100,9 @@ class Playfield
         return false;
     }
 
+    /**
+     * @returns an array of y-indexes of where a row is full
+     */
     get completedLines()
     {
         let completedLines = [];
