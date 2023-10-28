@@ -5,7 +5,7 @@
 // piece.y = 20
 // piece.x = 5;
 
-class Mikhailbot
+class MikhailBot
 {
     #player;
     #chosenMove;
