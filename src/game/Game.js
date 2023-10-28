@@ -152,7 +152,7 @@ class Game extends IScene
 
                 if (player.logic.AREtimer === 0)
                     player.input.inputs();
-
+                
                 player.render.update(delta);
             }
         }

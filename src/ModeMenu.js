@@ -7,7 +7,7 @@ class ModeMenu extends IScene
     constructor()
     {
         super();
-        selectedMode = "versus"//ModeMenu.gameModes[0];
+        selectedMode = "tetraminoArt"//ModeMenu.gameModes[0];
 
         this.container = new PIXI.Container();
         this._objects = {};
