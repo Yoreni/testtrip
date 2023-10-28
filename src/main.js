@@ -88,17 +88,7 @@ function test(player)
 }
 
 const textures = PIXI.Assets.load(["assets/rasei.png"])
-    .then(function()
-    {
-        //loads a skin
-        return readZip(new ZipReader(new HttpReader("/assets/tetrazz3.zip")))
-    })
-    .then(function(data)
-    {
-        let [skinData, urls] = data;
-        let skin = new Skin(skinData, urls);
-        return skin.loadTextures();
-    })
+    .then(loadSkin())
     .then(function(promise)
     {
         console.log("Textures Loaded");

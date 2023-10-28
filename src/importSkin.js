@@ -90,3 +90,43 @@ function fileToZipReader(file)
     const zipFileReader = new BlobReader(file);
     return new ZipReader(zipFileReader);
 }
+
+const fallbackSkin = {
+    urls: {
+        "I": "assets/fallback/I.png",
+        "J": "assets/fallback/J.png",
+        "L": "assets/fallback/L.png",
+        "S": "assets/fallback/S.png",
+        "Z": "assets/fallback/Z.png",
+        "O": "assets/fallback/O.png",
+        "T": "assets/fallback/T.png",
+        "*": "assets/fallback/fallback.png",
+    },
+    data: {
+        "name": "Tetarraz Skin 3",
+        "author": "FiFiZ",
+        "internalName": "tetarraz3",
+    }
+}
+
+async function loadFallbackSkin()
+{
+    let skin = new Skin(fallbackSkin.data, fallbackSkin.urls);
+    return skin.loadTextures();
+}
+
+async function loadSkin()
+{
+    try
+    {
+        const data = readZip(new ZipReader(new HttpReader("/assets/tetrazz3.zip")))
+        let [skinData, urls] = data;
+        let skin = new Skin(skinData, urls);
+        skin.loadTextures();
+    }
+    catch
+    {
+        console.warn("loading fallback skin")
+        loadFallbackSkin()
+    }
+} 
