@@ -158,35 +158,36 @@ class MikhailBot
         return roofs;
     }
 
-    #findRoofs(field)   // might be wrong
+    #findRoofs(field)
     {
-        let tops = Array(10).fill(null).map(() => Array(2).fill("0"))
+        const tops = Array.from({ length: 10 }, () => [0, 0]);
         let blankCnt = 0;
         let blankDepth = 0;
-        for (let y = 0; y != field.height; ++y)
+    
+        for (let i = field.height - 1; i >=  0; i--)
         {
-            for (let x = 0; x != field.width; ++x)
+            for (let j = 0; j < field.width; j++) 
             {
-                if (field.get(x, y) === "0")
+                if (field.get(j, i) !== "0") 
                 {
-                    if (tops[x][0] === 0)
-                        tops[x][0] = 17 - y;
-
-                    tops[x][1] += 1;
-                }
-                else if (field.get(x, y) !== "0" && tops[x][0] !== 0)
+                    if (tops[j][0] === 0) 
+                        tops[j][0] = -2 + i;
+                    
+                    tops[j][1] += 1;
+                } 
+                else if (field.get(j, i) === "0" && tops[j][0] !== 0)
                 {
-                    ++blankCnt;
-                    blankDepth += tops[x][1] - 1;
+                    blankCnt += 1;
+                    blankDepth += tops[j][1] - 1;
                 }
             }
         }
-
-        return [blankCnt,
-                tops.reduce((currentMax, row) => Math.max(currentMax, row[0]), tops[0][0]),
-                tops.map(row => row[0]),
-                blankDepth
-        ] 
+    
+        let maxTop = 0;
+        for (let j = 0; j < tops.length; j++) 
+            maxTop = Math.max(maxTop, tops[j][0]);
+    
+        return [blankCnt, maxTop, tops.map(top => top[0]), blankDepth];
     }
 
     /**
@@ -276,13 +277,10 @@ class MikhailBot
         }
 
         score -= roofs[0] * 10  // blank spaces
-
-        // console.log("depth", roofs[3])
-        return [score, expect_tetris];
-
         score -= roofs[3] * 2
 
-        console.log("roofs1", roofs[1])
+        return [score, expect_tetris];
+
         // height doesn't matter when its low
         if (roofs[1] > 7)
         {
@@ -445,5 +443,4 @@ function pieceWeight(figure)
     }
     return weights[figure]
 }
-
 
