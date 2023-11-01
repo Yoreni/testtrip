@@ -129,7 +129,7 @@ class GameManager
         {
             logic: player,
             render: new Renderer(player, playerPixiContainer),
-            input: player.id === 0 ? new MikhailBot(player) : new NoInput(player),
+            input: player.id === 0 ? new MikhailBot(player) : new Keyboard(player),
         });
     }
 

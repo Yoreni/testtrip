@@ -7,7 +7,11 @@
 
 class MikhailBot
 {
+    /**
+     * @type {PlayerLogic}
+     */
     #player;
+
     #chosenMove;
     #keys;
 
@@ -27,6 +31,7 @@ class MikhailBot
         this.focusBlank = false;
         this.scared = false
         this.choicesFor2nd = 4 //CONFIG['starting choices for 2nd']
+        this.#chosenMove = null;
 
         this.#keys = 
         {
@@ -83,46 +88,67 @@ class MikhailBot
 
     inputs()
     {
-        if (this.#keys.hardDrop.framesDown === 1)
-            this.#player.harddrop();
-        if (this.#keys.softDrop.framesDown > 0)
-            this.#player.softDrop();
-        if (this.#keys.rotateClockwise.framesDown === 1)
-            this.#player.rotateClockwise();
-        if (this.#keys.rotateAnticlockwise.framesDown === 1)
-            this.#player.rotateAnticlockwise();
-        if (this.#keys.rotate180.framesDown === 1)
-            this.#player.rotate180();
-        if (this.#keys.hold.framesDown === 1)
-            this.#player.hold();
-
-        const action = this.#chooseAction()
-        console.log(action.score, action.expect_tetris)
-        console.log("depth", this.#findRoofs(this.#player.board)[3])
-        // console.log(action.field)
-        //this.#chooseAction()
-        // if (this.#chosenMove === null)
-        // {
-        //     this.#chosenMove = chooseMove(this.#player);
-        //     console.log(countHoles(this.#chosenMove.board))
-        // }
-
-        // const piece = this.#player.currentPiece;
-
-        // if (piece.rotation !== this.#chosenMove.rotation)
+        // if (this.#keys.hardDrop.framesDown === 1)
+        //     this.#placePiece();
+        // if (this.#keys.softDrop.framesDown > 0)
+        //     this.#player.softDrop();
+        // if (this.#keys.rotateClockwise.framesDown === 1)
         //     this.#player.rotateClockwise();
-        // else if (piece.x !== this.#chosenMove.x)
-        //     this.#player.moveCurrentPiece(Math.sign(this.#chosenMove.x - piece.x))
+        // if (this.#keys.rotateAnticlockwise.framesDown === 1)
+        //     this.#player.rotateAnticlockwise();
+        // if (this.#keys.rotate180.framesDown === 1)
+        //     this.#player.rotate180();
+        // if (this.#keys.hold.framesDown === 1)
+        //     this.#player.hold();
+
+
+        if (this.#chosenMove === null)
+        {
+            this.#chosenMove = this.#chooseAction();
+            console.log(this.#chosenMove.field.toString())
+        }
         // else
-        // {   if (this.delay > 0)
-        //         --(this.delay)
-        //     else
-        //     {            
-        //         this.#player.harddrop();
-        //         this.#chosenMove = null;
-        //         this.delay = 0 * 60;
-        //     }
+        // {
+        //     if (this.#player.currentPiece.type !== this.#chosenMove.holdPiece)
+        //         this.#player.hold();
+
+        //     const piece = this.#player.currentPiece;
+        //     this.#player.plonkCurrentPiece(this.#chosenMove.rotation, this.#chosenMove.x)
         // }
+
+
+        //this code is wrong
+        if (this.#player.currentPiece.type !== this.#chosenMove.pieceType)
+            this.#player.hold();
+        const piece = this.#player.currentPiece;
+        if (piece.rotation !== this.#chosenMove.rotation)
+            this.#player.rotateClockwise();
+        else if (piece.x !== this.#chosenMove.x)
+            this.#player.moveCurrentPiece(Math.sign(this.#chosenMove.x - piece.x))
+        else
+        {   
+            if (this.delay > 0)
+                --(this.delay)
+            else
+            {
+                this.#placePiece()
+                this.delay = 0 * 15;
+            }
+        }
+    }
+
+    #placePiece()
+    {
+        const targetBoard = this.#chosenMove.field;
+        this.#player.harddrop();
+
+        if (targetBoard.equals(this.#player.board))
+            console.info("The playfields match")
+        else
+            console.info("The piece was not placed in the intended spot")
+        console.info(`Target X: ${this.#chosenMove.x}, Actual X: ${this.#player.currentPiece.x}`)
+
+        this.#chosenMove = null;
     }
 
     get logic()
@@ -226,13 +252,13 @@ class MikhailBot
         return [field, completedLines.length];
     }
 
-    #almostFullLine(cleared)
+    #almostFullLine(field)
     {
-        for (let y = 0; y != this.#player.board.height; ++y)
+        for (let y = 0; y != field.height; ++y)
         {
             let numOfMinosInRow = 0;
-            for (let x = 0; x != this.#player.board.width; ++x)
-                numOfMinosInRow += this.#player.board.get(x, y) !== "0"
+            for (let x = 0; x != field.width; ++x)
+                numOfMinosInRow += field.get(x, y) !== "0"
 
             if (numOfMinosInRow === 9)
                 return 2;
@@ -279,13 +305,13 @@ class MikhailBot
         score -= roofs[0] * 10  // blank spaces
         score -= roofs[3] * 2
 
-        return [score, expect_tetris];
+        //return [score, expect_tetris];
 
         // height doesn't matter when its low
         if (roofs[1] > 7)
         {
-           // console.log(roofs[1] ** 1.4)
-           // score -= roofs[1] ** 1.4 //EXP
+           //console.log(roofs[1] ** 1.4)
+           score -= roofs[1] ** 1.4 //EXP
         }
         score -= this.#findHole(roofs[2]) * 10
         if (this.focus_blank)
@@ -342,19 +368,19 @@ class MikhailBot
 
     #findHole(tops)
     {
-        let holeCount = 0;
-        tops.unshift(20);
+        let cntHole = 0;
+        tops = [20, ...tops];
         tops[tops.length - 1] = 20;
-
-        for (let index = 1; index != tops.length - 1; ++index)
+        for (let i = 1; i < tops.length - 1; i++) 
         {
-            if (tops[index - 1] - 2 > tops[index] && tops[index] < tops[index + 1] - 2)
-                ++holeCount;
-            else if (tops[index - 1] - 4 > tops[index] && tops[index] < tops[index + 1] - 4)
-                holeCount += Math.min(tops[index - 1] - 4 - tops[index], tops[index + 1] - 4 - tops[index])
+          if (tops[i - 1] - 2 > tops[i] && tops[i] < tops[i + 1] - 2) 
+            cntHole++;
+
+          if (tops[i - 1] - 4 > tops[i] && tops[i] < tops[i + 1] - 4) 
+            cntHole += Math.min(tops[i - 1] - 4 - tops[i], tops[i + 1] - 4 - tops[i]);
         }
 
-        return holeCount;
+        return cntHole;
     }
 
     /**

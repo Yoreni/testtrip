@@ -466,6 +466,26 @@ class PlayerLogic
         while (this._nextQueue.length < 5)
             this._nextQueue.push(...this._rules.pieceGeneration(this))
     }
+
+    /**
+     * used for testing bots
+     * @param {*} rotation 
+     * @param {*} x 
+     * @param {*} y 
+     */
+    // plonkCurrentPiece(rotation, x, y)
+    // {
+    //     while (this.currentPiece.rotation !== rotation)
+    //         this.currentPiece.rotate(1)
+
+    //     this.currentPiece.x = x;
+    //     if (y !== undefined)
+    //         this.currentPiece.y = y
+    //     else
+    //         this.currentPiece.y = this.ghostPiece.y
+
+    //     this._placeCurrentPiece();
+    // }
 }
 
 //this tracks types of lines cleared

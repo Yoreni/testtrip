@@ -144,6 +144,44 @@ class Playfield
         this._board.splice(index, 0, line);
         this._board.pop();
     }
+
+    toString()
+    {
+        let out = ""
+
+        for (let y = this.height - 1; y >= 0; --y)
+        {
+            for (let x = 0; x != this.width; ++x)
+                out += this.get(x, y)
+            out += "\n"
+        }
+
+        return out
+    }
+
+    /**
+     * 
+     * @param {Playfield} otherPlayfield 
+     */
+    equals(otherPlayfield)
+    {
+        if (!(otherPlayfield instanceof Playfield))
+            throw `the given argument is not a playfield ${otherPlayfield}`
+
+        if (this.width !== otherPlayfield.width || this.height !== otherPlayfield.height)
+            return false;
+
+        for (let y = 0; y !== this.height; ++y)
+        {
+            for (let x = 0; x !== this.width; ++x)
+            {
+                if (this.get(x, y) !== otherPlayfield.get(x, y))
+                    return false;
+            }
+        }
+
+        return true;
+    }
 }
 
 function leftToColision(fallingPiece, playfield)
