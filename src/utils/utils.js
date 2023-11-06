@@ -214,3 +214,8 @@ function countOccrences(array, elementToFind)
 
     return count;
 }
+
+function sum(array)
+{
+    return array.reduce((partialSum, number) => partialSum + number, 0);
+}

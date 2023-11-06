@@ -45,6 +45,9 @@ class Playfield
      */
     get(x, y)
     {
+        if (y < 0 || y >= this.height + 10 || x < 0 || x >= this.width)
+            return undefined;
+
         return this._board[y][x]
     }
 

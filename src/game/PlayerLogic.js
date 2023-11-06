@@ -45,6 +45,9 @@ class PlayerLogic
         return this._currentPiece;
     }
 
+    /**
+     * gets the next queue
+     */
     get nextQueue()
     {
         return this._nextQueue;
