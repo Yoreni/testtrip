@@ -9,7 +9,7 @@ class TBotProtocol
     /**
      * 
      * @param {Player} player 
-     * @param {*} bot 
+     * @param {String} bot 
      */
     constructor(player, bot)
     {

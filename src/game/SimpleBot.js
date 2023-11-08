@@ -38,7 +38,7 @@ class SimpleBot
             else
             {            
                 this.#placePiece();
-                this.delay = 1 * 15;
+                //this.delay = 1 * 15;
             }
         }
     }
@@ -183,7 +183,7 @@ function rateBoardState(player, move)
         "height": (move.y > 0 ? move.y : 0) * 10,
         "isQuad": stackHeightDiffence < 4 ? [0, 50, 50, 0, -200][linesClearing] : [0, -100, -120, -160, -350][linesClearing],
         "stackHeight": (stackHeightDiffence * (stackHeightDiffence < 3 ? 3 ** (stackHeightDiffence - 0) : 0)),
-        "dependency": (fixesDependency(player.board, move) * -300) * [1.5, 1, 1, 0.9, 0.8][linesClearing]
+        "dependency": (fixesDependency(player.board, move) * -300) * stackHeightDiffence < 3 ? [2, 1, 1, 0.9, 0.8][linesClearing] : 1
     }
 
     const total = sum(Object.values(scoreCatagoryies))
@@ -287,23 +287,23 @@ function fixesDependency(board, move)
     return false;
 }
 
-let board = new Playfield(10, 20);
-for (let x = 0; x != board.width; ++x)
-{
-    for (let y = 0; y != 3; ++y)
-        board.set(x, y, "S");
-}
-board.set(4, 0, "0")
-board.set(4, 1, "0")
-board.set(4, 2, "0")
+// let board = new Playfield(10, 20);
+// for (let x = 0; x != board.width; ++x)
+// {
+//     for (let y = 0; y != 3; ++y)
+//         board.set(x, y, "S");
+// }
+// board.set(4, 0, "0")
+// board.set(4, 1, "0")
+// board.set(4, 2, "0")
 
-console.log(board.toString())
+// console.log(board.toString())
 
-let piece = new FallingPiece("I")
-piece.rotate(1);
-piece.x = 4
-while (!board.doesColide(piece))
-    --(piece.y);
-++(piece.y)
-console.log(fixesDependency(board, piece))
+// let piece = new FallingPiece("I")
+// piece.rotate(1);
+// piece.x = 4
+// while (!board.doesColide(piece))
+//     --(piece.y);
+// ++(piece.y)
+// console.log(fixesDependency(board, piece))
 

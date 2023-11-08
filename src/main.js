@@ -78,15 +78,6 @@ function makePromiseWithDelay(delay) {
     });
   }
 
-/**
- * 
- * @param {Player} player 
- */
-function test(player)
-{
-    player.holdPiece
-}
-
 const textures = PIXI.Assets.load(["assets/rasei.png"])
     .then(loadSkin())
     .then(function(promise)
@@ -94,3 +85,6 @@ const textures = PIXI.Assets.load(["assets/rasei.png"])
         console.log("Textures Loaded");
         init();
     });
+
+const misamino = new Worker("src/utils/bots/misaImport.js");
+misamino.onmessage = (message) => console.log(message.data);

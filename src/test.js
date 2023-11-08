@@ -1,0 +1,1 @@
+onmessage = () => console.log("Hi")
