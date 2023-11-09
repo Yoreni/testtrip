@@ -86,5 +86,5 @@ const textures = PIXI.Assets.load(["assets/rasei.png"])
         init();
     });
 
-const misamino = new Worker("src/utils/bots/misaImport.js");
-misamino.onmessage = (message) => console.log(message.data);
+// const misamino = new Worker("src/utils/bots/misaImport.js");
+// misamino.onmessage = (message) => console.log(message.data);

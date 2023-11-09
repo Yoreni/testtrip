@@ -129,8 +129,13 @@ class GameManager
         {
             logic: player,
             render: new Renderer(player, playerPixiContainer),
-            input: player.id === 0 ? new SimpleBot(player) : new Keyboard(player),
+            input: player.id === 0 ? new Keyboard(player) : new Keyboard(player),
         });
+
+        if (player.id === 0)
+        {
+            const misamino = new TBotProtocol(player, "src/utils/bots/misaImport.js")
+        }
     }
 
     hasEnded()

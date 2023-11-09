@@ -1,10 +1,12 @@
 class Playfield
 {
+    static BOARD_BUFFER = 20
+
     constructor(width, height)
     {
         this._width = width;
         this._height = height;
-        this._board = Array(height + 10).fill(null)
+        this._board = Array(height + Playfield.BOARD_BUFFER).fill(null)
             .map(() => Array(width).fill("0"))
 
         //TST setup
@@ -45,7 +47,7 @@ class Playfield
      */
     get(x, y)
     {
-        if (y < 0 || y >= this.height + 10 || x < 0 || x >= this.width)
+        if (y < 0 || y >= this.height + Playfield.BOARD_BUFFER || x < 0 || x >= this.width)
             return undefined;
 
         return this._board[y][x]
@@ -130,7 +132,7 @@ class Playfield
     copy()
     {
         let copy = new Playfield(this.width, this.height);
-        for (let y = 0; y != this.height + 10; ++y)
+        for (let y = 0; y != this.height + Playfield.BOARD_BUFFER; ++y)
         {
             for (let x = 0; x != this.width; ++x)
                 copy.set(x, y, this.get(x, y));
