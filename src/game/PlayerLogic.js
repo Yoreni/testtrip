@@ -502,14 +502,16 @@ eventManager.addEvent("onPieceLock", (e) =>
         ++(logicPlayer._stats.linesCleared[e.clearedLines])
     }
 
-    if (e.spin > 0)
+    const spin = e.spinType
+    if (e.spinType !== SpinType.NONE)
     {
-        if (logicPlayer._stats.spins[spin][logicPlayer.currentPiece.type] == undefined)
-            logicPlayer._stats.spins[spin][logicPlayer.currentPiece.type] = {}
-        if (logicPlayer._stats.spins[spin][logicPlayer.currentPiece.type][e.clearedLines] == undefined)
-            logicPlayer._stats.spins[spin][logicPlayer.currentPiece.type][e.clearedLines] = 0
+        //TODO change 2 to spin
+        if (logicPlayer._stats.spins[2][logicPlayer.currentPiece.type] == undefined)
+            logicPlayer._stats.spins[2][logicPlayer.currentPiece.type] = {}
+        if (logicPlayer._stats.spins[2][logicPlayer.currentPiece.type][e.clearedLines] == undefined)
+            logicPlayer._stats.spins[2][logicPlayer.currentPiece.type][e.clearedLines] = 0
     
-         ++(logicPlayer._stats.spins[spin][logicPlayer.currentPiece.type][e.clearedLines])
+         ++(logicPlayer._stats.spins[2][logicPlayer.currentPiece.type][e.clearedLines])
 
          console.info("t-spin " + (["","single","double"][e.clearedLines]))
     }
