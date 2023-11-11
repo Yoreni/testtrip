@@ -510,6 +510,8 @@ eventManager.addEvent("onPieceLock", (e) =>
             logicPlayer._stats.spins[spin][logicPlayer.currentPiece.type][e.clearedLines] = 0
     
          ++(logicPlayer._stats.spins[spin][logicPlayer.currentPiece.type][e.clearedLines])
+
+         console.info("t-spin " + (["","single","double"][e.clearedLines]))
     }
 
     if (e.clearedLines > 0)
