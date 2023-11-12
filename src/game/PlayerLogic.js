@@ -513,7 +513,7 @@ eventManager.addEvent("onPieceLock", (e) =>
     
          ++(logicPlayer._stats.spins[2][logicPlayer.currentPiece.type][e.clearedLines])
 
-         console.info("t-spin " + (["","single","double"][e.clearedLines]))
+         console.info("t-spin " + (["","single","double", "triple", "quadruple"][e.clearedLines]))
     }
 
     if (e.clearedLines > 0)

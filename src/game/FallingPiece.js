@@ -16,10 +16,17 @@ class FallingPiece
         this._lockResets = 0;
     }
 
-    //gets the most right x of the piece
+    /**
+     * get the center x of the piece
+     * @returns {Number}
+     */
     get x()
     {
-        return this._position.x;
+        let x = this._position.x
+        // if (this.rotation === 1 || this.rotation === 2 && this.type === "I")
+        //     ++x;
+
+        return x;
     }
 
     set x(newX)
@@ -27,10 +34,18 @@ class FallingPiece
         this._position.x = newX;
     }
 
-    //gets the highest y of the piece
+    /**
+     * get the center y of the piece
+     * @returns {Number}
+     */
     get y()
     {
-        return this._position.y;
+        let y = this._position.y;
+
+        // if (this.rotation === 0 || this.rotation === 1 && this.type === "I")
+        //     ++y;
+
+        return y
     }
 
     set y(newY)
@@ -73,7 +88,7 @@ class FallingPiece
         const center = pieces[this.type].center
 
         return this._minos.map(mino => 
-            Point(Math.ceil(mino.x + this.x - center.x) - 1, 
+            Point(Math.ceil(mino.x + this.x - center.x) - 0, 
                   Math.ceil(mino.y + this.y - center.y)));
     }
 

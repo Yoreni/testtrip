@@ -22,8 +22,23 @@
                 this._objects.pieceText = new PIXI.Text();
                 this._objects.pieceText.style.fill = 0xAAAAAA
                 this.container.addChild(this._objects.pieceText);
+
+                this._objects.botCommond = new PIXI.Graphics();
+                this._objects.botCommond.beginFill(0x0000FF);
+                this._objects.botCommond.drawCircle(0, 0, 6);
+                this._objects.botCommond.endFill();
+                this.container.addChild(this._objects.botCommond);
                 //this._objects.pieceCentre.pivot.set(3, 3);
 
+            }
+
+            update(delta)
+            {
+                if (this._objects.botCommond === undefined)
+                    return;
+                if (misaminoPoint === undefined)
+                    return;
+                this._objects.botCommond.position.set(((misaminoPoint.x + 1) * 16) - 8,((misaminoPoint.y + 0) * -16) - 8)
             }
 
             _drawFallingPiece()
@@ -34,7 +49,7 @@
                 if (this._objects.pieceCentre === undefined)
                     return;
 
-                this._objects.pieceCentre.position.set(((piece.x - 1) * 16) - 8,((piece.y + 0) * -16) - 8)
+                this._objects.pieceCentre.position.set(((piece.x + 1) * 16) - 8,((piece.y + 0) * -16) - 8)
                 this._objects.pieceText.position.set(((piece.x + 0) * 16) - 8,((piece.y + 3) * -16) - 8)
                 this._objects.pieceText.text = `X: ${piece.x}, Y: ${piece.y}`;
             }
@@ -49,6 +64,8 @@
         gameRules:
         {
             gravitiy: 0,
+            lockDelay: 3999999990,
+            maxLockResets: 9999999,
         }   
     });
 }

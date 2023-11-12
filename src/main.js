@@ -1,6 +1,8 @@
 "use strict";
 let canvasSize = {width: 0, height: 0}
 
+let misaminoPoint = undefined;
+
 const 
 {
     configure,

@@ -38,7 +38,8 @@ class TBotProtocol
 
         eventManager.addEvent("onPieceLock", (event) => 
         {
-            console.log(`Placed piece x: ${event.piece.x}, y: ${event.piece.y} rotation: ${["north", "east", "south", "west"][event.piece.rotation]}`)
+            const center = pieceCenter(event.piece)
+            console.log(`Placed piece x: ${center.x}, y: ${center.y} rotation: ${["north", "east", "south", "west"][event.piece.rotation]}`)
         })
 
         this.#bot.onmessage = (message) => 
@@ -65,6 +66,7 @@ class TBotProtocol
                 console.log(`misamino says Piece: ${this.#move.location.type},
                  X: ${this.#move.location.x}, Y: ${this.#move.location.y},
                 Rotation: X: ${this.#move.location.orientation}`)
+                misaminoPoint = Point(this.#move.location.x, this.#move.location.y);
             }
         };
     }
@@ -106,7 +108,6 @@ class TBotProtocol
             type: "play",
             move: this.#move,
         })
-        console.log("played")
     }
 
     sendNewPiece()
@@ -153,4 +154,50 @@ class TBotProtocol
 
         return boardArray
     }
+}
+
+/**
+ * 
+ * @param {FallingPiece} piece 
+ */
+function pieceCenter(piece)
+{
+    if (piece.type !== "I")
+        return Point(piece.x, piece.y)
+
+    if (piece.rotation === 0)
+        return Point(piece.x, piece.y + 1)
+    if (piece.rotation === 1)
+        return Point(piece.x + 1, piece.y + 1)
+    if (piece.rotation === 2)
+        return Point(piece.x + 1, piece.y)
+    return Poin
+}
+
+/**
+ * find the keypresses in order to a pieces in a certain way
+ * 
+ * @param {FallingPiece} desiredPiece 
+ * @param {Playfield} board 
+ * 
+ * @returns {String[] | null} path to take
+ * proform each action in order
+ * 
+ * possible actions are:
+ * left - move piece left
+ * right - move piece right
+ * hd - harddrop
+ * sd - softdrop down to the bottom
+ * rc - rotate clockwise
+ * rac - rotate anti clockwise
+ * r180 - rotate 180
+ * 
+ * returns null if the piece if impossible to place there
+ */
+function findPathToPlacePiece(desiredPiece, board)
+{
+    if (board.doesColide(desiredPiece))
+        return null;
+
+
 }
