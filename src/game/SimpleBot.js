@@ -102,6 +102,7 @@ function placePiece(board, piece)
 }
 
 /**
+ * gets all the places on the board that can be obtained without spins and tucks
  * 
  * @param {Playfield} board 
  * @param {String} piece piece type
@@ -112,7 +113,7 @@ function getPossibleMoves(board, piece)
     // const ogrinalPiece = piece;
     let outcomes = []
 
-    for (let column = 0; column != ogrinalBoard.width; ++column)
+    for (let column = -3; column != ogrinalBoard.width; ++column)
     {
         for (let rotation = 0; rotation != 4; ++rotation)
         {
@@ -129,6 +130,7 @@ function getPossibleMoves(board, piece)
                     x: thisPiece.x,
                     y: thisPiece.y,
                     rotation: thisPiece.rotation,
+                    piece: thisPiece,
                     type: thisPiece.type,
             })
         }

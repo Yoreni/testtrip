@@ -1,4 +1,6 @@
 {
+    let actions = null;
+
     modeManager.register("dev",
     {
         render: class extends PlayerRenderer
@@ -28,8 +30,6 @@
                 this._objects.botCommond.drawCircle(0, 0, 6);
                 this._objects.botCommond.endFill();
                 this.container.addChild(this._objects.botCommond);
-                //this._objects.pieceCentre.pivot.set(3, 3);
-
             }
 
             update(delta)
@@ -39,6 +39,12 @@
                 if (misaminoPoint === undefined)
                     return;
                 this._objects.botCommond.position.set(((misaminoPoint.x + 1) * 16) - 8,((misaminoPoint.y + 0) * -16) - 8)
+
+                if (actions === null)
+                {
+                    actions = findPathToPlacePiece(misaminoPoint, this._logicPlayer.board);
+                    console.log(`Path: ${actions}`)
+                }
             }
 
             _drawFallingPiece()
@@ -58,7 +64,7 @@
         {
             onPiecePlace: (e) =>
             {
-
+                actions = null;
             }
         },
         gameRules:

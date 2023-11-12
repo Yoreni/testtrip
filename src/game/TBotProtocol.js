@@ -1,6 +1,13 @@
 //from this
 //https://github.com/tetris-bot-protocol/tbp-spec
 
+const directionConversion = {
+    "north": 0,
+    "east": 1,
+    "south": 2,
+    "west": 3,
+}
+
 class TBotProtocol
 {
     #player;
@@ -38,7 +45,7 @@ class TBotProtocol
 
         eventManager.addEvent("onPieceLock", (event) => 
         {
-            const center = pieceCenter(event.piece)
+            const center = findPieceCenter(event.piece)
             console.log(`Placed piece x: ${center.x}, y: ${center.y} rotation: ${["north", "east", "south", "west"][event.piece.rotation]}`)
         })
 
@@ -67,6 +74,8 @@ class TBotProtocol
                  X: ${this.#move.location.x}, Y: ${this.#move.location.y},
                 Rotation: X: ${this.#move.location.orientation}`)
                 misaminoPoint = Point(this.#move.location.x, this.#move.location.y);
+                misaminoPoint.rotation = directionConversion[this.#move.location.orientation];
+                misaminoPoint.type = this.#move.location.type;
             }
         };
     }
@@ -160,10 +169,11 @@ class TBotProtocol
  * 
  * @param {FallingPiece} piece 
  */
-function pieceCenter(piece)
+function findPieceCenter(piece)
 {
+    const ogrinal = Point(piece.x, piece.y)
     if (piece.type !== "I")
-        return Point(piece.x, piece.y)
+        return ogrinal
 
     if (piece.rotation === 0)
         return Point(piece.x, piece.y + 1)
@@ -171,8 +181,67 @@ function pieceCenter(piece)
         return Point(piece.x + 1, piece.y + 1)
     if (piece.rotation === 2)
         return Point(piece.x + 1, piece.y)
-    return Poin
+    return ogrinal
 }
+
+/**
+ * hard drops a piece for bots
+ * 
+ * @param {Playfield} board 
+ * @param {FallingPiece} piece 
+ * @returns 
+ */
+function softDropPiece(board, piece)
+{
+    if (board.doesColide(piece))
+        return null;
+
+    while (!board.doesColide(piece))
+        --(piece.y);
+    ++(piece.y);
+}
+
+/**
+ * gets all the places on the board that can be obtained without spins and tucks
+ * 
+ * @param {Playfield} board 
+ * @param {String} piece piece type
+ */
+// function getPossibleMoves(board, piece)
+// {
+//     const ogrinalBoard = board;
+//     // const ogrinalPiece = piece;
+//     let outcomes = []
+
+//     for (let column = 0; column != ogrinalBoard.width; ++column)
+//     {
+//         for (let rotation = 0; rotation != 4; ++rotation)
+//         {
+//             board = ogrinalBoard.copy();
+//             let thisPiece = new FallingPiece(piece);
+//             thisPiece.y = board.height + 2;
+//             thisPiece.x = column;
+//             thisPiece.rotate(rotation);
+
+//             let actions = []
+//             if (rotation !== 0)
+//                 actions.push([,"rc", "r180", "rac"])
+
+//             const pieceCenter = pieceCenter(thisPiece)
+    
+//             board = placePiece(board, thisPiece);
+//             if (board !== null)
+//                 outcomes.push({
+//                     x: thisPiece.x,
+//                     y: thisPiece.y,
+//                     rotation: thisPiece.rotation,
+//                     type: thisPiece.type,
+//             })
+//         }
+//     }
+
+//     return outcomes;
+// }
 
 /**
  * find the keypresses in order to a pieces in a certain way
@@ -199,5 +268,47 @@ function findPathToPlacePiece(desiredPiece, board)
     if (board.doesColide(desiredPiece))
         return null;
 
+    //const goal = findPieceCenter(desiredPiece)
+    let moves = getPossibleMoves(board, desiredPiece.type);
+    let vistied = []
+    let log = []
+    for (const piece of moves)
+    {
+        const pieceCenter = findPieceCenter(piece.piece)
+        let actions = []
 
+        if (piece.rotation !== 0)
+            actions.push([null, "rc", "r180", "rac"][piece.rotation])
+        
+
+        if (pieceCenter.x > 5)
+            actions.push(...Array(pieceCenter.x - 5).fill("right"))
+        if (pieceCenter.x < 5)
+            actions.push(...Array(5 - pieceCenter.x).fill("left"))
+
+        if (piece.rotation === desiredPiece.rotation)
+        {
+            log.push(`${pieceCenter.x} ${pieceCenter.y} ${piece.rotation}
+            ${pieceCenter.x === desiredPiece.x} ${pieceCenter.y === desiredPiece.y}
+            ${desiredPiece.x} ${desiredPiece.y}`)
+        }
+
+        if (pieceCenter.x === desiredPiece.x && pieceCenter.y === desiredPiece.y && piece.rotation === desiredPiece.rotation)
+        {
+           // console.log(piece.rotation, desiredPiece.rotation)
+            return [...actions, "hd"]
+        }
+        vistied.push({
+            actions,
+            x: pieceCenter.x,
+            y: pieceCenter.y,
+            rotation: piece.rotation,
+        })
+    }
+
+    for (const line of log)
+        console.log(line)
+
+    //the function will continue to look for spins and tucks
+    return undefined;
 }

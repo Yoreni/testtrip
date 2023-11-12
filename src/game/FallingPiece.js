@@ -53,6 +53,9 @@ class FallingPiece
         this._position.y = newY;
     }
 
+    /**
+     * @returns {String}
+     */
     get type()
     {
         return this.#type;
