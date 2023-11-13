@@ -217,3 +217,35 @@ class FallingPiece
         this._subPosition.y = mod(this._subPosition.y, 1);
     }
 }
+
+/**
+ * rotates a piece with content to a board state
+ * 
+ * @param {FallingPiece} piece 
+ * @param {Number} amount between 0 and 3
+ * @param {Playfield} board 
+ * @param {Object} kicktable 
+ * 
+ * @returns {FallingPiece | null} null if the rotation is unsucessful
+ */
+function rotateWithKicktable(piece, amount, board, kicktable)
+{
+    const kicktableType = kicktable[piece.type] === undefined 
+    ? "*" : piece.type;
+    const kicktableDirection = "" 
+        + piece.rotation + mod(piece.rotation + amount, 4);
+    const kickData = kicktable[kicktableType][kicktableDirection];
+
+    for (let attempt = 0; attempt != kickData.length; ++attempt)
+    {
+        piece = piece.copy();
+        piece.rotate(amount);
+        piece.x += kickData[attempt].x;
+        piece.y += kickData[attempt].y;
+
+        if (!board.doesColide(piece))
+            return piece;
+    }
+
+    return null;
+}

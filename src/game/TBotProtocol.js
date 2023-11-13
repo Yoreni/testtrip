@@ -243,6 +243,14 @@ function softDropPiece(board, piece)
 //     return outcomes;
 // }
 
+function hasVisted(piece, visitedList)
+{
+    for (const state of visitedList)
+        return piece.x === state.piece.x 
+            && piece.y === state.piece.y 
+            && piece.rotation === state.piece.rotation;
+}
+
 /**
  * find the keypresses in order to a pieces in a certain way
  * 
@@ -286,29 +294,166 @@ function findPathToPlacePiece(desiredPiece, board)
         if (pieceCenter.x < 5)
             actions.push(...Array(5 - pieceCenter.x).fill("left"))
 
-        if (piece.rotation === desiredPiece.rotation)
-        {
-            log.push(`${pieceCenter.x} ${pieceCenter.y} ${piece.rotation}
-            ${pieceCenter.x === desiredPiece.x} ${pieceCenter.y === desiredPiece.y}
-            ${desiredPiece.x} ${desiredPiece.y}`)
-        }
+        // if (piece.rotation === desiredPiece.rotation)
+        // {
+        //     log.push(`${pieceCenter.x} ${pieceCenter.y} ${piece.rotation}
+        //     ${pieceCenter.x === desiredPiece.x} ${pieceCenter.y === desiredPiece.y}
+        //     ${desiredPiece.x} ${desiredPiece.y}`)
+        // }
 
         if (pieceCenter.x === desiredPiece.x && pieceCenter.y === desiredPiece.y && piece.rotation === desiredPiece.rotation)
-        {
-           // console.log(piece.rotation, desiredPiece.rotation)
             return [...actions, "hd"]
-        }
+
         vistied.push({
-            actions,
-            x: pieceCenter.x,
-            y: pieceCenter.y,
-            rotation: piece.rotation,
+            actions: [...actions, "sd"],
+            piece: piece.piece,
+            pieceCenter,
         })
     }
 
-    for (const line of log)
-        console.log(line)
+    let index = 0;
+    while (index < vistied.length)
+    {
+        const move = vistied[index]
 
-    //the function will continue to look for spins and tucks
-    return undefined;
+        if (move.actions.length > 20)
+            return undefined; //timeout
+
+        let leftPiece = move.piece.copy()
+        leftPiece.x -= 1;
+        if (!hasVisted(leftPiece, vistied))
+        {
+            const pieceCenter = findPieceCenter(leftPiece);
+            const actions = [...move.actions, "left"]
+            if (pieceCenter.x === desiredPiece.x && pieceCenter.y === desiredPiece.y && leftPiece.rotation === desiredPiece.rotation)
+                return actions
+            
+            vistied.push({
+                actions,
+                piece: leftPiece,
+                pieceCenter: pieceCenter
+            })
+        }
+
+        let rightPiece = move.piece.copy()
+        rightPiece.x += 1;
+        if (!hasVisted(rightPiece, vistied))
+        {
+            const pieceCenter = findPieceCenter(rightPiece);
+            const actions = [...move.actions, "right"]
+            if (pieceCenter.x === desiredPiece.x && pieceCenter.y === desiredPiece.y && rightPiece.rotation === desiredPiece.rotation)
+                return actions
+            
+            vistied.push({
+                actions,
+                piece: rightPiece,
+                pieceCenter: pieceCenter
+            })
+        }
+
+        let clockwisePiece = rotateWithKicktable(move.piece, 1, board, SRSkicktable)
+        if (clockwisePiece !== null && !hasVisted(clockwisePiece, vistied))
+        {
+            const pieceCenter = findPieceCenter(clockwisePiece);
+            const actions = [...move.actions, "rc"]
+            if (pieceCenter.x === desiredPiece.x && pieceCenter.y === desiredPiece.y && clockwisePiece.rotation === desiredPiece.rotation)
+                return actions
+            
+            vistied.push({
+                actions,
+                piece: clockwisePiece,
+                pieceCenter: pieceCenter
+            })
+        }
+
+        let antiClockwisePiece = rotateWithKicktable(move.piece, 3, board, SRSkicktable)
+        if (antiClockwisePiece !== null && !hasVisted(antiClockwisePiece, vistied))
+        {
+            const pieceCenter = findPieceCenter(antiClockwisePiece);
+            const actions = [...move.actions, "rac"]
+            if (pieceCenter.x === desiredPiece.x && pieceCenter.y === desiredPiece.y && antiClockwisePiece.rotation === desiredPiece.rotation)
+                return actions
+            
+            vistied.push({
+                actions,
+                piece: antiClockwisePiece,
+                pieceCenter: pieceCenter
+            })
+        }
+
+
+        let flipPiece = rotateWithKicktable(move.piece, 2, board, SRSkicktable)
+        if (flipPiece !== null && !hasVisted(flipPiece, vistied))
+        {
+            const pieceCenter = findPieceCenter(flipPiece);
+            const actions = [...move.actions, "r180"]
+            if (pieceCenter.x === desiredPiece.x && pieceCenter.y === desiredPiece.y && flipPiece.rotation === desiredPiece.rotation)
+                return actions
+            
+            vistied.push({
+                actions,
+                piece: flipPiece,
+                pieceCenter: pieceCenter
+            })
+        }
+
+        ++index;
+    }
+
+    // for (const line of log)
+    //     console.log(line)
+
+
+    return null;
 }
+
+let board = new Playfield(10, 20)
+// board.set(0, 0, "I")
+// board.set(1, 0, "I")
+// board.set(2, 0, "I")
+// board.set(3, 0, "I")
+// board.set(5, 0, "I")
+// board.set(6, 0, "I")
+// board.set(7, 0, "I")
+// board.set(8, 0, "I")
+// board.set(9, 0, "I")
+
+// board.set(0, 1, "I")
+// board.set(1, 1, "I")
+// board.set(2, 1, "I")
+// board.set(6, 1, "I")
+// board.set(7, 1, "I")
+// board.set(8, 1, "I")
+// board.set(9, 1, "I")
+
+// board.set(3, 2, "I")
+
+board.set(0, 0, "I")
+board.set(1, 0, "I")
+board.set(2, 0, "I")
+board.set(3, 0, "I")
+
+board.set(6, 0, "I")
+board.set(7, 0, "I")
+board.set(8, 0, "I")
+board.set(9, 0, "I")
+
+board.set(0, 1, "I")
+board.set(1, 1, "I")
+board.set(2, 1, "I")
+
+board.set(5, 1, "I")
+board.set(6, 1, "I")
+board.set(7, 1, "I")
+board.set(8, 1, "I")
+board.set(9, 1, "I")
+
+board.set(4, 2, "I")
+
+let piece = new FallingPiece("Z");
+piece.y = 0
+piece.x = 4
+
+setTimeout(() => {
+    console.log(findPathToPlacePiece(piece, board))
+}, 1000)
