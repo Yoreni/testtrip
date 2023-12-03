@@ -43,11 +43,11 @@ class TBotProtocol
             this.sendSugest();
         })
 
-        eventManager.addEvent("onPieceLock", (event) => 
-        {
-            const center = findPieceCenter(event.piece)
-            console.log(`Placed piece x: ${center.x}, y: ${center.y} rotation: ${["north", "east", "south", "west"][event.piece.rotation]}`)
-        })
+        // eventManager.addEvent("onPieceLock", (event) => 
+        // {
+        //     const center = findPieceCenter(event.piece)
+        //     console.log(`Placed piece x: ${center.x}, y: ${center.y} rotation: ${["north", "east", "south", "west"][event.piece.rotation]}`)
+        // })
 
         this.#bot.onmessage = (message) => 
         {
@@ -91,10 +91,13 @@ class TBotProtocol
     {
         if (this.#hasGameStarted && this.#isBotReady)
         {
+            const nextQueue = this.#player.nextQueue.slice(0, 5)
+            console.log("next", nextQueue)
+
             this.#bot.postMessage({
                 type: "start",
                 hold: this.#player.holdPiece,
-                queue: [this.#player.currentPiece.type, ...this.#player.nextQueue],
+                queue: [this.#player.currentPiece.type, ...nextQueue],
                 combo: this.#player.combo,
                 back_to_back: (this.#player._stats.b2b ?? 0) > 0,
                 board: this.#toBoardNotation(this.#player.board),
@@ -121,6 +124,7 @@ class TBotProtocol
 
     sendNewPiece()
     {
+        console.log("new piece", this.#player.nextQueue[4])
         this.#bot.postMessage({
             type: "new_piece",
             piece: this.#player.nextQueue[4],   //change when the num of preview pieces change
@@ -201,259 +205,3 @@ function softDropPiece(board, piece)
     ++(piece.y);
 }
 
-/**
- * gets all the places on the board that can be obtained without spins and tucks
- * 
- * @param {Playfield} board 
- * @param {String} piece piece type
- */
-// function getPossibleMoves(board, piece)
-// {
-//     const ogrinalBoard = board;
-//     // const ogrinalPiece = piece;
-//     let outcomes = []
-
-//     for (let column = 0; column != ogrinalBoard.width; ++column)
-//     {
-//         for (let rotation = 0; rotation != 4; ++rotation)
-//         {
-//             board = ogrinalBoard.copy();
-//             let thisPiece = new FallingPiece(piece);
-//             thisPiece.y = board.height + 2;
-//             thisPiece.x = column;
-//             thisPiece.rotate(rotation);
-
-//             let actions = []
-//             if (rotation !== 0)
-//                 actions.push([,"rc", "r180", "rac"])
-
-//             const pieceCenter = pieceCenter(thisPiece)
-    
-//             board = placePiece(board, thisPiece);
-//             if (board !== null)
-//                 outcomes.push({
-//                     x: thisPiece.x,
-//                     y: thisPiece.y,
-//                     rotation: thisPiece.rotation,
-//                     type: thisPiece.type,
-//             })
-//         }
-//     }
-
-//     return outcomes;
-// }
-
-function hasVisted(piece, visitedList)
-{
-    for (const state of visitedList)
-        return piece.x === state.piece.x 
-            && piece.y === state.piece.y 
-            && piece.rotation === state.piece.rotation;
-}
-
-/**
- * find the keypresses in order to a pieces in a certain way
- * 
- * @param {FallingPiece} desiredPiece 
- * @param {Playfield} board 
- * 
- * @returns {String[] | null} path to take
- * proform each action in order
- * 
- * possible actions are:
- * left - move piece left
- * right - move piece right
- * hd - harddrop
- * sd - softdrop down to the bottom
- * rc - rotate clockwise
- * rac - rotate anti clockwise
- * r180 - rotate 180
- * 
- * returns null if the piece if impossible to place there
- */
-function findPathToPlacePiece(desiredPiece, board)
-{
-    if (board.doesColide(desiredPiece))
-        return null;
-
-    //const goal = findPieceCenter(desiredPiece)
-    let moves = getPossibleMoves(board, desiredPiece.type);
-    let vistied = []
-    let log = []
-    for (const piece of moves)
-    {
-        const pieceCenter = findPieceCenter(piece.piece)
-        let actions = []
-
-        if (piece.rotation !== 0)
-            actions.push([null, "rc", "r180", "rac"][piece.rotation])
-        
-
-        if (pieceCenter.x > 5)
-            actions.push(...Array(pieceCenter.x - 5).fill("right"))
-        if (pieceCenter.x < 5)
-            actions.push(...Array(5 - pieceCenter.x).fill("left"))
-
-        // if (piece.rotation === desiredPiece.rotation)
-        // {
-        //     log.push(`${pieceCenter.x} ${pieceCenter.y} ${piece.rotation}
-        //     ${pieceCenter.x === desiredPiece.x} ${pieceCenter.y === desiredPiece.y}
-        //     ${desiredPiece.x} ${desiredPiece.y}`)
-        // }
-
-        if (pieceCenter.x === desiredPiece.x && pieceCenter.y === desiredPiece.y && piece.rotation === desiredPiece.rotation)
-            return [...actions, "hd"]
-
-        vistied.push({
-            actions: [...actions, "sd"],
-            piece: piece.piece,
-            pieceCenter,
-        })
-    }
-
-    let index = 0;
-    while (index < vistied.length)
-    {
-        const move = vistied[index]
-
-        if (move.actions.length > 20)
-            return undefined; //timeout
-
-        let leftPiece = move.piece.copy()
-        leftPiece.x -= 1;
-        if (!hasVisted(leftPiece, vistied))
-        {
-            const pieceCenter = findPieceCenter(leftPiece);
-            const actions = [...move.actions, "left"]
-            if (pieceCenter.x === desiredPiece.x && pieceCenter.y === desiredPiece.y && leftPiece.rotation === desiredPiece.rotation)
-                return actions
-            
-            vistied.push({
-                actions,
-                piece: leftPiece,
-                pieceCenter: pieceCenter
-            })
-        }
-
-        let rightPiece = move.piece.copy()
-        rightPiece.x += 1;
-        if (!hasVisted(rightPiece, vistied))
-        {
-            const pieceCenter = findPieceCenter(rightPiece);
-            const actions = [...move.actions, "right"]
-            if (pieceCenter.x === desiredPiece.x && pieceCenter.y === desiredPiece.y && rightPiece.rotation === desiredPiece.rotation)
-                return actions
-            
-            vistied.push({
-                actions,
-                piece: rightPiece,
-                pieceCenter: pieceCenter
-            })
-        }
-
-        let clockwisePiece = rotateWithKicktable(move.piece, 1, board, SRSkicktable)
-        if (clockwisePiece !== null && !hasVisted(clockwisePiece, vistied))
-        {
-            const pieceCenter = findPieceCenter(clockwisePiece);
-            const actions = [...move.actions, "rc"]
-            if (pieceCenter.x === desiredPiece.x && pieceCenter.y === desiredPiece.y && clockwisePiece.rotation === desiredPiece.rotation)
-                return actions
-            
-            vistied.push({
-                actions,
-                piece: clockwisePiece,
-                pieceCenter: pieceCenter
-            })
-        }
-
-        let antiClockwisePiece = rotateWithKicktable(move.piece, 3, board, SRSkicktable)
-        if (antiClockwisePiece !== null && !hasVisted(antiClockwisePiece, vistied))
-        {
-            const pieceCenter = findPieceCenter(antiClockwisePiece);
-            const actions = [...move.actions, "rac"]
-            if (pieceCenter.x === desiredPiece.x && pieceCenter.y === desiredPiece.y && antiClockwisePiece.rotation === desiredPiece.rotation)
-                return actions
-            
-            vistied.push({
-                actions,
-                piece: antiClockwisePiece,
-                pieceCenter: pieceCenter
-            })
-        }
-
-
-        let flipPiece = rotateWithKicktable(move.piece, 2, board, SRSkicktable)
-        if (flipPiece !== null && !hasVisted(flipPiece, vistied))
-        {
-            const pieceCenter = findPieceCenter(flipPiece);
-            const actions = [...move.actions, "r180"]
-            if (pieceCenter.x === desiredPiece.x && pieceCenter.y === desiredPiece.y && flipPiece.rotation === desiredPiece.rotation)
-                return actions
-            
-            vistied.push({
-                actions,
-                piece: flipPiece,
-                pieceCenter: pieceCenter
-            })
-        }
-
-        ++index;
-    }
-
-    // for (const line of log)
-    //     console.log(line)
-
-
-    return null;
-}
-
-let board = new Playfield(10, 20)
-// board.set(0, 0, "I")
-// board.set(1, 0, "I")
-// board.set(2, 0, "I")
-// board.set(3, 0, "I")
-// board.set(5, 0, "I")
-// board.set(6, 0, "I")
-// board.set(7, 0, "I")
-// board.set(8, 0, "I")
-// board.set(9, 0, "I")
-
-// board.set(0, 1, "I")
-// board.set(1, 1, "I")
-// board.set(2, 1, "I")
-// board.set(6, 1, "I")
-// board.set(7, 1, "I")
-// board.set(8, 1, "I")
-// board.set(9, 1, "I")
-
-// board.set(3, 2, "I")
-
-board.set(0, 0, "I")
-board.set(1, 0, "I")
-board.set(2, 0, "I")
-board.set(3, 0, "I")
-
-board.set(6, 0, "I")
-board.set(7, 0, "I")
-board.set(8, 0, "I")
-board.set(9, 0, "I")
-
-board.set(0, 1, "I")
-board.set(1, 1, "I")
-board.set(2, 1, "I")
-
-board.set(5, 1, "I")
-board.set(6, 1, "I")
-board.set(7, 1, "I")
-board.set(8, 1, "I")
-board.set(9, 1, "I")
-
-board.set(4, 2, "I")
-
-let piece = new FallingPiece("Z");
-piece.y = 0
-piece.x = 4
-
-setTimeout(() => {
-    console.log(findPathToPlacePiece(piece, board))
-}, 1000)
