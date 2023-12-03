@@ -1,5 +1,5 @@
 {
-    const lineGoal = 40;
+    let lineGoal;
 
     let lppstracker = []
 
@@ -53,6 +53,10 @@
                     alert(`Pieces: ${e.player.logic.piecesPlaced}`)
                 }
             }
+        },
+        load: (modeOptions) => 
+        {
+            lineGoal = modeOptions.lineGoal ?? 40
         }
     });
 }

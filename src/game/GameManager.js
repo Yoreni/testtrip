@@ -27,10 +27,10 @@ class GameManager
         return this.#players;
     }
 
-    load(modeName)
+    load(modeName, modeOptions = {})
     {
         this.#mode = modeName;
-        this.#mode = modeManager.get(modeName);
+        this.#mode = modeManager.get(modeName, modeOptions);
         if (typeof(this.#mode.events) === "function")
             this.modeEventIds = this.#mode.events();
         else

@@ -1,7 +1,7 @@
 {
-    const lineGoal = 100;
-    const cheeseHeight = 10;
-    const garbageMessiness = 100;
+    let lineGoal = 100;
+    let cheeseHeight = 10;
+    let garbageMessiness = 100;
 
     const inComboMinCheeseHeight = Math.min(cheeseHeight, 3)
 
@@ -96,7 +96,10 @@
 
                 //dont replace garbage lines if we are in a combo
                 if (logicPlayer.combo > 0)
+                {
                     replaceAmount = clamp(replaceAmount, inComboMinCheeseHeight - logicPlayer.currentCheeseHeight, 0);
+                    replaceAmount = Math.min(replaceAmount, garbageLeftToSpawn)
+                }
 
                 replaceGarbage(logicPlayer, replaceAmount);
                 e.player.render._drawBoard(logicPlayer.board);
@@ -106,6 +109,12 @@
         gameRules:
         {
             seed: 10
-        }
+        },
+        load: (modeOptions) => 
+        {
+            lineGoal = modeOptions.lineGoal ?? 100
+            cheeseHeight = modeOptions.cheeseHeight ?? 10
+            garbageMessiness = modeOptions.garbageMessiness ?? 100
+        },
     });
 }

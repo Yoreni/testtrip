@@ -1,5 +1,5 @@
 {
-    const timeLimit = 120;
+    let timeLimit = 120;
 
     modeManager.register("ultra",
     {
@@ -42,6 +42,10 @@
         },
         init: (rules) =>
         {
+        },
+        load: (modeOptions) => 
+        {
+            timeLimit = modeOptions.timeLimit ?? 120
         },
         addons: ["guidlineScoring"],
     });

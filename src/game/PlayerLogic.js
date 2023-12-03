@@ -420,7 +420,7 @@ class PlayerLogic
         }
 
         let newFallingPiece = new FallingPiece(type);
-        newFallingPiece.x = Math.ceil(this.board.width / 2);
+        newFallingPiece.x = Math.ceil(this.board.width / 2) - 1;
 
         const lowestY = Math.min(...newFallingPiece.minos.map(mino => mino.y))
         //- lowestY + 1 makes the piece spawns 1 unit above the board

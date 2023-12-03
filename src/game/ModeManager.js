@@ -9,11 +9,15 @@ class ModeManager
         this.#modes = {};
     }
 
-    get(modeName)
+    get(modeName, modeOptions = {})
     {
-        let a = this.#modes[modeName];
-        a.name = modeName;
-        return a;
+        let mode = this.#modes[modeName];
+        mode.name = modeName;
+
+        if (mode.load !== undefined)
+            mode.load(modeOptions)
+
+        return mode;
     }
 
     register(name, modeData)
