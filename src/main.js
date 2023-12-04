@@ -3,6 +3,8 @@ let canvasSize = {width: 0, height: 0}
 
 let misaminoPoint = undefined;
 
+let controllerIndex = null
+
 const 
 {
     configure,
@@ -43,6 +45,7 @@ function setup()
 
     app.ticker.add((delta) => {
         stats.begin();
+        handleControllerInputs(controllerIndex)
         stats.end();
     });
 }
@@ -87,6 +90,33 @@ const textures = PIXI.Assets.load(["assets/rasei.png"])
         console.log("Textures Loaded");
         init();
     });
+
+window.addEventListener("gamepadconnected", (e) => {
+    controllerIndex = e.gamepad.index
+    console.log(
+        "Gamepad connected at index %d: %s. %d buttons, %d axes.",
+        e.gamepad.index,
+        e.gamepad.id,
+        e.gamepad.buttons.length,
+        e.gamepad.axes.length,
+    );
+});
+
+function handleControllerInputs(index)
+{
+    if (controllerIndex !== null) 
+    {
+        const gamepad = navigator.getGamepads()[index];
+        for (const [index, button] of Object.entries(gamepad.buttons)) 
+        {
+            if (button.pressed)
+            {
+                // console.log(button)
+                // console.log(`button ${index} pressed`)
+            }
+        }
+    }
+}
 
 // const misamino = new Worker("src/utils/bots/misaImport.js");
 // misamino.onmessage = (message) => console.log(message.data);

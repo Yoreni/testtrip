@@ -129,12 +129,12 @@ class GameManager
         {
             logic: player,
             render: new Renderer(player, playerPixiContainer),
-            input: player.id === 0 ? new Keyboard(player) : new Keyboard(player),
+            input: player.id === 0 ? new Keyboard(player) : new Gamepad(player, controllerIndex),
         });
 
         if (player.id === 0)
         {
-            const misamino = new TBotProtocol(player, "src/utils/bots/misaImport.js")
+            //const misamino = new TBotProtocol(player, "src/utils/bots/misaImport.js")
         }
     }
 
