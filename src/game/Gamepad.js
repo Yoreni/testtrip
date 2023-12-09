@@ -15,14 +15,14 @@ class Gamepad
         this.#player = player;
         this.#keys = 
         {
-            left: new GamepadButtonDetector(GamepadButton.LEFT_DPAD, controllerIndex),
-            right: new GamepadButtonDetector(GamepadButton.RIGHT_DPAD, controllerIndex),
-            softDrop: new GamepadButtonDetector(GamepadButton.DOWN_DPAD, controllerIndex),
-            rotateClockwise: new GamepadButtonDetector(GamepadButton.UP_DPAD, controllerIndex),
-            rotateAnticlockwise: new GamepadButtonDetector(GamepadButton.X, controllerIndex),
-            hold: new GamepadButtonDetector(GamepadButton.Y, controllerIndex),
-            rotate180: new GamepadButtonDetector(GamepadButton.B, controllerIndex),
-            hardDrop: new GamepadButtonDetector(GamepadButton.LEFT_BUMPER, controllerIndex),
+            left: new GamepadAxisDetector(GamepadAxis.LEFT, controllerIndex, true),
+            right: new GamepadAxisDetector(GamepadAxis.RIGHT, controllerIndex, true),
+            softDrop: new GamepadAxisDetector(GamepadAxis.DOWN, controllerIndex, true),
+            rotateClockwise:  new GamepadButtonDetector(GamepadButton.A, controllerIndex),
+            rotateAnticlockwise: new GamepadButtonDetector(GamepadButton.B, controllerIndex),
+            hold: new GamepadButtonDetector(GamepadButton.LEFT_BUMPER, controllerIndex),
+            rotate180: new GamepadButtonDetector(GamepadButton.X, controllerIndex),
+            hardDrop: new GamepadAxisDetector(GamepadAxis.UP, controllerIndex, true),
         }
 
         if (navigator.getGamepads()[controllerIndex] === undefined)
@@ -71,7 +71,14 @@ class Gamepad
 
     inputs() 
     {
-        //const gamepad = navigator.getGamepads()[this.#controllerIndex]
+        const gamepad = navigator.getGamepads()[this.#controllerIndex]
+        const axes = this.#keys.left.axes
+        console.log(axes.x.toFixed(4), axes.y.toFixed(4), 
+         (this.#keys.left.pressed ? "left " : "") +
+         (this.#keys.right.pressed ? "right " : "") +
+         (this.#keys.softDrop.pressed ? "down " : "") +
+         (this.#keys.rotateClockwise.pressed ? "up" : "")
+         )
 
         // navigator.getGamepads() gets called for every request. maybe an optimisation can remove this.
         if (this.#keys.hardDrop.framesPressed === 1)
