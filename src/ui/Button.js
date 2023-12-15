@@ -38,35 +38,49 @@ class Button extends PIXI.Container
         });
     }
 
+    /**
+     * @param {Number} colour 
+     */
+    set borderColour(colour)
+    {
+        this._borderColour = colour
+        this.#redraw()
+    }
+
     #applySettings(settings)
     {
         this.onClick = settings.onClick;
         this.colour = settings.colour;
-        this.borderColour = settings.borderColour;
+        this._borderColour = settings.borderColour;
     }
     
     draw(writing) 
     {
+        if (writing != null) 
+            this.writing = writing;
+        this.#redraw()
+    }
+
+    #redraw()
+    {
         this.removeChildren();
-        if (writing == null) 
-            writing = this.writing;
-        let text = new PIXI.Text(writing, textStyle());
+
+        let text = new PIXI.Text(this.writing, textStyle());
         text.pivot.x = text.width / 2;
         this.text = text;
-
         const calcDimension = (textDim, setDim) => this.#settings.fixed || textDim + 10 < setDim ? setDim : textDim + 10
-        const width = calcDimension(text.width, this.#settings.width)
-        const height = calcDimension(text.height, this.#settings.height)
+        const width = calcDimension(this.text.width, this.#settings.width)
+        const height = calcDimension(this.text.height, this.#settings.height)
         text.position.set(width / 2, 5);
 
         let background = new PIXI.Graphics();
-        background.lineStyle(4, this.borderColour, 1);
+        background.lineStyle(4, this._borderColour, 1);
         background.beginFill(this.colour);
         background.drawRect(0, 0, width, height);
         background.endFill();
         this.addChild(background);
         this.addChild(text);
 
-        this.text.text = writing;
+        // this.text.text = this.writing;
     }
 }

@@ -71,48 +71,80 @@ class SettingsScreen extends IScene
         this._objects.controlerSelectorContainer.y = 20;
         this.container.addChild(this._objects.controlerSelectorContainer);
 
+        this._objects.lineThing = new PIXI.Graphics()
+        this.#drawControlConections(this._objects.lineThing)
+        this._objects.controlerSelectorContainer.addChild(this._objects.lineThing);
+
         this._objects.p1 = new Button("Player 1", {
-            onClick: () => this.selectedPlayer = 0
+            onClick: () => 
+            { 
+                this.selectedPlayer = 0
+                this.#showSelectedPlayer()
+            }
         })
         this._objects.p1.y = 0
         this._objects.controlerSelectorContainer.addChild(this._objects.p1);
 
         this._objects.p2 = new Button("Player 2", {
-            onClick: () => this.selectedPlayer = 1
+            onClick: () => 
+            {
+                this.selectedPlayer = 1
+                this.#showSelectedPlayer()
+            }
         })
         this._objects.p2.y = 50
         this._objects.controlerSelectorContainer.addChild(this._objects.p2);
 
         this._objects.i1 = new Button("Keyboard", {
-            onClick: () => playerInputs[this.selectedPlayer] = InputDevices.KEYBOARD
+            onClick: () =>
+            {
+                playerInputs[this.selectedPlayer] = InputDevices.KEYBOARD
+                this.#drawControlConections(this._objects.lineThing);
+            }
         })
         this._objects.i1.y = 0
         this._objects.i1.x = 150
         this._objects.controlerSelectorContainer.addChild(this._objects.i1);
 
         this._objects.i2 = new Button("Gamepad 1", {
-            onClick: () => playerInputs[this.selectedPlayer] = InputDevices.GAMEPAD_0
+            onClick: () => 
+            {
+                playerInputs[this.selectedPlayer] = InputDevices.GAMEPAD_0
+                this.#drawControlConections(this._objects.lineThing);
+            }
         })
         this._objects.i2.y = 50
         this._objects.i2.x = 150
         this._objects.controlerSelectorContainer.addChild(this._objects.i2);
 
         this._objects.i2 = new Button("Gamepad 2", {
-            onClick: () => playerInputs[this.selectedPlayer] = InputDevices.GAMEPAD_1
+            onClick: () => 
+            {
+                playerInputs[this.selectedPlayer] = InputDevices.GAMEPAD_1
+                this.#drawControlConections(this._objects.lineThing);
+            }
         })
         this._objects.i2.y = 100
         this._objects.i2.x = 150
         this._objects.controlerSelectorContainer.addChild(this._objects.i2);
 
         this._objects.i3 = new Button("Gamepad 3", {
-            onClick: () => playerInputs[this.selectedPlayer] = InputDevices.GAMEPAD_2
+            onClick: () => 
+            {
+                playerInputs[this.selectedPlayer] = InputDevices.GAMEPAD_2
+                this.#drawControlConections(this._objects.lineThing);
+            }
         })
         this._objects.i3.y = 150
         this._objects.i3.x = 150
         this._objects.controlerSelectorContainer.addChild(this._objects.i3);
 
         this._objects.i4 = new Button("Gamepad 4", {
-            onClick: () => playerInputs[this.selectedPlayer] = InputDevices.GAMEPAD_3
+            onClick: () => 
+            {
+                playerInputs[this.selectedPlayer] = InputDevices.GAMEPAD_3
+                this.#drawControlConections(this._objects.lineThing);
+            }
         })
         this._objects.i4.y = 200
         this._objects.i4.x = 150
@@ -164,5 +196,37 @@ class SettingsScreen extends IScene
         container.addChild(label);
 
         return container;
+    }
+
+    /**
+     * 
+     * @param {PIXI.Graphics} graphics 
+     */
+    #drawControlConections(graphics)
+    {
+        graphics.clear()
+        for (let playerIndex = 0; playerIndex < 2; ++playerIndex)
+        {
+            if (playerInputs[playerIndex] === null)
+                continue
+
+            let startX = 80;
+            let startY = playerIndex * 50 + 20;
+            let endY = playerInputs[playerIndex] * 50 + 20
+            let endX = 150;
+            graphics.moveTo(startX, startY)
+                    .lineStyle(3)
+                    .bezierCurveTo(startX, startY, (startX + endX) - 100 / 2, (startY + endY) / 2, endX, endY)
+              //      .endFill(0x000000);
+        }
+
+        // graphics.beginFill(0xff0000);
+        // graphics.drawRect(0, 0, 200, 100);
+    }
+
+    #showSelectedPlayer()
+    {
+        this._objects.p1.borderColour = this.selectedPlayer === 0 ? 0xFF0000 : 0x000000
+        this._objects.p2.borderColour = this.selectedPlayer === 1 ? 0xFF0000 : 0x000000
     }
 }
