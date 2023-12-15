@@ -129,12 +129,32 @@ class GameManager
         {
             logic: player,
             render: new Renderer(player, playerPixiContainer),
-            input: player.id === 0 ? new Keyboard(player) : new Gamepad(player, controllerIndex),
+            input: this.#makeInputObject(player),
         });
 
         if (player.id === 0)
         {
             //const misamino = new TBotProtocol(player, "src/utils/bots/misaImport.js")
+        }
+    }
+
+    #makeInputObject(player)
+    {
+        const mode = playerInputs[player.id] ?? null
+        switch(mode)
+        {
+            case InputDevices.KEYBOARD:
+                return new Keyboard(player)
+            case InputDevices.GAMEPAD_0:
+                return new Gamepad(player, 0)
+            case InputDevices.GAMEPAD_1:
+                return new Gamepad(player, 1)
+            case InputDevices.GAMEPAD_2:
+                return new Gamepad(player, 2)
+            case InputDevices.GAMEPAD_3:
+                return new Gamepad(player, 3)
+            default:
+                throw `player id ${player.id} connected with mode ${mode} but failed`
         }
     }
 
