@@ -8,7 +8,7 @@ const InputDevices =  Object.freeze({
     GAMEPAD_3: 4,
 })
 
-let playerInputs = [InputDevices.GAMEPAD_0, null]
+let playerInputs = [InputDevices.KEYBOARD, null]
 
 window.addEventListener("gamepadconnected", (e) => 
 {

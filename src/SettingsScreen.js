@@ -6,6 +6,7 @@ class SettingsScreen extends IScene
 
         this.container = new PIXI.Container();
         this._objects = {};
+        this.selectedPlayer = 0;
 
         this._objects.back = new Button("Back", {colour: 0xFF5959});
         this._objects.back.position.set(8, app.view.height - this._objects.back.height - 5);
@@ -63,6 +64,59 @@ class SettingsScreen extends IScene
             keybinder.position.set(600, 100 + (index * 40));
             this.container.addChild(keybinder);
         })
+
+        //make controler selector
+        this._objects.controlerSelectorContainer = new PIXI.Container();
+        this._objects.controlerSelectorContainer.x = 800;
+        this._objects.controlerSelectorContainer.y = 20;
+        this.container.addChild(this._objects.controlerSelectorContainer);
+
+        this._objects.p1 = new Button("Player 1", {
+            onClick: () => this.selectedPlayer = 0
+        })
+        this._objects.p1.y = 0
+        this._objects.controlerSelectorContainer.addChild(this._objects.p1);
+
+        this._objects.p2 = new Button("Player 2", {
+            onClick: () => this.selectedPlayer = 1
+        })
+        this._objects.p2.y = 50
+        this._objects.controlerSelectorContainer.addChild(this._objects.p2);
+
+        this._objects.i1 = new Button("Keyboard", {
+            onClick: () => playerInputs[this.selectedPlayer] = InputDevices.KEYBOARD
+        })
+        this._objects.i1.y = 0
+        this._objects.i1.x = 150
+        this._objects.controlerSelectorContainer.addChild(this._objects.i1);
+
+        this._objects.i2 = new Button("Gamepad 1", {
+            onClick: () => playerInputs[this.selectedPlayer] = InputDevices.GAMEPAD_0
+        })
+        this._objects.i2.y = 50
+        this._objects.i2.x = 150
+        this._objects.controlerSelectorContainer.addChild(this._objects.i2);
+
+        this._objects.i2 = new Button("Gamepad 2", {
+            onClick: () => playerInputs[this.selectedPlayer] = InputDevices.GAMEPAD_1
+        })
+        this._objects.i2.y = 100
+        this._objects.i2.x = 150
+        this._objects.controlerSelectorContainer.addChild(this._objects.i2);
+
+        this._objects.i3 = new Button("Gamepad 3", {
+            onClick: () => playerInputs[this.selectedPlayer] = InputDevices.GAMEPAD_2
+        })
+        this._objects.i3.y = 150
+        this._objects.i3.x = 150
+        this._objects.controlerSelectorContainer.addChild(this._objects.i3);
+
+        this._objects.i4 = new Button("Gamepad 4", {
+            onClick: () => playerInputs[this.selectedPlayer] = InputDevices.GAMEPAD_3
+        })
+        this._objects.i4.y = 200
+        this._objects.i4.x = 150
+        this._objects.controlerSelectorContainer.addChild(this._objects.i4);
     }
 
     start()
