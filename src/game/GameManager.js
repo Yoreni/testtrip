@@ -143,6 +143,8 @@ class GameManager
         const mode = playerInputs[player.id] ?? null
         switch(mode)
         {
+            case InputDevices.NONE:
+                return new NoInput()
             case InputDevices.KEYBOARD:
                 return new Keyboard(player)
             case InputDevices.GAMEPAD_0:

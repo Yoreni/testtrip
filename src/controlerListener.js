@@ -1,6 +1,7 @@
 let controllerIndex = [];
 
 const InputDevices =  Object.freeze({
+    NONE: null,
     KEYBOARD: 0,
     GAMEPAD_0: 1,
     GAMEPAD_1: 2,

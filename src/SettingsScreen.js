@@ -6,7 +6,7 @@ class SettingsScreen extends IScene
 
         this.container = new PIXI.Container();
         this._objects = {};
-        this.selectedPlayer = 0;
+        this.selectedPlayer = null;
         this.gamepadDetectionIndicater = [0, 0, 0, 0]; // used to show to the user that a gamepad recived inputs
 
         this._objects.back = new Button("Back", {colour: 0xFF5959});
@@ -76,80 +76,41 @@ class SettingsScreen extends IScene
         this.#drawControlConections(this._objects.lineThing)
         this._objects.controlerSelectorContainer.addChild(this._objects.lineThing);
 
-        this._objects.p1 = new Button("Player 1", {
-            onClick: () => 
-            { 
-                this.selectedPlayer = 0
-                this.#showSelectedPlayer()
-            }
-        })
-        this._objects.p1.y = 0
-        this._objects.controlerSelectorContainer.addChild(this._objects.p1);
+        for (let index = 0; index < 2; ++index)
+        {
+            const button = new Button(`Player ${index + 1}`, {
+                onClick: () => 
+                { 
+                    this.selectedPlayer = index
+                    this.#showSelectedPlayer()
+                    this.#drawControlConections(this._objects.lineThing)
+                }
+            })
+            button.y = index * 50
 
-        this._objects.p2 = new Button("Player 2", {
-            onClick: () => 
-            {
-                this.selectedPlayer = 1
-                this.#showSelectedPlayer()
-            }
-        })
-        this._objects.p2.y = 50
-        this._objects.controlerSelectorContainer.addChild(this._objects.p2);
+            this._objects.controlerSelectorContainer.addChild(button);
+            this._objects[`p${index + 1}`] = button;
+        }
 
-        this._objects.i1 = new Button("Keyboard", {
-            onClick: () =>
-            {
-                playerInputs[this.selectedPlayer] = InputDevices.KEYBOARD
-                this.#drawControlConections(this._objects.lineThing);
-            }
-        })
-        this._objects.i1.y = 0
-        this._objects.i1.x = 150
-        this._objects.controlerSelectorContainer.addChild(this._objects.i1);
-
-        this._objects.i2 = new Button("Gamepad 1", {
-            onClick: () => 
-            {
-                playerInputs[this.selectedPlayer] = InputDevices.GAMEPAD_0
-                this.#drawControlConections(this._objects.lineThing);
-            }
-        })
-        this._objects.i2.y = 50
-        this._objects.i2.x = 150
-        this._objects.controlerSelectorContainer.addChild(this._objects.i2);
-
-        this._objects.i3 = new Button("Gamepad 2", {
-            onClick: () => 
-            {
-                playerInputs[this.selectedPlayer] = InputDevices.GAMEPAD_1
-                this.#drawControlConections(this._objects.lineThing);
-            }
-        })
-        this._objects.i3.y = 100
-        this._objects.i3.x = 150
-        this._objects.controlerSelectorContainer.addChild(this._objects.i3);
-
-        this._objects.i4 = new Button("Gamepad 3", {
-            onClick: () => 
-            {
-                playerInputs[this.selectedPlayer] = InputDevices.GAMEPAD_2
-                this.#drawControlConections(this._objects.lineThing);
-            }
-        })
-        this._objects.i4.y = 150
-        this._objects.i4.x = 150
-        this._objects.controlerSelectorContainer.addChild(this._objects.i4);
-
-        this._objects.i5 = new Button("Gamepad 4", {
-            onClick: () => 
-            {
-                playerInputs[this.selectedPlayer] = InputDevices.GAMEPAD_3
-                this.#drawControlConections(this._objects.lineThing);
-            }
-        })
-        this._objects.i5.y = 200
-        this._objects.i5.x = 150
-        this._objects.controlerSelectorContainer.addChild(this._objects.i5);
+        const buttonText = ["Keyboard", "Gamepad 1", "Gamepad 2", "Gamepad 3", "Gamepad 4"]
+        const inputDeviceMap = [InputDevices.KEYBOARD, InputDevices.GAMEPAD_0, InputDevices.GAMEPAD_1, InputDevices.GAMEPAD_2, InputDevices.GAMEPAD_3]
+        for (let index = 0; index < 5; ++index)
+        {
+            const button = new Button(buttonText[index], {
+                onClick: () =>
+                {
+                    const inputDevice = inputDeviceMap[index]
+                    // clicking on the same button will allow the user to unconnect a player to an input device.
+                    playerInputs[this.selectedPlayer] = playerInputs[this.selectedPlayer] === inputDevice
+                        ? null : inputDevice
+                    this.#drawControlConections(this._objects.lineThing);
+                }
+            })
+            button.y = index * 50
+            button.x = 150
+            this._objects.controlerSelectorContainer.addChild(button);
+            this._objects[`i${index + 1}`] = button;
+        }
     }
 
     start()
@@ -233,16 +194,12 @@ class SettingsScreen extends IScene
 
             let startX = 80;
             let startY = playerIndex * 50 + 20;
-            let endY = playerInputs[playerIndex] * 50 + 20
+            let endY = (playerInputs[playerIndex]) * 50 + 20
             let endX = 150;
             graphics.moveTo(startX, startY)
-                    .lineStyle(3)
+                    .lineStyle(3, playerIndex === this.selectedPlayer ? 0xFF0000 : 0x000000)
                     .bezierCurveTo(startX, startY, (startX + endX) - 100 / 2, (startY + endY) / 2, endX, endY)
-              //      .endFill(0x000000);
         }
-
-        // graphics.beginFill(0xff0000);
-        // graphics.drawRect(0, 0, 200, 100);
     }
 
     #showSelectedPlayer()
