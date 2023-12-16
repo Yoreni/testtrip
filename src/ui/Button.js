@@ -43,6 +43,9 @@ class Button extends PIXI.Container
      */
     set borderColour(colour)
     {
+        if (colour === this._borderColour)
+            return
+        
         this._borderColour = colour
         this.#redraw()
     }

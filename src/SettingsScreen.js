@@ -7,6 +7,7 @@ class SettingsScreen extends IScene
         this.container = new PIXI.Container();
         this._objects = {};
         this.selectedPlayer = 0;
+        this.gamepadDetectionIndicater = [0, 0, 0, 0]; // used to show to the user that a gamepad recived inputs
 
         this._objects.back = new Button("Back", {colour: 0xFF5959});
         this._objects.back.position.set(8, app.view.height - this._objects.back.height - 5);
@@ -117,38 +118,38 @@ class SettingsScreen extends IScene
         this._objects.i2.x = 150
         this._objects.controlerSelectorContainer.addChild(this._objects.i2);
 
-        this._objects.i2 = new Button("Gamepad 2", {
+        this._objects.i3 = new Button("Gamepad 2", {
             onClick: () => 
             {
                 playerInputs[this.selectedPlayer] = InputDevices.GAMEPAD_1
                 this.#drawControlConections(this._objects.lineThing);
             }
         })
-        this._objects.i2.y = 100
-        this._objects.i2.x = 150
-        this._objects.controlerSelectorContainer.addChild(this._objects.i2);
+        this._objects.i3.y = 100
+        this._objects.i3.x = 150
+        this._objects.controlerSelectorContainer.addChild(this._objects.i3);
 
-        this._objects.i3 = new Button("Gamepad 3", {
+        this._objects.i4 = new Button("Gamepad 3", {
             onClick: () => 
             {
                 playerInputs[this.selectedPlayer] = InputDevices.GAMEPAD_2
                 this.#drawControlConections(this._objects.lineThing);
             }
         })
-        this._objects.i3.y = 150
-        this._objects.i3.x = 150
-        this._objects.controlerSelectorContainer.addChild(this._objects.i3);
+        this._objects.i4.y = 150
+        this._objects.i4.x = 150
+        this._objects.controlerSelectorContainer.addChild(this._objects.i4);
 
-        this._objects.i4 = new Button("Gamepad 4", {
+        this._objects.i5 = new Button("Gamepad 4", {
             onClick: () => 
             {
                 playerInputs[this.selectedPlayer] = InputDevices.GAMEPAD_3
                 this.#drawControlConections(this._objects.lineThing);
             }
         })
-        this._objects.i4.y = 200
-        this._objects.i4.x = 150
-        this._objects.controlerSelectorContainer.addChild(this._objects.i4);
+        this._objects.i5.y = 200
+        this._objects.i5.x = 150
+        this._objects.controlerSelectorContainer.addChild(this._objects.i5);
     }
 
     start()
@@ -163,7 +164,27 @@ class SettingsScreen extends IScene
 
     update(delta)
     {
+        // show controler response
+        for (let gamepadIndex = 0; gamepadIndex < 4; ++gamepadIndex)
+        {
+            if (!controllerIndex.includes(gamepadIndex))
+            {
+                this.gamepadDetectionIndicater[gamepadIndex] -= 1;
+                continue;
+            }
 
+            const gamepad = navigator.getGamepads()[gamepadIndex]
+            if (gamepad.buttons.some(button => button.pressed))
+                this.gamepadDetectionIndicater[gamepadIndex] = 30
+            else
+                this.gamepadDetectionIndicater[gamepadIndex] -= 1;
+        }
+
+        for (const [index, button] of Object.entries([this._objects.i2, this._objects.i3, this._objects.i4, this._objects.i5]))
+        {
+            if (button !== undefined)
+                button.borderColour = interpolateColour(0x000000, 0x00a8e0, this.gamepadDetectionIndicater[index] / 30)
+        }
     }
 
     destory()

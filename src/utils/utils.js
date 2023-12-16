@@ -219,3 +219,34 @@ function sum(array)
 {
     return array.reduce((partialSum, number) => partialSum + number, 0);
 }
+
+function interpolateColour(startColour, endColour, progress) 
+{
+    progress = clamp(progress, 0, 1);
+
+    if (progress === 0) 
+        return startColour;
+    if (progress === 1) 
+        return endColour;
+
+    const interpolateComponent = (start, end, p) => start + (end - start) * p;
+
+    // Extract RGB components from the colors
+    const startRed = (startColour >> 16) & 0xff;
+    const startGreen = (startColour >> 8) & 0xff;
+    const startBlue = startColour & 0xff;
+
+    const endRed = (endColour >> 16) & 0xff;
+    const endGreen = (endColour >> 8) & 0xff;
+    const endBlue = endColour & 0xff;
+
+    // Interpolate each RGB component
+    const interpolatedRed = Math.round(interpolateComponent(startRed, endRed, progress));
+    const interpolatedGreen = Math.round(interpolateComponent(startGreen, endGreen, progress));
+    const interpolatedBlue = Math.round(interpolateComponent(startBlue, endBlue, progress));
+
+    // Combine interpolated components into a single color
+    const interpolatedColor = (interpolatedRed << 16) | (interpolatedGreen << 8) | interpolatedBlue;
+
+    return interpolatedColor;
+}
