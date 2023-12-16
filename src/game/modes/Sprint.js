@@ -1,5 +1,5 @@
 {
-    let lineGoal;
+    let lineGoal = 40;
 
     let lppstracker = []
 
@@ -56,7 +56,7 @@
         },
         load: (modeOptions) => 
         {
-            lineGoal = modeOptions.lineGoal ?? 40
+            lineGoal = modeOptions.lineGoal ?? lineGoal
         }
     });
 }

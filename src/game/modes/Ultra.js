@@ -45,7 +45,7 @@
         },
         load: (modeOptions) => 
         {
-            timeLimit = modeOptions.timeLimit ?? 120
+            timeLimit = modeOptions.timeLimit ?? timeLimit
         },
         addons: ["guidlineScoring"],
     });

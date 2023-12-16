@@ -112,9 +112,9 @@
         },
         load: (modeOptions) => 
         {
-            lineGoal = modeOptions.lineGoal ?? 100
-            cheeseHeight = modeOptions.cheeseHeight ?? 10
-            garbageMessiness = modeOptions.garbageMessiness ?? 100
+            lineGoal = modeOptions.lineGoal ?? lineGoal
+            cheeseHeight = modeOptions.cheeseHeight ?? cheeseHeight
+            garbageMessiness = modeOptions.garbageMessiness ?? garbageMessiness
         },
     });
 }

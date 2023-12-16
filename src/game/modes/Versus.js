@@ -14,6 +14,8 @@
     const garbageCap = 6;
     const incomingAttackColours = [0xFF0000, 0xf9f90e, 0x24f204, 0x04e6f2, 0x0f07f9, 0xef04e7]
 
+    let pieceRandimiserSeed = 0
+
     const absorbIncomingAttack = (player, amount) =>
     {
         const remainingAttack = Math.max(0, amount - player.garbageIncoming);
@@ -171,7 +173,15 @@
             }
         },
         gameRules: {
-            hold: 1
+            hold: 1,
+        },
+        load: (modeOptions) => 
+        {
+            pieceRandimiserSeed = modeOptions.seed ?? new Date().getTime()
+        },
+        init: (rules) =>
+        {
+            rules.seed = pieceRandimiserSeed
         },
         addons: ["backToBack"],
         endCondition: (alivePlayers) => alivePlayers === 1,

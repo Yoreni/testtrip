@@ -74,7 +74,7 @@
         },
         load: (modeOptions) => 
         {
-            startingLevel = modeOptions.startingLevel ?? 1
+            startingLevel = modeOptions.startingLevel ?? startingLevel
         },
         addons: ["guidlineScoring"],
     });

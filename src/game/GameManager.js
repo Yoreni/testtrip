@@ -64,6 +64,10 @@ class GameManager
 
     restartGame()
     {
+        this.#mode.load({})
+        if (this.#mode.init !== undefined)
+            this.#mode.init(this.#mode.gameRules ?? PlayerLogic.defaultRules);
+
         const Logic = this.#mode.logic ?? PlayerLogic;
         for (const player of this.#players)
         {
