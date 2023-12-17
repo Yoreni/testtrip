@@ -40,6 +40,9 @@ class PlayerLogic
         return this.#id;
     }
 
+    /**
+     * @returns {FallingPiece}
+     */
     get currentPiece()
     {
         return this._currentPiece;

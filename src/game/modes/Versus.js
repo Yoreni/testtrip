@@ -25,7 +25,8 @@
 
     const calculateDamgeDealt = (logicPlayer, linesCleared, spinType) =>
     {
-        const query = linesCleared + "line" + (spinType === SpinType.FULL ? "TS" : "");
+        const isTSpin = spinType === SpinType.FULL && logicPlayer.currentPiece.type === "T"
+        const query = linesCleared + "line" + (isTSpin ? "TS" : "");
         return attackTable[query]
             + (logicPlayer.combo < comboTable.length ? comboTable[logicPlayer.combo] : comboTable.at(-1))   //combo bonus
             + (logicPlayer._stats.b2b > 0 ? 1 : 0);                                                          //b2b bonus
@@ -160,9 +161,7 @@
                 {
                     let attack = calculateDamgeDealt(logicPlayer, completedLines, e.spinType);
                     const target = e.player.otherPlayers[randInt(0, e.player.otherPlayers.length - 1)]
-                    // console.log(logicPlayer)
                     const attackResult = handleAttack(logicPlayer, target, attack);
-                    // console.log(logicPlayer)
                     updateRendersAfterAttack(e.player, target, attackResult);
                 }
                 else if (logicPlayer.garbageIncoming > 0)
