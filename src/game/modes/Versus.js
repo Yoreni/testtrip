@@ -103,10 +103,12 @@
             getPlayerStat(statName)
             {
                 const apm = this._logicPlayer._stats.attack / this._logicPlayer.time * 60
+                const vsScore = ((this._logicPlayer._stats.attack + this._logicPlayer._stats.garbageCleared)
+                        / this._logicPlayer.piecesPlaced) * this._logicPlayer.pps * 100;
                 if (statName === "APM")
                     return apm.toFixed(apm < 9.95 ? 2 : apm < 99.5 ? 1 : 0);
                 if (statName === "VS Score")
-                    return  "Not implemented";
+                    return  Number.isNaN(vsScore) ? (0).toFixed(2) : vsScore.toFixed(vsScore < 9.95 ? 2 : vsScore < 99.5 ? 1 : 0);
                 if (statName === "Attack")
                     return  this._logicPlayer._stats.attack;
                 return super.getPlayerStat(statName)
@@ -149,6 +151,7 @@
                 e.player.logic._stats.attack = 0;
                 e.player.logic.garbageIncoming = 0;
                 e.player.logic.currentSpike = 0;
+                e.player.logic._stats.garbageCleared = 0;
                 e.player.render.drawIncomingAttack();
             },
             onPieceLock: (e) =>
@@ -156,6 +159,13 @@
                 const completedLines = e.oldBoard.completedLines.length
                 const logicPlayer = e.player.logic;
                 const render = e.player.render
+
+                // count cleared garbage lines
+                for (let line of e.oldBoard.completedLines)
+                {
+                    if (e.oldBoard.get(0, line) === "#" || e.oldBoard.get(1, line) === "#")
+                        ++(e.player.logic._stats.garbageCleared);
+                }
 
                 if (completedLines > 0)
                 {

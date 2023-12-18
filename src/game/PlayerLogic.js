@@ -101,6 +101,15 @@ class PlayerLogic
         return this._stats.piecesPlaced
     }
 
+    /**
+     * calculates pieces per second
+     * @returns {Number}
+     */
+    get pps()
+    {
+        return this.piecesPlaced / this.time
+    }
+
     get time()
     {
         if (this.isAlive)

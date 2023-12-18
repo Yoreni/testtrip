@@ -277,7 +277,7 @@ class PlayerRenderer
     getPlayerStat(statName)
     {
         if (statName === "PPS")
-            return (this._logicPlayer.piecesPlaced / this._logicPlayer.time).toFixed(2);
+            return this._logicPlayer.pps.toFixed(2);
         if (statName === "Time")
             return mss000timeformat(this._logicPlayer.time);
         if (statName === "Pieces")
