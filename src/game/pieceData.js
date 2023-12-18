@@ -7,7 +7,7 @@ const pieces = {
              [0, 0, 0, 0],
              [0, 0, 0, 0]],
         colour: 0x3ffff2,
-        center: Point(1.5, 1.5)
+        center: Point(1.5, 1.5),
     },
     J: {
         shape:
@@ -45,7 +45,9 @@ const pieces = {
              [1, 1, 1],
              [0, 0, 0]],
         colour: 0xa32ae0,
-        center: Point(1, 1)
+        center: Point(1, 1),
+        primaryCorners: [Point(-1, 1), Point(1, 1)],
+        secondaryCorners: [Point(-1, -1), Point(1, -1)],
     },
     Z: {
         shape:
@@ -155,4 +157,45 @@ const pieceColours = {
     T: 0xa32ae0,
     Z: 0xff2121,
     Y: 0x9faa66,
+}
+
+/**
+ * 
+ * @param {String} pieceType 
+ * @param {Number} rotation int between 0 and 3
+ * @returns 
+ */
+function getPieceCorners(pieceType, rotation)
+{
+    if (pieces[pieceType]?.primaryCorners === null || pieces[pieceType]?.secondaryCorners === null)
+        return null;
+
+    let primaryCorners = deepCopy(pieces[pieceType].primaryCorners)
+    let secondaryCorners = deepCopy(pieces[pieceType].secondaryCorners)
+
+    rotation = mod(rotation, 4)
+    let rotationMatrix = []
+    if (rotation === 0)
+        return {primary: primaryCorners, secondary: secondaryCorners}
+
+    switch (rotation)
+    {
+        case 1:     //clockwise
+                rotationMatrix = [[0, 1],[-1, 0]];
+                break;
+        case 2:     //180
+                rotationMatrix = [[-1, 0],[0, -1]]
+                break;
+        case 3:     //anti-clockwise
+                rotationMatrix = [[0, -1],[1, 0]]
+                break;
+    }
+
+    const matrixRotation = (corner) => Point(
+        (rotationMatrix[0][0] * corner.x) + (rotationMatrix[0][1] * corner.y),
+        (rotationMatrix[1][0] * corner.x) + (rotationMatrix[1][1] * corner.y))
+
+    primaryCorners = primaryCorners.map(matrixRotation)
+    secondaryCorners = secondaryCorners.map(matrixRotation)
+    return {primary: primaryCorners, secondary: secondaryCorners}
 }

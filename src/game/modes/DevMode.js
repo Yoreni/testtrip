@@ -34,17 +34,17 @@
 
             update(delta)
             {
-                if (this._objects.botCommond === undefined)
-                    return;
-                if (misaminoPoint === undefined)
-                    return;
-                this._objects.botCommond.position.set(((misaminoPoint.x + 1) * 16) - 8,((misaminoPoint.y + 0) * -16) - 8)
+                // if (this._objects.botCommond === undefined)
+                //     return;
+                // if (misaminoPoint === undefined)
+                //     return;
+                // this._objects.botCommond.position.set(((misaminoPoint.x + 1) * 16) - 8,((misaminoPoint.y + 0) * -16) - 8)
 
-                if (actions === null)
-                {
-                    actions = findPathToPlacePiece(misaminoPoint, this._logicPlayer.board);
-                    console.log(`Path: ${actions}`)
-                }
+                // if (actions === null)
+                // {
+                //     actions = findPathToPlacePiece(misaminoPoint, this._logicPlayer.board);
+                //     console.log(`Path: ${actions}`)
+                // }
             }
 
             _drawFallingPiece()

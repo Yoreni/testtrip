@@ -1,6 +1,11 @@
 class PlayerLogic
 {
     #id;
+    /**
+     * @type {Boolean}
+     * for t-spin detection
+     */
+    #lastMovementASuccessfulSpin;
 
     static defaultRules = {
         board: {
@@ -133,6 +138,9 @@ class PlayerLogic
             this._currentPiece = newPiece;
         else
             this._currentPiece = this.ghostPiece;
+
+        if (oldY !== this._currentPiece.y)
+            this.#lastMovementASuccessfulSpin = false;
         
         this.callEvent("onSoftDrop", 
         {
@@ -142,21 +150,21 @@ class PlayerLogic
 
     rotateClockwise()
     {
-        this._rotate(1);
+        this.#lastMovementASuccessfulSpin = this._rotate(1);
         if (this._currentPiece.x == this.ghostPiece.x)
             this._resetLockDelay();
     }
 
     rotateAnticlockwise()
     {
-         this._rotate(-1);
+        this.#lastMovementASuccessfulSpin = this._rotate(-1);
         if (this._currentPiece.x == this.ghostPiece.x)
             this._resetLockDelay();
     }
 
     rotate180()
     {
-        this._rotate(2);
+        this.#lastMovementASuccessfulSpin = this._rotate(2);
         if (this._currentPiece.x == this.ghostPiece.x)
             this._resetLockDelay();
     }
@@ -199,6 +207,9 @@ class PlayerLogic
 
         this._placeCurrentPiece();
 
+        if (oldY !== newY)
+            this.#lastMovementASuccessfulSpin = false;
+
         this.callEvent("onHardDrop", 
         {
             distance: oldY - newY
@@ -221,6 +232,7 @@ class PlayerLogic
         this._hold = this._currentPiece.type;
         this._spawnNextPiece(oldHoldPiece);
 
+        this.#lastMovementASuccessfulSpin = false;
         this._holdUsed = true;
         this.callEvent("onHold")
     }
@@ -285,6 +297,7 @@ class PlayerLogic
 
             if (oldX != this._currentPiece.x)
             {
+                this.#lastMovementASuccessfulSpin = false;
                 this._resetLockDelay();
                 this.callEvent("onPieceMove", 
                 {
@@ -317,7 +330,10 @@ class PlayerLogic
 
     _placeCurrentPiece()
     {
-        const spin = this._inmovableSpinDetection();
+        const spin = this.currentPiece.type === "T"
+            ? this._3cornerSpinDetection()
+            : this._inmovableSpinDetection();
+        console.log(spin)
         this._lockCurrentPiece();
 
         const linesClearedThisPiece = this._board.completedLines.length
@@ -337,27 +353,41 @@ class PlayerLogic
     }
 
     //only for t pieces
-    //0 = no spin, 1 = mini spin, 2 = full spin
     _3cornerSpinDetection()
     {
         if (this._currentPiece.type !== "T")
-            return 0;
+            return SpinType.NONE;
+        if (this.#lastMovementASuccessfulSpin !== true)
+            return SpinType.NONE;
 
-        //TODO: check here if the last action was a succsessful rotation
+        const corners = getPieceCorners(this._currentPiece.type, this._currentPiece.rotation)
+        if (corners === null)
+            return SpinType.NONE;
 
-        const centerX = this._currentPiece.x - 1;
-        const centerY = this._currentPiece.y - 1;
-        
-        const ocupiedCorners = this._board.doesColide({x: centerX + 1, y: centerY + 1})
-                             + this._board.doesColide({x: centerX + 1, y: centerY - 1})
-                             + this._board.doesColide({x: centerX - 1, y: centerY + 1})
-                             + this._board.doesColide({x: centerX - 1, y: centerY - 1});
-        
-        if (ocupiedCorners >= 3)
-            return 2;
-        if (ocupiedCorners === 2)
-            return 1;
-        return 0;
+        const centerX = this._currentPiece.x;
+        const centerY = this._currentPiece.y;
+
+        const cornerCount = (() =>
+        {
+            let count = 0
+            for (const corner of corners.primary.concat(corners.secondary))
+            {
+                if (this._board.doesColide(Point(centerX + corner.x, centerY +  corner.y)))
+                    ++count
+            }
+            return count;
+        })()
+        if (cornerCount < 3)
+            return SpinType.NONE;
+
+        const coverdPrimaryCorners = corners.primary.every(corner => this._board.doesColide(Point(centerX + corner.x, centerY +  corner.y)))
+        const coverdSecondaryCorners = corners.secondary.some(corner => this._board.doesColide(Point(centerX + corner.x, centerY +  corner.y)))
+
+        if (!coverdPrimaryCorners)
+            return SpinType.MINI;
+        else if (coverdPrimaryCorners && coverdSecondaryCorners)
+            return SpinType.FULL;
+        return SpinType.NONE;
     }
 
     _inmovableSpinDetection()

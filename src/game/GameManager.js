@@ -64,7 +64,8 @@ class GameManager
 
     restartGame()
     {
-        this.#mode.load({})
+        if (this.#mode.load !== undefined)
+            this.#mode.load({})
         if (this.#mode.init !== undefined)
             this.#mode.init(this.#mode.gameRules ?? PlayerLogic.defaultRules);
 
