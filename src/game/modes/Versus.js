@@ -60,6 +60,7 @@
         const {absorbed, sent} = attack;
         const picePosition = Point((attacker.logic.currentPiece.x - 1) * 16, (attacker.logic.currentPiece.y + 1) * -16);
 
+        console.log(sent)
         if (absorbed > 0)
         {
             attacker.render.drawIncomingAttack();
@@ -167,9 +168,13 @@
                         ++(e.player.logic._stats.garbageCleared);
                 }
 
+                let newBoard = e.oldBoard.copy()
+                newBoard.clearLines(e.oldBoard.completedLines)
+                console.log("isPc", newBoard.isPc)
+
                 if (completedLines > 0)
                 {
-                    let attack = calculateDamgeDealt(logicPlayer, completedLines, e.spinType);
+                    let attack = calculateDamgeDealt(logicPlayer, completedLines, e.spinType) + (newBoard.isPc ? attackTable["perfectClear"] : 0);
                     const target = e.player.otherPlayers[randInt(0, e.player.otherPlayers.length - 1)]
                     const attackResult = handleAttack(logicPlayer, target, attack);
                     updateRendersAfterAttack(e.player, target, attackResult);
