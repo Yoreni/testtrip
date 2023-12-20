@@ -25,11 +25,11 @@
                 this._objects.pieceText.style.fill = 0xAAAAAA
                 this.container.addChild(this._objects.pieceText);
 
-                this._objects.botCommond = new PIXI.Graphics();
-                this._objects.botCommond.beginFill(0x0000FF);
-                this._objects.botCommond.drawCircle(0, 0, 6);
-                this._objects.botCommond.endFill();
-                this.container.addChild(this._objects.botCommond);
+                // this._objects.botCommond = new PIXI.Graphics();
+                // this._objects.botCommond.beginFill(0x0000FF);
+                // this._objects.botCommond.drawCircle(0, 0, 6);
+                // this._objects.botCommond.endFill();
+                // this.container.addChild(this._objects.botCommond);
             }
 
             update(delta)
@@ -72,6 +72,8 @@
             gravitiy: 0,
             lockDelay: 3999999990,
             maxLockResets: 9999999,
-        }   
+            seed: 1,
+        },
+        addons: ["lineClearToasts"]
     });
 }
