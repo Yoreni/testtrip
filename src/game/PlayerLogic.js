@@ -545,7 +545,7 @@ eventManager.addEvent("onPieceLock", (e) =>
     }
 
     const spin = e.spinType
-    if (e.spinType !== SpinType.NONE)
+    if (spin !== SpinType.NONE)
     {
         //TODO change 2 to spin
         if (logicPlayer._stats.spins[2][logicPlayer.currentPiece.type] == undefined)
