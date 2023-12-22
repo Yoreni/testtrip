@@ -76,7 +76,7 @@
         {
             startingLevel = modeOptions.startingLevel ?? startingLevel
         },
-        addons: ["guidlineScoring"],
+        addons: ["guidlineScoring","lineClearToasts"],
     });
 
     class NumberPopup

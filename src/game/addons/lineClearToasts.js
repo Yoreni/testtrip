@@ -89,6 +89,94 @@
         }
     }
 
+    class LineClearText extends PIXI.Container
+    {
+        static lineClearText = ["","single", "double", "triple", "quadruple", "quintuple", "sextuple", "septuple", "octuple", "nonuple", "dectuple"]
+
+        /**
+         * 
+         * @param {Number} linesCleared greater than 0
+         * @param {Number} b2b 
+         * @param {SpinType} spinType
+         * @param {String} type of piece
+         */
+        constructor(linesCleared, b2b, spinType, pieceType)
+        {
+            super()
+            app.ticker.add(this.#update.bind(this))
+            this.timer = 0
+
+            if (spinType != SpinType.NONE)
+            {
+                let style = saveOptionsWithDeafults({
+                    // dropShadow: true,
+                    // dropShadowAngle: 9,
+                    // dropShadowBlur: 1,
+                    // dropShadowColor: "#2e2e2e",
+                    // dropShadowDistance: 2,
+                    fill: pieces[pieceType].colour
+                },textStyle(24))
+                let b2bText = new PIXI.Text(`${pieceType}-spin${spinType === SpinType.MINI ? " mini": ""}`, style)
+                b2bText.pivot.x = b2bText.width / 2
+                b2bText.pivot.y = (b2bText.height / 2)
+                b2bText.y -= 16
+                this.addChild(b2bText)
+            }
+
+            if (b2b > 1)
+            {
+                let b2bFill = saveOptionsWithDeafults({
+                    // dropShadow: true,
+                    // dropShadowAngle: 9,
+                    // dropShadowBlur: 1,
+                    // dropShadowColor: "#2e2e2e",
+                    // dropShadowDistance: 2,
+                    fill: "#f79d02"
+                },textStyle(24))
+                let b2bText = new PIXI.Text(`back to back${b2b > 2 ? " x" + (b2b - 1) : ""}`, b2bFill)
+                b2bText.pivot.x = b2bText.width / 2
+                b2bText.pivot.y = b2bText.height / 2
+                b2bText.y = -18
+                b2bText.x = -5
+                if (spinType != SpinType.NONE)  //ensures the spin text and b2b text doesnt overlap
+                {
+                    b2bText.y -= 18
+                }
+                this.addChild(b2bText)
+            }
+
+            const fill = linesCleared <= 4 ? ["#2e2e2e", "#64d178", "#64d1a7", "#12e8af", "#0cf4f4"][linesCleared] : "#6dcfe8"
+            let style = saveOptionsWithDeafults({
+                dropShadow: true,
+                dropShadowAngle: 9,
+                dropShadowBlur: 1,
+                dropShadowColor: "#2e2e2e",
+                dropShadowDistance: 2,
+                fill: fill
+            },textStyle(28))
+            this.text = new PIXI.Text(LineClearText.lineClearText[linesCleared], style)
+            this.text.pivot.x = this.text.width / 2
+            this.text.pivot.y = this.text.height / 2
+            this.addChild(this.text)
+        }
+
+        #update(delta)
+        {
+            if (this.alpha > 0)
+            {
+                if (this.timer > 30)
+                    this.alpha -= 0.0075;
+            }
+            else
+            {
+                app.ticker.remove(this.#update)
+                this.visible = false;
+                this.destroy()
+            }
+
+            ++(this.timer)
+        }
+    }
 
 
     const addon = 
@@ -102,14 +190,25 @@
             onPieceLock: (e) =>
             {
                 const logic = e.player.logic
+                const render = e.player.render
                 if (logic.combo > 1)
                 {
-                    const render = e.player.render
                     const comboText = new ComboIndicator(logic.combo);
                     comboText.x = -16 * 3.5
                     comboText.y = -16 * 12
                     render.playField.addChild(comboText)
                 }
+
+                if (e.clearedLines > 0)
+                {
+                    const lineClearText = new LineClearText(e.clearedLines, logic._stats.b2b ?? 0,
+                         e.spinType, logic.currentPiece.type)
+                    lineClearText.x = -16 * 4
+                    lineClearText.y = -16 * 14
+                    render.playField.addChild(lineClearText)
+                }
+
+
             },
             onPiecePlace: (e) =>
             {

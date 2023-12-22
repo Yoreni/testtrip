@@ -117,7 +117,7 @@
 
             _updateStats()
             {
-                let display = ["PPS", "Time", "APM", "VS Score", "Attack"];
+                let display = ["PPS", "Time", "APM", "VS Score"];
                 super._updateStats(display);
             }
 
@@ -197,7 +197,7 @@
         {
             rules.seed = pieceRandimiserSeed
         },
-        addons: ["backToBack"],
+        addons: ["backToBack", "lineClearToasts"],
         endCondition: (alivePlayers) => alivePlayers === 1,
     });
 

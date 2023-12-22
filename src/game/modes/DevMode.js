@@ -73,6 +73,7 @@
             lockDelay: 3999999990,
             maxLockResets: 9999999,
             seed: 1,
+            // pieceRoster: ["I5"],
         },
         addons: ["lineClearToasts"]
     });

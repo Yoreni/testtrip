@@ -342,7 +342,6 @@ class PlayerLogic
         const spin = this.currentPiece.type === "T"
             ? this._3cornerSpinDetection()
             : this._inmovableSpinDetection();
-        console.log(spin)
         this._lockCurrentPiece();
 
         const linesClearedThisPiece = this._board.completedLines.length
@@ -554,8 +553,6 @@ eventManager.addEvent("onPieceLock", (e) =>
             logicPlayer._stats.spins[2][logicPlayer.currentPiece.type][e.clearedLines] = 0
     
          ++(logicPlayer._stats.spins[2][logicPlayer.currentPiece.type][e.clearedLines])
-
-         console.info("t-spin " + (["","single","double", "triple", "quadruple"][e.clearedLines]))
     }
 
     if (e.clearedLines > 0)

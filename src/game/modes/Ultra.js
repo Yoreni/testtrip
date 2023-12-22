@@ -47,7 +47,7 @@
         {
             timeLimit = modeOptions.timeLimit ?? timeLimit
         },
-        addons: ["guidlineScoring"],
+        addons: ["guidlineScoring","lineClearToasts"],
     });
 
     class NumberPopup

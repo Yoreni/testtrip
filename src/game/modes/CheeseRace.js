@@ -116,5 +116,6 @@
             cheeseHeight = modeOptions.cheeseHeight ?? cheeseHeight
             garbageMessiness = modeOptions.garbageMessiness ?? garbageMessiness
         },
+        addons: ["lineClearToasts"]
     });
 }
