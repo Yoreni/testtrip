@@ -59,8 +59,17 @@ class LangManager
         }
     }
 
-    raw()
+    /**
+     * 
+     * @param {Number} number 
+     */
+    formatNumber(number)
     {
-        return this.#translations;
+        return number.toLocaleString(this.#translations["meta"]["numberLocal"]);
     }
+
+    // raw()
+    // {
+    //     return this.#translations;
+    // }
 }

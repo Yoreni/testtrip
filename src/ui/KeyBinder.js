@@ -83,7 +83,16 @@ class KeyBinder extends Button
             width: settings.size,
             height: settings.size,
             fixed: true,
-            onClick: () => {
+            onClick: () => 
+            {
+                //prevent 2+ keybinders waiting for new inputs. 
+                // if (KeyBinder.controlsObject != undefined)
+                // {
+                //     console.log(KeyBinder.controlsObject)
+                //     for (const otherKeyBinder of KeyBinder.controlsObject)
+                //         otherKeyBinder.cancelWaitingForKeypress();
+                // }
+
                 this.waitingForKeypress = true,
                 this.draw("?")
             }
@@ -106,6 +115,15 @@ class KeyBinder extends Button
         }, false)
 
         app.ticker.add(this.update.bind(this));
+    }
+
+    cancelWaitingForKeypress()
+    {
+        if (waitingForKeypress === true)
+        {
+            this.waitingForKeypress = false;
+            this.draw(getKeyDisplay(this.key));
+        }
     }
 
     update()

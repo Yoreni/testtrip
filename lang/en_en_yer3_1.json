@@ -1,0 +1,62 @@
+{
+    "meta": {
+        "nativeName": "English (YER v3.1 Riysbeliŋ)",
+        "ISOcode": "en_en_yer3_1",
+        "numberLocal": "en"
+    },
+    "settings": "Setiŋz",
+    "back": "Bak",
+    "play": "Pley",
+    "menu": {
+        "settings": {
+            "DAS": "DAS",
+            "ARR": "ARR",
+            "SDF": "SDF",
+            "moveLeft": "Muwv Left",
+            "moveRight": "Muwv Rayt",
+            "softdrop": "Softjrop",
+            "rotateClockwise": "Rəwteyt Klokwayz",
+            "rotateAnticlockwise": "Rəwteyt Antiy-Klokwayz",
+            "hold": "Howd",
+            "rotate180": "Rəwteyt 180",
+            "harddrop": "Hádjrop",
+            "reset": "Riyset",
+            "quit": "Qit",
+            "playern": "Pleyə {$0}",
+            "keyboard": "Kiybód",
+            "gamepadn": "Geympad {$0}"
+        }
+    },
+    "modes": {
+        "marathon": "Marəþn",
+        "sprint": "Sbrint",
+        "ultra": "Owcrə",
+        "cheeseRace": "Ciyz Reys",
+        "tetraminoArt": "Tecrəmiynəw Át",
+        "versus": "Və́siz",
+        "c4wcombos": "S4W Kombəwz"
+    },
+    "gameHud": {
+        "level": "Levul",
+        "score": "Sgó",
+        "lines": "Laynz",
+        "linesRemaining": "Laynz Rəmeyniŋ",
+        "PPS": "PPS",
+        "APM": "ƎPM",
+        "vsScore": "VS Sgó",
+        "combo": "Kombəw",
+        "singleLineClear": "Siŋgul",
+        "doubleLineClear": "Dəbul",
+        "tripleLineClear": "Cripul",
+        "quadLineClear": "Qajrupul",
+        "5-pleLineClear": "Qintəpul",
+        "6-pleLineClear": "Sextəpul",
+        "spin": "{$0}-Sbin",
+        "spinMini": "{$0}-Sbin mini",
+        "n-pleSpin": "{$0}-Sbin {$1}",
+        "n-pleSpinMini": "{$0}-Sbin {$1} mini",
+        "perfectClear": "Pə́fekt Klí",
+        "backToBack": "Bak tə Bak",
+        "backToBackCombo": "Bak tə Bak x{$0}"
+    }
+}
