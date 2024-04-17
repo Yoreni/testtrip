@@ -17,6 +17,7 @@ const
 
 const SpinType = _enum("NONE", "MINI", "FULL");
 const sceneManager = new SceneManager(app);
+let langManager = new LangManager("en_en");
 
 function init() 
 {

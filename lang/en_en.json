@@ -1,0 +1,62 @@
+{
+    "meta": {
+        "nativeName": "English",
+        "ISOcode": "en_en",
+        "numberLocal": "en"
+    },
+    "settings": "Settings",
+    "back": "Back",
+    "play": "Play",
+    "menu": {
+        "settings": {
+            "DAS": "DAS",
+            "ARR": "ARR",
+            "SDF": "SDF",
+            "moveLeft": "Move Left",
+            "moveRight": "Move Right",
+            "softdrop": "Softdrop",
+            "rotateClockwise": "Rotate Clockwise",
+            "rotateAnticlockwise": "Rotate Anti-Clockwise",
+            "hold": "Hold",
+            "rotate180": "Rotate 180",
+            "harddrop": "Harddrop",
+            "reset": "Rest",
+            "quit": "quit",
+            "playern": "Player {$0}",
+            "keyboard": "keyboard",
+            "gamepadn": "Gamepad {$0}"
+        }
+    },
+    "modes": {
+        "marathon": "Marathon",
+        "sprint": "Sprint",
+        "ultra": "Ultra",
+        "cheeseRace": "Cheese Race",
+        "tetraminoArt": "Tetramino Art",
+        "versus": "Versus",
+        "c4wcombos": "C4W Combos"
+    },
+    "gameHud": {
+        "level": "Level",
+        "score": "Score",
+        "lines": "Lines",
+        "linesRemaining": "Lines Remaining",
+        "PPS": "PPS",
+        "APM": "APM",
+        "vsScore": "VS Score",
+        "combo": "Combo",
+        "singleLineClear": "Single",
+        "doubleLineClear": "Double",
+        "tripleLineClear": "Triple",
+        "quadLineClear": "Quadruple",
+        "5-pleLineClear": "Quintuple",
+        "6-pleLineClear": "Sextuple",
+        "spin": "{$0}-Spin",
+        "spinMini": "{$0}-Spin mini",
+        "n-pleSpin": "{$0}-Spin {$1}",
+        "n-pleSpinMini": "{$0}-Spin {$1} mini",
+        "perfectClear": "Perfect Clear",
+        "backToBack": "Back to Back",
+        "backToBackCombo": "Back to Back x{$0}"
+    }
+}
