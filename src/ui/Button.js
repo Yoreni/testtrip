@@ -74,7 +74,7 @@ class Button extends PIXI.Container
         const calcDimension = (textDim, setDim) => this.#settings.fixed || textDim + 10 < setDim ? setDim : textDim + 10
         const width = calcDimension(this.text.width, this.#settings.width)
         const height = calcDimension(this.text.height, this.#settings.height)
-        text.position.set(width / 2, 5);
+        text.position.set(width / 2, 0);
 
         let background = new PIXI.Graphics();
         background.lineStyle(4, this._borderColour, 1);
@@ -83,7 +83,5 @@ class Button extends PIXI.Container
         background.endFill();
         this.addChild(background);
         this.addChild(text);
-
-        // this.text.text = this.writing;
     }
 }

@@ -9,7 +9,7 @@ class SettingsScreen extends IScene
         this.selectedPlayer = null;
         this.gamepadDetectionIndicater = [0, 0, 0, 0]; // used to show to the user that a gamepad recived inputs
 
-        this._objects.back = new Button("Back", {colour: 0xFF5959});
+        this._objects.back = new Button(langManager.get("back"), {colour: 0xFF5959});
         this._objects.back.position.set(8, app.view.height - this._objects.back.height - 5);
         this._objects.back.onClick = () => 
         {
@@ -48,7 +48,7 @@ class SettingsScreen extends IScene
 
         this._objects.sdfSlider = new Slider({
             ...dimensions,
-            label: "SDF", 
+            label: langManager.get("menu.settings.SDF"), 
             min: 5, 
             max: 41,
             default: handling.SDF,
@@ -60,8 +60,10 @@ class SettingsScreen extends IScene
         this.container.addChild(this._objects.sdfSlider);
 
         // make keybind buttons
-        Object.keys(controls).forEach((key, index) => {
-            let keybinder =  this.#makeKeybindButton(controlDisplayNames[key], key);
+        console.log(controlNames)
+        controlNames.forEach((key, index) => {
+            console.log(key, index);
+            let keybinder =  this.#makeKeybindButton(key);
             keybinder.position.set(600, 100 + (index * 40));
             this.container.addChild(keybinder);
         })
@@ -160,10 +162,9 @@ class SettingsScreen extends IScene
 
     /**
      * 
-     * @param {String} displayName 
      * @param {String} control
      */
-    #makeKeybindButton(displayName, control)
+    #makeKeybindButton(control)
     {
         let container = new PIXI.Container();
         let keyBinder = new KeyBinder({
@@ -172,7 +173,7 @@ class SettingsScreen extends IScene
         });
         container.addChild(keyBinder);
 
-        let label = new PIXI.Text(displayName, textStyle());
+        let label = new PIXI.Text(langManager.get(`menu.settings.${control}`), textStyle());
         label.pivot.x = label.width;
         label.x = -5;
         container.addChild(label);

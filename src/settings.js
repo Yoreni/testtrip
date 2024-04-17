@@ -7,14 +7,14 @@ const handling = JSON.parse(localStorage.getItem("handling")) ?? {
 
 const controls = JSON.parse(localStorage.getItem("controls")) ?? {  
     //default controls
-    left: "ArrowLeft",
-    right: "ArrowRight",
-    softDrop: "ArrowDown",
+    moveLeft: "ArrowLeft",
+    moveRight: "ArrowRight",
+    softdrop: "ArrowDown",
     rotateClockwise: "ArrowUp",
     rotateAnticlockwise: "z",
     hold: "x",
     rotate180: "c",
-    hardDrop: " ",
+    harddrop: " ",
     reset: "r",
 }
 KeyBinder.controlsObject = controls;

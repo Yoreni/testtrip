@@ -1,14 +1,14 @@
-const controlDisplayNames = {
-    left: "Move Left",
-    right: "Move Right",
-    softDrop: "Softdrop",
-    rotateClockwise: "Rotate Clockwise",
-    rotateAnticlockwise: "Rotate Anti-Clockwise",
-    hold: "Hold",
-    rotate180: "Rotate 180",
-    hardDrop: "Harddrop",
-    reset: "Reset",
-}
+const controlNames = [
+    "moveLeft",
+    "moveRight",
+    "softdrop",
+    "rotateClockwise",
+    "rotateAnticlockwise",
+    "hold",
+    "rotate180",
+    "harddrop",
+    "reset"
+]
 
 class Keyboard 
 {
