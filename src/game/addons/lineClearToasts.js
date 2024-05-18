@@ -116,7 +116,8 @@
                     // dropShadowDistance: 2,
                     fill: pieces[pieceType].colour
                 },textStyle(24))
-                let b2bText = new PIXI.Text(`${pieceType}-spin${spinType === SpinType.MINI ? " mini": ""}`, style)
+                let translationKey = spinType === SpinType.MINI ? "gameHud.spinMini" : "gameHud.spin";
+                let b2bText = new PIXI.Text(langManager.get(translationKey, pieceType), style)
                 b2bText.pivot.x = b2bText.width / 2
                 b2bText.pivot.y = (b2bText.height / 2)
                 b2bText.y -= 16
@@ -133,7 +134,8 @@
                     // dropShadowDistance: 2,
                     fill: "#f79d02"
                 },textStyle(24))
-                let b2bText = new PIXI.Text(`back to back${b2b > 2 ? " x" + (b2b - 1) : ""}`, b2bFill)
+                let b2bTextContent = b2b == 2 ? langManager.get("gameHud.backToBack") : langManager.get("gameHud.backToBackCombo", b2b - 1)
+                let b2bText = new PIXI.Text(b2bTextContent, b2bFill)
                 b2bText.pivot.x = b2bText.width / 2
                 b2bText.pivot.y = b2bText.height / 2
                 b2bText.y = -18
@@ -154,7 +156,7 @@
                 dropShadowDistance: 2,
                 fill: fill
             },textStyle(28))
-            this.text = new PIXI.Text(LineClearText.lineClearText[linesCleared], style)
+            this.text = new PIXI.Text(langManager.get(`gameHud.${linesCleared}LineClear`), style)
             this.text.pivot.x = this.text.width / 2
             this.text.pivot.y = this.text.height / 2
             this.addChild(this.text)
