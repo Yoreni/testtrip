@@ -203,7 +203,7 @@
 
                 if (e.clearedLines > 0)
                 {
-                    const lineClearText = new LineClearText(e.clearedLines, logic._stats.b2b ?? 0,
+                    const lineClearText = new LineClearText(e.clearedLines, logic.stats.b2b ?? 0,
                          e.spinType, logic.currentPiece.type)
                     lineClearText.x = -16 * 4
                     lineClearText.y = -16 * 14

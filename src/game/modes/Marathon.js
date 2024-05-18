@@ -45,9 +45,9 @@
                 const logicPlayer = e.player.logic;
                 
                 logicPlayer.level = startingLevel;
-                logicPlayer._rules.gravitiy = gravitys[startingLevel - 1];
-                logicPlayer._rules.lockDelay = lockDelays[startingLevel - 1];
-                logicPlayer._rules.scoreMulti = startingLevel;
+                logicPlayer.rules.gravitiy = gravitys[startingLevel - 1];
+                logicPlayer.rules.lockDelay = lockDelays[startingLevel - 1];
+                logicPlayer.rules.scoreMulti = startingLevel;
             },
             onScoreChange: (e) =>
             {
@@ -62,9 +62,9 @@
                 if (level != logicPlayer.level)
                 {
                     logicPlayer.level = level;
-                    logicPlayer._rules.gravitiy = gravitys[level - 1];
-                    logicPlayer._rules.lockDelay = lockDelays[level - 1];
-                    logicPlayer._rules.scoreMulti = level;
+                    logicPlayer.rules.gravitiy = gravitys[level - 1];
+                    logicPlayer.rules.lockDelay = lockDelays[level - 1];
+                    logicPlayer.rules.scoreMulti = level;
                 }
             }
 

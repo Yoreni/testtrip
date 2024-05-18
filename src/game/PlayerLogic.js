@@ -6,6 +6,12 @@ class PlayerLogic
      * for t-spin detection
      */
     #lastMovementASuccessfulSpin;
+    #board;
+    #currentPiece;
+    #hold;
+    #holdUsed;
+    #alive
+    #AREtimer;
 
     static defaultRules = {
         board: {
@@ -25,19 +31,19 @@ class PlayerLogic
 
     constructor(rules, id)
     {
-        this._rules = saveOptionsWithDeafults(rules, PlayerLogic.defaultRules)
+        this.rules = saveOptionsWithDeafults(rules, PlayerLogic.defaultRules)
         this.random = new Random(rules.seed ?? new Date().getTime());
         this.#id = id;
-        this._board = new Playfield(this._rules.board.width, this._rules.board.height);
-        this._topupNextQueue();
-        this._currentPiece = undefined;
-        this._stats = this._initStats();
-        this._hold = null;
-        this._holdUsed = false;
-        this._alive = true;
-        this._AREtimer = 0;
+        this.#board = new Playfield(this.rules.board.width, this.rules.board.height);
+        this.#topupNextQueue();
+        this.#currentPiece = undefined;
+        this.stats = this.#initStats();
+        this.#hold = null;
+        this.#holdUsed = false;
+        this.#alive = true;
+        this.#AREtimer = 0;
 
-        this._spawnNextPiece();
+        this.#spawnNextPiece();
     }
 
     get id()
@@ -50,7 +56,7 @@ class PlayerLogic
      */
     get currentPiece()
     {
-        return this._currentPiece;
+        return this.#currentPiece;
     }
 
     /**
@@ -68,17 +74,17 @@ class PlayerLogic
      */
     get holdPiece()
     {
-        return this._hold;
+        return this.#hold;
     }
 
     get holdUsed()
     {
-        return this._rules.hold === 2 ? false : this._holdUsed;
+        return this.rules.hold === 2 ? false : this.#holdUsed;
     }
 
     get board()
     {
-        return this._board;
+        return this.#board;
     }
 
     /**
@@ -88,17 +94,17 @@ class PlayerLogic
      */
     get isAlive()
     {
-        return this._stats.end === undefined;
+        return this.stats.end === undefined;
     }
 
     get AREtimer()
     {
-        return this._AREtimer;
+        return this.#AREtimer;
     }
 
     get piecesPlaced()
     {
-        return this._stats.piecesPlaced
+        return this.stats.piecesPlaced
     }
 
     /**
@@ -113,13 +119,13 @@ class PlayerLogic
     get time()
     {
         if (this.isAlive)
-            return ((new Date()) - this._stats.start) / 1000;
-        return (this._stats.end - this._stats.start) / 1000;
+            return ((new Date()) - this.stats.start) / 1000;
+        return (this.stats.end - this.stats.start) / 1000;
     }
 
     get linesCleared()
     {
-        return Object.entries(this._stats.linesCleared).reduce((accumlator, currcentValue) =>
+        return Object.entries(this.stats.linesCleared).reduce((accumlator, currcentValue) =>
         {
             let [numOfLines, amount] = currcentValue;
             return accumlator + (numOfLines * amount);
@@ -128,74 +134,74 @@ class PlayerLogic
 
     get combo()
     {
-        return this._stats.combo;
+        return this.stats.combo;
     }
 
     set board(newBoard)
     {
-        this._board = newBoard;
+        this.#board = newBoard;
     }
 
     softDrop()
     {
         const minSoftDrop = 1/60 * handling.SDF;
-        const oldY = this._currentPiece.y
+        const oldY = this.#currentPiece.y
 
-        let newPiece = this._currentPiece.copy();
-        newPiece.move(0, -Math.max(minSoftDrop, this._rules.gravitiy * handling.SDF));
-        if (!this._board.doesColide(newPiece))
-            this._currentPiece = newPiece;
+        let newPiece = this.#currentPiece.copy();
+        newPiece.move(0, -Math.max(minSoftDrop, this.rules.gravitiy * handling.SDF));
+        if (!this.#board.doesColide(newPiece))
+            this.#currentPiece = newPiece;
         else
-            this._currentPiece = this.ghostPiece;
+            this.#currentPiece = this.ghostPiece;
 
-        if (oldY !== this._currentPiece.y)
+        if (oldY !== this.#currentPiece.y)
             this.#lastMovementASuccessfulSpin = false;
         
         this.callEvent("onSoftDrop", 
         {
-            distance: oldY - this._currentPiece.y
+            distance: oldY - this.#currentPiece.y
         })
     }
 
     rotateClockwise()
     {
-        this.#lastMovementASuccessfulSpin = this._rotate(1);
-        if (this._currentPiece.x == this.ghostPiece.x)
-            this._resetLockDelay();
+        this.#lastMovementASuccessfulSpin = this.#rotate(1);
+        if (this.#currentPiece.x == this.ghostPiece.x)
+            this.#resetLockDelay();
     }
 
     rotateAnticlockwise()
     {
-        this.#lastMovementASuccessfulSpin = this._rotate(-1);
-        if (this._currentPiece.x == this.ghostPiece.x)
-            this._resetLockDelay();
+        this.#lastMovementASuccessfulSpin = this.#rotate(-1);
+        if (this.#currentPiece.x == this.ghostPiece.x)
+            this.#resetLockDelay();
     }
 
     rotate180()
     {
-        this.#lastMovementASuccessfulSpin = this._rotate(2);
-        if (this._currentPiece.x == this.ghostPiece.x)
-            this._resetLockDelay();
+        this.#lastMovementASuccessfulSpin = this.#rotate(2);
+        if (this.#currentPiece.x == this.ghostPiece.x)
+            this.#resetLockDelay();
     }
 
-    _rotate(direction)
+    #rotate(direction)
     {
-        const kicktableType = this._rules.rotationSystem[this._currentPiece.type] === undefined 
-                    ? "*" : this._currentPiece.type;
+        const kicktableType = this.rules.rotationSystem[this.#currentPiece.type] === undefined 
+                    ? "*" : this.#currentPiece.type;
         const kicktableDirection = "" 
-                        + this._currentPiece.rotation + mod(this._currentPiece.rotation + direction, 4);
-        const kickData = this._rules.rotationSystem[kicktableType][kicktableDirection];
+                        + this.#currentPiece.rotation + mod(this.#currentPiece.rotation + direction, 4);
+        const kickData = this.rules.rotationSystem[kicktableType][kicktableDirection];
     
         for (let attempt = 0; attempt != kickData.length; ++attempt)
         {
-            let piece = this._currentPiece.copy();
+            let piece = this.#currentPiece.copy();
             piece.rotate(direction);
             piece.x += kickData[attempt].x;
             piece.y += kickData[attempt].y;
             
-            if (!this._board.doesColide(piece, true))
+            if (!this.#board.doesColide(piece, true))
             {
-                this._currentPiece = piece;
+                this.#currentPiece = piece;
                 this.callEvent("onPieceRotate", 
                 {
                     kickUsed: attempt,
@@ -210,11 +216,11 @@ class PlayerLogic
 
     harddrop()
     {
-        const oldY = this._currentPiece.y
-        this._currentPiece = this.ghostPiece;
-        const newY = this._currentPiece.y
+        const oldY = this.#currentPiece.y
+        this.#currentPiece = this.ghostPiece;
+        const newY = this.#currentPiece.y
 
-        this._placeCurrentPiece();
+        this.#placeCurrentPiece();
 
         if (oldY !== newY)
             this.#lastMovementASuccessfulSpin = false;
@@ -227,61 +233,61 @@ class PlayerLogic
 
     hold()
     {
-        if (this._AREtimer > 0)
+        if (this.#AREtimer > 0)
             return;
 
-        if (this._rules.hold === 0)
+        if (this.rules.hold === 0)
             return;
 
-        if (this._rules.hold === 1 && this._holdUsed)
+        if (this.rules.hold === 1 && this.#holdUsed)
             return;
 
         //preform the hold action
-        const oldHoldPiece = this._hold;
-        this._hold = this._currentPiece.type;
-        this._spawnNextPiece(oldHoldPiece);
+        const oldHoldPiece = this.#hold;
+        this.#hold = this.#currentPiece.type;
+        this.#spawnNextPiece(oldHoldPiece);
 
         this.#lastMovementASuccessfulSpin = false;
-        this._holdUsed = true;
+        this.#holdUsed = true;
         this.callEvent("onHold")
     }
 
     tick(delta)
     {
-        if (!this._alive)
+        if (!this.#alive)
             return;
-        if (this._AREtimer > 0)
+        if (this.#AREtimer > 0)
         {
-            --(this._AREtimer);
-            if (this._AREtimer === 0)
+            --(this.#AREtimer);
+            if (this.#AREtimer === 0)
                 this.callEvent("AREend")
             return;
         }
 
         //move piece down by gravity
-        const newPiece = this._currentPiece.copy();
-        newPiece.move(0, -this._rules.gravitiy);
-        if (!this._board.doesColide(newPiece))
-            this._currentPiece = newPiece;
+        const newPiece = this.#currentPiece.copy();
+        newPiece.move(0, -this.rules.gravitiy);
+        if (!this.#board.doesColide(newPiece))
+            this.#currentPiece = newPiece;
         else
-            this._currentPiece = this.ghostPiece;
+            this.#currentPiece = this.ghostPiece;
 
-        if (this.ghostPiece.y == this._currentPiece.y)
+        if (this.ghostPiece.y == this.#currentPiece.y)
         {
-            ++(this._currentPiece.lockTimer)
-            if (this._currentPiece.lockTimer >= this._rules.lockDelay)
-                this._placeCurrentPiece();
+            ++(this.#currentPiece.lockTimer)
+            if (this.#currentPiece.lockTimer >= this.rules.lockDelay)
+                this.#placeCurrentPiece();
         }
     }
 
     get ghostPiece()
     {
         //if the piece colides with somthing then ghostPiece == fallingPiece
-        if (this._board.doesColide(this._currentPiece))
-            return this._currentPiece;
+        if (this.#board.doesColide(this.#currentPiece))
+            return this.#currentPiece;
 
-        let ghostPiece = this._currentPiece.copy();
-        while (!this._board.doesColide(ghostPiece))
+        let ghostPiece = this.#currentPiece.copy();
+        while (!this.#board.doesColide(ghostPiece))
             ghostPiece.y -= 1;
         ghostPiece.y += 1;             //1 above the place it would colide with other minos/bounds
         return ghostPiece;
@@ -290,28 +296,28 @@ class PlayerLogic
     //this function can be split up
     moveCurrentPiece(amount)
     {
-        if (this._AREtimer > 0)
+        if (this.#AREtimer > 0)
             return;
 
-        const maxLeft = -leftToColision(this._currentPiece, this._board);
-        const maxRight = rightToColision(this._currentPiece, this._board);
+        const maxLeft = -leftToColision(this.#currentPiece, this.#board);
+        const maxRight = rightToColision(this.#currentPiece, this.#board);
         amount = Math.max(maxLeft, Math.min(amount, maxRight))
 
-        let newPiece = this._currentPiece.copy();
+        let newPiece = this.#currentPiece.copy();
         newPiece.move(amount, 0);
-        if (!this._board.doesColide(newPiece))
+        if (!this.#board.doesColide(newPiece))
         {
-            const oldX = this._currentPiece.x;
-            this._currentPiece = newPiece;
+            const oldX = this.#currentPiece.x;
+            this.#currentPiece = newPiece;
 
-            if (oldX != this._currentPiece.x)
+            if (oldX != this.#currentPiece.x)
             {
                 this.#lastMovementASuccessfulSpin = false;
-                this._resetLockDelay();
+                this.#resetLockDelay();
                 this.callEvent("onPieceMove", 
                 {
                     //positive is right, negitive is left
-                    distance: this._currentPiece.x - oldX
+                    distance: this.#currentPiece.x - oldX
                 });
             }
         }
@@ -325,62 +331,62 @@ class PlayerLogic
      * 
      * @returns nothing
      */
-    _resetLockDelay()
+    #resetLockDelay()
     {
         if (this.currentPiece.lockTimer > 0)
         {
             this.currentPiece.lockTimer = 0;
             ++(this.currentPiece.lockResets);
 
-            if (this.currentPiece.lockResets > this._rules.maxLockResets)
-                this._placeCurrentPiece();
+            if (this.currentPiece.lockResets > this.rules.maxLockResets)
+                this.#placeCurrentPiece();
         }
     }
 
-    _placeCurrentPiece()
+    #placeCurrentPiece()
     {
         const spin = this.currentPiece.type === "T"
-            ? this._3cornerSpinDetection()
-            : this._inmovableSpinDetection();
-        this._lockCurrentPiece();
+            ? this.#threeCornerSpinDetection()
+            : this.#inmovableSpinDetection();
+        this.#lockCurrentPiece();
 
-        const linesClearedThisPiece = this._board.completedLines.length
-        this._AREtimer = linesClearedThisPiece > 0 ? this._rules.lineARE : this._rules.ARE;
+        const linesClearedThisPiece = this.#board.completedLines.length
+        this.#AREtimer = linesClearedThisPiece > 0 ? this.rules.lineARE : this.rules.ARE;
 
         this.callEvent("onPieceLock", {
-            oldBoard: this._board.copy(),
+            oldBoard: this.#board.copy(),
             clearedLines: linesClearedThisPiece,
             spinType: spin,
             piece: this.currentPiece.copy()
         })
 
-        this._board.clearLines(this._board.completedLines)
-        this._spawnNextPiece();
+        this.#board.clearLines(this.#board.completedLines)
+        this.#spawnNextPiece();
 
         this.callEvent("onPiecePlace");
     }
 
     //only for t pieces
-    _3cornerSpinDetection()
+    #threeCornerSpinDetection()
     {
-        if (this._currentPiece.type !== "T")
+        if (this.#currentPiece.type !== "T")
             return SpinType.NONE;
         if (this.#lastMovementASuccessfulSpin !== true)
             return SpinType.NONE;
 
-        const corners = getPieceCorners(this._currentPiece.type, this._currentPiece.rotation)
+        const corners = getPieceCorners(this.#currentPiece.type, this.#currentPiece.rotation)
         if (corners === null)
             return SpinType.NONE;
 
-        const centerX = this._currentPiece.x;
-        const centerY = this._currentPiece.y;
+        const centerX = this.#currentPiece.x;
+        const centerY = this.#currentPiece.y;
 
         const cornerCount = (() =>
         {
             let count = 0
             for (const corner of corners.primary.concat(corners.secondary))
             {
-                if (this._board.doesColide(Point(centerX + corner.x, centerY +  corner.y)))
+                if (this.#board.doesColide(Point(centerX + corner.x, centerY +  corner.y)))
                     ++count
             }
             return count;
@@ -388,8 +394,8 @@ class PlayerLogic
         if (cornerCount < 3)
             return SpinType.NONE;
 
-        const coverdPrimaryCorners = corners.primary.every(corner => this._board.doesColide(Point(centerX + corner.x, centerY +  corner.y)))
-        const coverdSecondaryCorners = corners.secondary.some(corner => this._board.doesColide(Point(centerX + corner.x, centerY +  corner.y)))
+        const coverdPrimaryCorners = corners.primary.every(corner => this.#board.doesColide(Point(centerX + corner.x, centerY +  corner.y)))
+        const coverdSecondaryCorners = corners.secondary.some(corner => this.#board.doesColide(Point(centerX + corner.x, centerY +  corner.y)))
 
         if (!coverdPrimaryCorners)
             return SpinType.MINI;
@@ -398,19 +404,19 @@ class PlayerLogic
         return SpinType.NONE;
     }
 
-    _inmovableSpinDetection()
+    #inmovableSpinDetection()
     {
-        let pieceUp = this._currentPiece.copy();
+        let pieceUp = this.#currentPiece.copy();
         pieceUp.y += 1;
 
-        let pieceLeft = this._currentPiece.copy();
+        let pieceLeft = this.#currentPiece.copy();
         pieceLeft.x -= 1;
 
-        let pieceRight = this._currentPiece.copy();
+        let pieceRight = this.#currentPiece.copy();
         pieceRight.x += 1;
 
-        if (this._board.doesColide(pieceUp) && this._board.doesColide(pieceLeft) 
-                && this._board.doesColide(pieceRight))
+        if (this.#board.doesColide(pieceUp) && this.#board.doesColide(pieceLeft) 
+                && this.#board.doesColide(pieceRight))
             return SpinType.FULL;
         return SpinType.NONE;
     }
@@ -420,7 +426,7 @@ class PlayerLogic
      * 
      * @returns nothing
      */
-    _lockCurrentPiece()
+    #lockCurrentPiece()
     {
         if (this.currentPiece === undefined)
         {
@@ -428,22 +434,22 @@ class PlayerLogic
             return;
         }
 
-        if (this._board.doesColide(this.currentPiece))
+        if (this.#board.doesColide(this.currentPiece))
         {
             console.warn("Could not lock the current piece onto the board");
             return;
         }
 
         //check for topout
-        if (Math.min(...this.currentPiece.minos.map(element => element.y)) >= this._board.height)
-            this._markTopout();
+        if (Math.min(...this.currentPiece.minos.map(element => element.y)) >= this.#board.height)
+            this.#markTopout();
 
-        let newBoard = this._board.copy();
-        for (let mino of this._currentPiece.minos)
+        let newBoard = this.#board.copy();
+        for (let mino of this.#currentPiece.minos)
             newBoard.set(mino.x, mino.y, this.currentPiece.type);
 
-        this._board = newBoard;
-        this._holdUsed = false;             //refresh hold
+        this.#board = newBoard;
+        this.#holdUsed = false;             //refresh hold
     }
 
     /*
@@ -451,7 +457,7 @@ class PlayerLogic
         if a type is specified then it spawns one of that type otherwise it
         gets the next that is next in the next queue.
      */
-    _spawnNextPiece(type = null)
+    #spawnNextPiece(type = null)
     {
         if (type == null)
         {
@@ -468,23 +474,23 @@ class PlayerLogic
         newFallingPiece.y = this.board.height - lowestY + 1;
 
         //check for topout
-        if (this._board.doesColide(newFallingPiece))
+        if (this.#board.doesColide(newFallingPiece))
         {
-            this._markTopout();
+            this.#markTopout();
             return;
         }
 
-        this._currentPiece = newFallingPiece;
-        this._topupNextQueue();
+        this.#currentPiece = newFallingPiece;
+        this.#topupNextQueue();
     }
 
-    _markTopout()
+    #markTopout()
     {
-        this._stats.end = new Date();
-        this._alive = false;
+        this.stats.end = new Date();
+        this.#alive = false;
     }
 
-    _initStats()
+    #initStats()
     {
         return {
             start: new Date(),       //assuming the game starts as soon as the object is constructed
@@ -503,12 +509,12 @@ class PlayerLogic
         };
     }
 
-    _topupNextQueue()
+    #topupNextQueue()
     {
         if (this._nextQueue === undefined)
             this._nextQueue = [];
         while (this._nextQueue.length < 5)
-            this._nextQueue.push(...this._rules.pieceGeneration(this))
+            this._nextQueue.push(...this.rules.pieceGeneration(this))
     }
 
     /**
@@ -528,7 +534,7 @@ class PlayerLogic
     //     else
     //         this.currentPiece.y = this.ghostPiece.y
 
-    //     this._placeCurrentPiece();
+    //     this.#placeCurrentPiece();
     // }
 }
 
@@ -538,34 +544,34 @@ eventManager.addEvent("onPieceLock", (e) =>
     const logicPlayer = e.player.logic;
     if (e.clearedLines > 0)
     {
-        if (logicPlayer._stats.linesCleared[e.clearedLines] == undefined)
-            logicPlayer._stats.linesCleared[e.clearedLines] = 0;
-        ++(logicPlayer._stats.linesCleared[e.clearedLines])
+        if (logicPlayer.stats.linesCleared[e.clearedLines] == undefined)
+            logicPlayer.stats.linesCleared[e.clearedLines] = 0;
+        ++(logicPlayer.stats.linesCleared[e.clearedLines])
     }
 
     const spin = e.spinType
     if (spin !== SpinType.NONE)
     {
         //TODO change 2 to spin
-        if (logicPlayer._stats.spins[2][logicPlayer.currentPiece.type] == undefined)
-            logicPlayer._stats.spins[2][logicPlayer.currentPiece.type] = {}
-        if (logicPlayer._stats.spins[2][logicPlayer.currentPiece.type][e.clearedLines] == undefined)
-            logicPlayer._stats.spins[2][logicPlayer.currentPiece.type][e.clearedLines] = 0
+        if (logicPlayer.stats.spins[2][logicPlayer.currentPiece.type] == undefined)
+            logicPlayer.stats.spins[2][logicPlayer.currentPiece.type] = {}
+        if (logicPlayer.stats.spins[2][logicPlayer.currentPiece.type][e.clearedLines] == undefined)
+            logicPlayer.stats.spins[2][logicPlayer.currentPiece.type][e.clearedLines] = 0
     
-         ++(logicPlayer._stats.spins[2][logicPlayer.currentPiece.type][e.clearedLines])
+         ++(logicPlayer.stats.spins[2][logicPlayer.currentPiece.type][e.clearedLines])
     }
 
     if (e.clearedLines > 0)
-        ++(logicPlayer._stats.combo);
+        ++(logicPlayer.stats.combo);
     else
-        logicPlayer._stats.combo = 0;
+        logicPlayer.stats.combo = 0;
 
-    logicPlayer._stats.piecesPlaced += 1;
+    logicPlayer.stats.piecesPlaced += 1;
 });
 
 eventManager.addEvent("onPiecePlace", (e) => 
 {
     const logicPlayer = e.player.logic;
     if (logicPlayer.board.isPc)
-        ++(logicPlayer._stats.perfectClears)
+        ++(logicPlayer.stats.perfectClears)
 });

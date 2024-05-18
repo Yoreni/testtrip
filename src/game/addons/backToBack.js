@@ -8,9 +8,9 @@
             return;
 
         if (e.clearedLines >= 4 || e.spinType != SpinType.NONE)
-            ++(logicPlayer._stats.b2b);
+            ++(logicPlayer.stats.b2b);
         else
-            logicPlayer._stats.b2b = 0;
+            logicPlayer.stats.b2b = 0;
     };
 
     const addon =
@@ -22,7 +22,7 @@
         events:
         {
             onPieceLock,
-            onGameStart: (e) => e.player.logic._stats.b2b = 0,
+            onGameStart: (e) => e.player.logic.stats.b2b = 0,
         }
     }
 

@@ -13,8 +13,8 @@
 
         changeTracker = {}
         logicPlayer.score = 0;
-        if (logicPlayer._rules.scoreMulti === undefined)
-            logicPlayer._rules.scoreMulti = 1;
+        if (logicPlayer.rules.scoreMulti === undefined)
+            logicPlayer.rules.scoreMulti = 1;
     }
 
     const onPieceLock = (e) =>
@@ -26,7 +26,7 @@
 
         const logicPlayer = e.player.logic;
         //get extra points for keeping a b2b
-        const b2bMultiplyer = logicPlayer._stats.b2b > 1 ? 1.5 : 1;
+        const b2bMultiplyer = logicPlayer.stats.b2b > 1 ? 1.5 : 1;
 
         if (e.spinType === SpinType.MINI && e.piece.type == "T")    //t spin mini
             change += miniSpinClears[e.clearedLines] * b2bMultiplyer;
@@ -39,7 +39,7 @@
         if(logicPlayer.combo > 0)
             change += 50 * (logicPlayer.combo - 1);
 
-        change = Math.round(change * logicPlayer._rules.scoreMulti)
+        change = Math.round(change * logicPlayer.rules.scoreMulti)
         logicPlayer.score += change
         if (change > 0)
             e.change = change
@@ -52,7 +52,7 @@
 
         if (logicPlayer.board.isPc)
         {
-            const pointsAwarded = Math.round(perfectClearAmount * logicPlayer._rules.scoreMulti);
+            const pointsAwarded = Math.round(perfectClearAmount * logicPlayer.rules.scoreMulti);
             logicPlayer.score += pointsAwarded;
             changeTracker[logicPlayer.id].change += pointsAwarded;
         }
