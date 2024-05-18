@@ -2,11 +2,13 @@ PlayerRenderer.addEvents();
 
 class Game extends IScene 
 {
+    #objects;
+
     constructor() 
     {
         super();
         this.container = new PIXI.Container();
-        this._objects = {};
+        this.#objects = {};
         this.gameManager = new GameManager(this.container);
     }
 
@@ -164,9 +166,9 @@ class Game extends IScene
         }
 
         //reset game
-        this._objects.resetIndicator.visible = this.resetKey.framesDown > 0 && this.resetKey.framesDown < 30;
-        if (this._objects.resetIndicator.visible)
-            this._objects.resetIndicator.draw(this.resetKey.framesDown / 30)
+        this.#objects.resetIndicator.visible = this.resetKey.framesDown > 0 && this.resetKey.framesDown < 30;
+        if (this.#objects.resetIndicator.visible)
+            this.#objects.resetIndicator.draw(this.resetKey.framesDown / 30)
         if (this.resetKey.framesDown === 30)
             this.gameManager.restartGame();
     }
@@ -178,13 +180,13 @@ class Game extends IScene
 
     init() {
         //add rasei
-        this._objects.rasei = PIXI.Sprite.from("assets/rasei.png");
-        this._objects.rasei.scale.set(0.4);
-        this._objects.rasei.position.set(0, canvasSize.height - this._objects.rasei.height);
-        this.container.addChild(this._objects.rasei);
+        this.#objects.rasei = PIXI.Sprite.from("assets/rasei.png");
+        this.#objects.rasei.scale.set(0.4);
+        this.#objects.rasei.position.set(0, canvasSize.height - this.#objects.rasei.height);
+        this.container.addChild(this.#objects.rasei);
 
-        this._objects.resetIndicator =  new CircleBar(0, {label: "Restart", colour: 0xf4ae09});
-        this._objects.resetIndicator.position.set(300, 300)
-        this.container.addChild(this._objects.resetIndicator);
+        this.#objects.resetIndicator =  new CircleBar(0, {label: "Restart", colour: 0xf4ae09});
+        this.#objects.resetIndicator.position.set(300, 300)
+        this.container.addChild(this.#objects.resetIndicator);
     }
 }
