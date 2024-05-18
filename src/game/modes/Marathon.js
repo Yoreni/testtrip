@@ -25,16 +25,16 @@
         {
             getPlayerStat(statName)
             {
-                if (statName === "Score")
+                if (statName === "score")
                     return this._logicPlayer.score.toLocaleString()
-                if (statName === "Level")
+                if (statName === "level")
                     return this._logicPlayer.level;
                 return super.getPlayerStat(statName)
             }
 
             _updateStats()
             {
-                let display = ["Lines", "Time", "Score", "Level"];
+                let display = ["lines", "time", "score", "level"];
                 super._updateStats(display);
             }
         },

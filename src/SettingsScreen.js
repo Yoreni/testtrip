@@ -22,7 +22,7 @@ class SettingsScreen extends IScene
 
         this._objects.dasSlider = new Slider({
             ...dimensions,
-            label: "DAS", 
+            label: langManager.get("menu.settings.DAS"), 
             min: 17, 
             max: 333,
             default: handling.DAS,
@@ -35,7 +35,7 @@ class SettingsScreen extends IScene
 
         this._objects.arrSlider = new Slider({
             ...dimensions, 
-            label: "ARR", 
+            label: langManager.get("menu.settings.ARR"), 
             min: 0, 
             max: 83,
             default: handling.ARR,
@@ -80,7 +80,7 @@ class SettingsScreen extends IScene
 
         for (let index = 0; index < 2; ++index)
         {
-            const button = new Button(`Player ${index + 1}`, {
+            const button = new Button(langManager.get("menu.settings.playern", index + 1), {
                 onClick: () => 
                 { 
                     this.selectedPlayer = index
@@ -94,11 +94,11 @@ class SettingsScreen extends IScene
             this._objects[`p${index + 1}`] = button;
         }
 
-        const buttonText = ["Keyboard", "Gamepad 1", "Gamepad 2", "Gamepad 3", "Gamepad 4"]
         const inputDeviceMap = [InputDevices.KEYBOARD, InputDevices.GAMEPAD_0, InputDevices.GAMEPAD_1, InputDevices.GAMEPAD_2, InputDevices.GAMEPAD_3]
         for (let index = 0; index < 5; ++index)
         {
-            const button = new Button(buttonText[index], {
+            const buttonText = index == 0 ? langManager.get("menu.settings.keyboard") : langManager.get("menu.settings.gamepadn", index)
+            const button = new Button(buttonText, {
                 onClick: () =>
                 {
                     const inputDevice = inputDeviceMap[index]

@@ -37,14 +37,21 @@
         "c4wcombos": "S4W Kombəwz"
     },
     "gameHud": {
-        "level": "Levul",
-        "score": "Sgó",
-        "lines": "Laynz",
-        "linesRemaining": "Laynz Rəmeyniŋ",
-        "PPS": "PPS",
-        "APM": "ƎPM",
-        "vsScore": "VS Sgó",
-        "combo": "Kombəw",
+        "stats":
+        {
+            "level": "Levul",
+            "score": "Sgó",
+            "lines": "Laynz",
+            "linesRemaining": "Laynz Rəmeyniŋ",
+            "PPS": "PPS",
+            "APM": "ƎPM",
+            "vsScore": "VS Sgó",
+            "combo": "Kombəw",
+            "time": "Táym",
+            "lPPS": "lPPS",
+            "pace": "Peys",
+            "garbageLeft": "Gábij Rəmeyniŋ"
+        },
         "singleLineClear": "Siŋgul",
         "doubleLineClear": "Dəbul",
         "tripleLineClear": "Cripul",

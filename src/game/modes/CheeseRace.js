@@ -40,18 +40,18 @@
         {
             getPlayerStat(statName)
             {
-                if (statName === "Garbage Cleared")
+                if (statName === "garbageCleared")
                     return this._logicPlayer.garbageCleared
-                if (statName === "Garbage Left")
+                if (statName === "garbageLeft")
                     return Math.max(lineGoal - this._logicPlayer.garbageCleared, 0)
-                if (statName === "Pace")
+                if (statName === "pace")
                     return Math.round((this._logicPlayer.piecesPlaced / this._logicPlayer.garbageCleared) * lineGoal);
                 return super.getPlayerStat(statName)
             }
 
             _updateStats()
             {
-                let display = ["PPS", "Time", "Garbage Left", "Pieces", "Pace"];
+                let display = ["PPS", "time", "garbageLeft", "pieces", "pace"];
                 super._updateStats(display);
             }
         },

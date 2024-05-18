@@ -108,16 +108,16 @@
                         / this._logicPlayer.piecesPlaced) * this._logicPlayer.pps * 100;
                 if (statName === "APM")
                     return apm.toFixed(apm < 9.95 ? 2 : apm < 99.5 ? 1 : 0);
-                if (statName === "VS Score")
+                if (statName === "vsScore")
                     return  Number.isNaN(vsScore) ? (0).toFixed(2) : vsScore.toFixed(vsScore < 9.95 ? 2 : vsScore < 99.5 ? 1 : 0);
-                if (statName === "Attack")
+                if (statName === "attack")
                     return  this._logicPlayer._stats.attack;
                 return super.getPlayerStat(statName)
             }
 
             _updateStats()
             {
-                let display = ["PPS", "Time", "APM", "VS Score"];
+                let display = ["PPS", "time", "APM", "vsScore"];
                 super._updateStats(display);
             }
 

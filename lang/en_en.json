@@ -37,14 +37,20 @@
         "c4wcombos": "C4W Combos"
     },
     "gameHud": {
-        "level": "Level",
-        "score": "Score",
-        "lines": "Lines",
-        "linesRemaining": "Lines Remaining",
-        "PPS": "PPS",
-        "APM": "APM",
-        "vsScore": "VS Score",
-        "combo": "Combo",
+        "stats": {
+            "level": "Level",
+            "score": "Score",
+            "lines": "Lines",
+            "linesRemaining": "Lines Remaining",
+            "PPS": "PPS",
+            "APM": "APM",
+            "vsScore": "VS Score",
+            "combo": "Combo",
+            "time": "Time",
+            "lPPS": "lPPS",
+            "pace": "Pace",
+            "garbageLeft": "Garbage Left"
+        },
         "singleLineClear": "Single",
         "doubleLineClear": "Double",
         "tripleLineClear": "Triple",

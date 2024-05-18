@@ -9,7 +9,7 @@
         {
             getPlayerStat(statName)
             {
-                if (statName === "Lines Remaining")
+                if (statName === "linesRemaining")
                     return Math.max(lineGoal - this._logicPlayer.linesCleared, 0);
                 if (statName === "lPPS")
                     return  lppstracker.length <= 1 ? "0.00" : 
@@ -19,7 +19,7 @@
 
             _updateStats()
             {
-                let display = ["PPS", "Time", "Lines Remaining", "lPPS"];
+                let display = ["PPS", "time", "linesRemaining", "lPPS"];
                 super._updateStats(display);
             }
 

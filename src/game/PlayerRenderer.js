@@ -4,7 +4,7 @@ const defaultDrawPieceValues = {
     grayscale: false,
 }
 
-const showStats = ["PPS", "Time", "Pieces"]
+const showStats = ["PPS", "time", "pieces"]
 const greyScaleFilter = new PIXI.ColorMatrixFilter();
 greyScaleFilter.blackAndWhite();
 
@@ -136,7 +136,7 @@ class PlayerRenderer
         {
             //move this block into its own function
             if (child.stat === "")
-                child.stat = statsToDisplay[index];
+                child.stat = statsToDisplay[index]//langManager.get(`gameHud.${statsToDisplay[index]}`)
 
             child.update();
             child.y = index * -50
@@ -278,11 +278,11 @@ class PlayerRenderer
     {
         if (statName === "PPS")
             return this._logicPlayer.pps.toFixed(2);
-        if (statName === "Time")
+        if (statName === "time")
             return mss000timeformat(this._logicPlayer.time);
-        if (statName === "Pieces")
+        if (statName === "pieces")
             return this._logicPlayer.piecesPlaced;
-        if (statName === "Lines")
+        if (statName === "lines")
             return this._logicPlayer.linesCleared;
         return "undefined";
     }
@@ -315,7 +315,7 @@ class InfoText extends PIXI.Container
     set stat(stat)
     {
         this.#stat = stat
-        this.nameText.text = this.#stat;
+        this.nameText.text = langManager.get(`gameHud.stats.${this.#stat}`);
     }
 
     update(text)

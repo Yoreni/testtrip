@@ -7,7 +7,7 @@
         {
             _updateStats()
             {
-                let display = ["Time", "PPS"];
+                let display = ["time", "PPS"];
                 super._updateStats(display);
             }
 

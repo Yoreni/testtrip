@@ -21,17 +21,18 @@ class Keyboard
      */
     constructor(player)
     {
+        console.log(controls.hardDrop);
         this.#player = player;
         this.#keys = 
         {
-            left: new KeyDetector(controls.left),
-            right: new KeyDetector(controls.right),
-            softDrop: new KeyDetector(controls.softDrop),
+            left: new KeyDetector(controls.moveLeft),
+            right: new KeyDetector(controls.moveRight),
+            softDrop: new KeyDetector(controls.softdrop),
             rotateClockwise: new KeyDetector(controls.rotateClockwise),
             rotateAnticlockwise: new KeyDetector(controls.rotateAnticlockwise),
             hold: new KeyDetector(controls.hold),
             rotate180: new KeyDetector(controls.rotate180),
-            hardDrop: new KeyDetector(controls.hardDrop),
+            hardDrop: new KeyDetector(controls.harddrop),
         }
 
         //thank you zztetris

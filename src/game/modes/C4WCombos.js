@@ -5,14 +5,14 @@
         {
             getPlayerStat(statName)
             {
-                if (statName === "Combo")
+                if (statName === "combo")
                     return this._logicPlayer.combo;
                 return super.getPlayerStat(statName)
             }
 
             _updateStats()
             {
-                let display = ["PPS", "Time", "Combo"];
+                let display = ["PPS", "time", "combo"];
                 super._updateStats(display);
             }
         },

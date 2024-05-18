@@ -128,7 +128,7 @@
         {
             _updateStats()
             {
-                let display = ["Time"];
+                let display = ["time"];
                 super._updateStats(display);
             }
         },

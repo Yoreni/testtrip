@@ -7,16 +7,16 @@
         {
             getPlayerStat(statName)
             {
-                if (statName === "Score")
+                if (statName === "score")
                     return this._logicPlayer.score.toLocaleString()
-                if (statName === "Time")
+                if (statName === "time")
                     return mss000timeformat(Math.max(timeLimit - this._logicPlayer.time, 0))
                 return super.getPlayerStat(statName)
             }
 
             _updateStats()
             {
-                let display = ["PPS", "Time", "Score"];
+                let display = ["PPS", "time", "score"];
                 super._updateStats(display);
             }
         },
