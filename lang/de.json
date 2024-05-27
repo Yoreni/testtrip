@@ -24,7 +24,8 @@
             "quit": "quit",
             "playern": "Spieler {$0}",
             "keyboard": "Tastatur",
-            "gamepadn": "Gamepad {$0}"
+            "gamepadn": "Gamepad {$0}",
+            "langauge": "Sprache"
         }
     },
     "modes": {

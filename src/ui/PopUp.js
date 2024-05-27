@@ -3,6 +3,7 @@ class PopUp extends PIXI.Container
     constructor()
     {
         super()
+        this.visible = false;
 
         let box = new PIXI.Graphics()
         box.lineStyle(8,0x000000,1)
@@ -15,7 +16,19 @@ class PopUp extends PIXI.Container
             onClick: () => this.close()
         });
         closeButton.x = box.width;
-        this.addChild(closeButton)
+        this.addChild(closeButton);
+
+        this._addContent();
+    }
+
+    _addContent()
+    {
+
+    }
+
+    open()
+    {
+        this.visible = true; 
     }
 
     close()

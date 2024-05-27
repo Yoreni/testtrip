@@ -218,8 +218,14 @@ class SettingsScreen extends IScene
 
     #drawLangaugeMenu()
     {
-        let langaugeMenuContainer = new PopUp();
-        langaugeMenuContainer.position.set(128, 128);
-        this.container.addChild(langaugeMenuContainer);
+        let button = new Button(langManager.get("menu.settings.langauge"), {
+            onClick: () => this._objects.langaugeMenuContainer.open()
+        })
+        button.position.set(100, 250)
+        this.container.addChild(button);
+
+        this._objects.langaugeMenuContainer = new LangaugeSelector();
+        this._objects.langaugeMenuContainer.position.set(128, 128);
+        this.container.addChild(this._objects.langaugeMenuContainer);
     }
 }

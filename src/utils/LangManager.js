@@ -1,14 +1,18 @@
 class LangManager
 {
+    static #SUPORTED_LANGAUGES = ["en_en", "en_en_yer3_1", "de"];
+
     /**
      * @type {String{}}
      */
     #translations = {};
+    #languages;
 
     constructor(locale)
     {
         this.locale = locale;
         this.#fetchStrings();
+        this.#languages = this.getLangauges();
     }
 
     #fetchStrings()
@@ -20,12 +24,30 @@ class LangManager
         }).then((data) => 
         {
             console.log("retrived translations");
-            console.log()
             this.#translations = data;
         }).catch(error =>
         {
             console.log(error);
         });
+    }
+
+    /**
+     * 
+     * @param {string} langaugeCode 
+     */
+    async #getNativeName(langaugeCode)
+    {
+        try 
+        {
+            const response = await fetch(`lang/${langaugeCode}.json`);
+            const data = await response.json();
+            console.log(data);
+            return data["meta"]["nativeName"];
+        } 
+        catch (error) 
+        {
+            console.error(error);
+        }
     }
 
     /**
@@ -68,8 +90,25 @@ class LangManager
         return number.toLocaleString(this.#translations["meta"]["numberLocal"]);
     }
 
-    // raw()
-    // {
-    //     return this.#translations;
-    // }
+    /**
+     * Gets a list of langauges that this game has been translated to.
+     * 
+     * @returns {Object[](name: string, code: string)} name is the name of the langauge in that language, code is the languages ISO code
+     */
+    async getLangauges()
+    {
+        if (this.#languages !== undefined)
+            return this.#languages;
+
+        let langauges = []
+        for (let code of LangManager.#SUPORTED_LANGAUGES)
+        {
+            langauges.push({
+                "name": await this.#getNativeName(code),
+                code
+            })
+        }
+
+        return langauges;
+    }
 }

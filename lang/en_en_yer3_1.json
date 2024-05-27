@@ -24,7 +24,8 @@
             "quit": "Qit",
             "playern": "Pleyə {$0}",
             "keyboard": "Kiybód",
-            "gamepadn": "Geympad {$0}"
+            "gamepadn": "Geympad {$0}",
+            "langauge": "Laŋgwij"
         }
     },
     "modes": {

@@ -19,8 +19,13 @@ const controls = JSON.parse(localStorage.getItem("controls")) ?? {
 }
 KeyBinder.controlsObject = controls;
 
+const otherSettings = JSON.parse(localStorage.getItem("settings")) ?? {
+    language: "en_en"
+}
+
 function saveSettingsToLocalStorange()
 {
     localStorage.setItem("handling",  JSON.stringify(handling));
     localStorage.setItem("controls",  JSON.stringify(controls));
+    localStorage.setItem("settings",  JSON.stringify(otherSettings));
 }
