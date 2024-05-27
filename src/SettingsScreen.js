@@ -18,46 +18,7 @@ class SettingsScreen extends IScene
         }
         this.container.addChild(this._objects.back)
 
-        const dimensions = {width: 200, height: 15}
-
-        this._objects.dasSlider = new Slider({
-            ...dimensions,
-            label: langManager.get("menu.settings.DAS"), 
-            min: 17, 
-            max: 333,
-            default: handling.DAS,
-            step: 16,
-            valueDisplay: (value) => `${value}ms`,
-            whileChanging: (value) => handling.DAS = value,
-        });
-        this._objects.dasSlider.position.set(100, 100);
-        this.container.addChild(this._objects.dasSlider)
-
-        this._objects.arrSlider = new Slider({
-            ...dimensions, 
-            label: langManager.get("menu.settings.ARR"), 
-            min: 0, 
-            max: 83,
-            default: handling.ARR,
-            step: 1,
-            valueDisplay: (value) => `${value}ms`,
-            whileChanging: (value) => handling.ARR = value,
-        });
-        this._objects.arrSlider.position.set(100, 150);
-        this.container.addChild(this._objects.arrSlider)
-
-        this._objects.sdfSlider = new Slider({
-            ...dimensions,
-            label: langManager.get("menu.settings.SDF"), 
-            min: 5, 
-            max: 41,
-            default: handling.SDF,
-            step: 1,
-            valueDisplay: (value) => `x${value === 41 ? "∞" : value}`,
-            whileChanging: (value) => handling.SDF = value === 41 ? 1.79e308 : value,
-        });
-        this._objects.sdfSlider.position.set(100, 200);
-        this.container.addChild(this._objects.sdfSlider);
+        this.#drawHandleingSliders();
 
         // make keybind buttons
         console.log(controlNames)
@@ -113,6 +74,8 @@ class SettingsScreen extends IScene
             this._objects.controlerSelectorContainer.addChild(button);
             this._objects[`i${index + 1}`] = button;
         }
+
+        this.#drawLangaugeMenu();
     }
 
     start()
@@ -158,6 +121,50 @@ class SettingsScreen extends IScene
     init()
     {
 
+    }
+
+    #drawHandleingSliders()
+    {
+        const dimensions = {width: 200, height: 15}
+
+        this._objects.dasSlider = new Slider({
+            ...dimensions,
+            label: langManager.get("menu.settings.DAS"), 
+            min: 17, 
+            max: 333,
+            default: handling.DAS,
+            step: 16,
+            valueDisplay: (value) => `${value}ms`,
+            whileChanging: (value) => handling.DAS = value,
+        });
+        this._objects.dasSlider.position.set(100, 100);
+        this.container.addChild(this._objects.dasSlider)
+
+        this._objects.arrSlider = new Slider({
+            ...dimensions, 
+            label: langManager.get("menu.settings.ARR"), 
+            min: 0, 
+            max: 83,
+            default: handling.ARR,
+            step: 1,
+            valueDisplay: (value) => `${value}ms`,
+            whileChanging: (value) => handling.ARR = value,
+        });
+        this._objects.arrSlider.position.set(100, 150);
+        this.container.addChild(this._objects.arrSlider)
+
+        this._objects.sdfSlider = new Slider({
+            ...dimensions,
+            label: langManager.get("menu.settings.SDF"), 
+            min: 5, 
+            max: 41,
+            default: handling.SDF,
+            step: 1,
+            valueDisplay: (value) => `x${value === 41 ? "∞" : value}`,
+            whileChanging: (value) => handling.SDF = value === 41 ? 1.79e308 : value,
+        });
+        this._objects.sdfSlider.position.set(100, 200);
+        this.container.addChild(this._objects.sdfSlider);
     }
 
     /**
@@ -207,5 +214,12 @@ class SettingsScreen extends IScene
     {
         this._objects.p1.borderColour = this.selectedPlayer === 0 ? 0xFF0000 : 0x000000
         this._objects.p2.borderColour = this.selectedPlayer === 1 ? 0xFF0000 : 0x000000
+    }
+
+    #drawLangaugeMenu()
+    {
+        let langaugeMenuContainer = new PopUp();
+        langaugeMenuContainer.position.set(128, 128);
+        this.container.addChild(langaugeMenuContainer);
     }
 }
