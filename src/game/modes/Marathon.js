@@ -23,15 +23,6 @@
     {
         render: class extends PlayerRenderer
         {
-            getPlayerStat(statName)
-            {
-                if (statName === "score")
-                    return this._logicPlayer.score.toLocaleString()
-                if (statName === "level")
-                    return this._logicPlayer.level;
-                return super.getPlayerStat(statName)
-            }
-
             _updateStats()
             {
                 let display = ["lines", "time", "score", "level"];
@@ -75,6 +66,8 @@
         load: (modeOptions) => 
         {
             startingLevel = modeOptions.startingLevel ?? startingLevel
+
+            PlayerRenderer.addStat("level", (player) => player.level);
         },
         addons: ["guidlineScoring","lineClearToasts"],
     });

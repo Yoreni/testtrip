@@ -50,7 +50,8 @@
             "time": "Time",
             "lPPS": "lPPS",
             "pace": "Pace",
-            "garbageLeft": "Garbage Left"
+            "garbageLeft": "Garbage Left",
+            "timeRemaining": "Time"
         },
         "1LineClear": "Single",
         "2LineClear": "Double",

@@ -3,13 +3,6 @@
     {
         render: class extends PlayerRenderer
         {
-            getPlayerStat(statName)
-            {
-                if (statName === "combo")
-                    return this._logicPlayer.combo;
-                return super.getPlayerStat(statName)
-            }
-
             _updateStats()
             {
                 let display = ["PPS", "time", "combo"];
@@ -46,7 +39,7 @@
         },
         load: (modeOptions) => 
         {
-            
+            PlayerRenderer.addStat("combo", (player) => player.combo)
         },
         addons: ["lineClearToasts"]
     });

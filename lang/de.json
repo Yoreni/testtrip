@@ -51,7 +51,8 @@
             "time": "Zeit",
             "lPPS": "lPPS",
             "pace": "pace",
-            "garbageLeft": "Verbleibende Müll"
+            "garbageLeft": "Verbleibende Müll",
+            "timeRemaining": "Zeit"
         },
         "1LineClear": "Einzel",
         "2LineClear": "Doppel",

@@ -65,7 +65,7 @@
     {
         onAdd: () =>
         {    
-
+            PlayerRenderer.addStat("score", (player) => langManager.formatNumber(player.score));
         },
         events:
         {

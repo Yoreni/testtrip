@@ -29,12 +29,12 @@
         const query = linesCleared + "line" + (isTSpin ? "TS" : "");
         return attackTable[query]
             + (logicPlayer.combo < comboTable.length ? comboTable[logicPlayer.combo] : comboTable.at(-1))   //combo bonus
-            + (logicPlayer._stats.b2b > 0 ? 1 : 0);                                                          //b2b bonus
+            + (logicPlayer.stats.b2b > 0 ? 1 : 0);                                                          //b2b bonus
     }
 
     const handleAttack = (player, target, amount) =>
     {
-        player._stats.attack += amount;                       //update attack stat
+        player.stats.attack += amount;                       //update attack stat
 
         //attack removes our own incoming attack first
         const absorbed = amount - absorbIncomingAttack(player, amount);
@@ -45,11 +45,11 @@
             target.logic.garbageIncoming += sent;
 
             //spike counter
-            if (player._stats.lastAttack === undefined || new Date() - player._stats.lastAttack > 1500)
+            if (player.stats.lastAttack === undefined || new Date() - player.stats.lastAttack > 1500)
                 player.currentSpike = sent;
             else
                 player.currentSpike += sent;
-            player._stats.lastAttack = new Date();
+            player.stats.lastAttack = new Date();
        }
 
         return {absorbed, sent}
@@ -101,20 +101,6 @@
                 this._objects.statsDisplay.x -= 12
             }
 
-            getPlayerStat(statName)
-            {
-                const apm = this._logicPlayer._stats.attack / this._logicPlayer.time * 60
-                const vsScore = ((this._logicPlayer._stats.attack + this._logicPlayer._stats.garbageCleared)
-                        / this._logicPlayer.piecesPlaced) * this._logicPlayer.pps * 100;
-                if (statName === "APM")
-                    return apm.toFixed(apm < 9.95 ? 2 : apm < 99.5 ? 1 : 0);
-                if (statName === "vsScore")
-                    return  Number.isNaN(vsScore) ? (0).toFixed(2) : vsScore.toFixed(vsScore < 9.95 ? 2 : vsScore < 99.5 ? 1 : 0);
-                if (statName === "attack")
-                    return  this._logicPlayer._stats.attack;
-                return super.getPlayerStat(statName)
-            }
-
             _updateStats()
             {
                 let display = ["PPS", "time", "APM", "vsScore"];
@@ -149,10 +135,10 @@
             onGameStart: (e) =>
             {
                 e.player.otherPlayers = e.players.filter((player) => e.player.logic.id !== player.logic.id)
-                e.player.logic._stats.attack = 0;
+                e.player.logic.stats.attack = 0;
                 e.player.logic.garbageIncoming = 0;
                 e.player.logic.currentSpike = 0;
-                e.player.logic._stats.garbageCleared = 0;
+                e.player.logic.stats.garbageCleared = 0;
                 e.player.render.drawIncomingAttack();
             },
             onPieceLock: (e) =>
@@ -165,7 +151,7 @@
                 for (let line of e.oldBoard.completedLines)
                 {
                     if (e.oldBoard.get(0, line) === "#" || e.oldBoard.get(1, line) === "#")
-                        ++(e.player.logic._stats.garbageCleared);
+                        ++(e.player.logic.stats.garbageCleared);
                 }
 
                 let newBoard = e.oldBoard.copy()
@@ -192,6 +178,18 @@
         load: (modeOptions) => 
         {
             pieceRandimiserSeed = modeOptions.seed ?? new Date().getTime()
+
+            PlayerRenderer.addStat("APM", (player) => {
+                const apm = player.stats.attack / player.time * 60
+                return apm.toFixed(apm < 9.95 ? 2 : apm < 99.5 ? 1 : 0);
+            });
+            PlayerRenderer.addStat("vsScore", (player) => {
+                const vsScore = ((player.stats.attack + player.stats.garbageCleared)
+                        / player.piecesPlaced) * player.pps * 100;
+            
+                return  Number.isNaN(vsScore) ? (0).toFixed(2) : vsScore.toFixed(vsScore < 9.95 ? 2 : vsScore < 99.5 ? 1 : 0);
+            });
+            PlayerRenderer.addStat("attack", (player) => player.stats.attack);
         },
         init: (rules) =>
         {

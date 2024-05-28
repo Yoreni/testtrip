@@ -38,17 +38,6 @@
     {
         render: class extends PlayerRenderer
         {
-            getPlayerStat(statName)
-            {
-                if (statName === "garbageCleared")
-                    return this._logicPlayer.garbageCleared
-                if (statName === "garbageLeft")
-                    return Math.max(lineGoal - this._logicPlayer.garbageCleared, 0)
-                if (statName === "pace")
-                    return Math.round((this._logicPlayer.piecesPlaced / this._logicPlayer.garbageCleared) * lineGoal);
-                return super.getPlayerStat(statName)
-            }
-
             _updateStats()
             {
                 let display = ["PPS", "time", "garbageLeft", "pieces", "pace"];
@@ -115,6 +104,10 @@
             lineGoal = modeOptions.lineGoal ?? lineGoal
             cheeseHeight = modeOptions.cheeseHeight ?? cheeseHeight
             garbageMessiness = modeOptions.garbageMessiness ?? garbageMessiness
+
+            PlayerRenderer.addStat("garbageCleared", (player) => player.garbageCleared)
+            PlayerRenderer.addStat("garbageLeft", (player) => Math.max(lineGoal - player.garbageCleared, 0))
+            PlayerRenderer.addStat("pace", (player) => Math.round((player.piecesPlaced / player.garbageCleared) * lineGoal))
         },
         addons: ["lineClearToasts"]
     });

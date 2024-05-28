@@ -5,18 +5,9 @@
     {
         render: class extends PlayerRenderer
         {
-            getPlayerStat(statName)
-            {
-                if (statName === "score")
-                    return this._logicPlayer.score.toLocaleString()
-                if (statName === "time")
-                    return mss000timeformat(Math.max(timeLimit - this._logicPlayer.time, 0))
-                return super.getPlayerStat(statName)
-            }
-
             _updateStats()
             {
-                let display = ["PPS", "time", "score"];
+                let display = ["PPS", "timeRemaining", "score"];
                 super._updateStats(display);
             }
         },
@@ -46,6 +37,8 @@
         load: (modeOptions) => 
         {
             timeLimit = modeOptions.timeLimit ?? timeLimit
+
+            PlayerRenderer.addStat("timeRemaining", (player) => mss000timeformat(Math.max(timeLimit - player.time, 0)))
         },
         addons: ["guidlineScoring","lineClearToasts"],
     });

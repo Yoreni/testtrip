@@ -57,6 +57,10 @@
         load: (modeOptions) => 
         {
             lineGoal = modeOptions.lineGoal ?? lineGoal
+
+            PlayerRenderer.addStat("linesRemaining", (player) => Math.max(lineGoal - player.linesCleared, 0));
+            PlayerRenderer.addStat("lPPS", (player) => lppstracker.length <= 1 ? "0.00" : 
+                (lppstracker.length / (lppstracker[0] - lppstracker.at(-1))).toFixed(2))
         }
     });
 }
