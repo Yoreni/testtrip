@@ -21,9 +21,8 @@ class SettingsScreen extends IScene
         this.#drawHandleingSliders();
 
         // make keybind buttons
-        console.log(controlNames)
-        controlNames.forEach((key, index) => {
-            console.log(key, index);
+        controlNames.forEach((key, index) => 
+        {
             let keybinder =  this.#makeKeybindButton(key);
             keybinder.position.set(600, 100 + (index * 40));
             this.container.addChild(keybinder);

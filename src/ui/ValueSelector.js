@@ -3,7 +3,8 @@ class ValueSelector extends PIXI.Container
     static #defaultSettings = {
         width: 150,
         options: [Option("one", 1), Option("two", 2)],
-        defaultIndex: 0
+        defaultIndex: 0,
+        title: ""
     }
 
     #settings;
@@ -34,8 +35,16 @@ class ValueSelector extends PIXI.Container
         incrementIndexButton.x = this.#settings.width + decrementIndexButton.width;
         this.addChild(incrementIndexButton);
 
-
-
+        if (this.#settings.title !== "")
+        {
+            let titleText = new PIXI.Text(this.#settings.title, textStyle())
+            titleText.style.bold = true
+            titleText.pivot.x = titleText.width / 2;
+            titleText.x = (this.#settings.width / 2) + (decrementIndexButton.width);
+            titleText.y = -8;
+            titleText.pivot.y = decrementIndexButton.height / 2;
+            this.addChild(titleText);
+        }
     }
 
     #changeIndex(amount)

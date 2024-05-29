@@ -41,7 +41,6 @@ class LangManager
         {
             const response = await fetch(`lang/${langaugeCode}.json`);
             const data = await response.json();
-            console.log(data);
             return data["meta"]["nativeName"];
         } 
         catch (error) 
