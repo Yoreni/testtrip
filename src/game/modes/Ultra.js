@@ -18,7 +18,7 @@
                 if (this.time >= timeLimit && this.isAlive)
                 {
                     alert(this.score.toLocaleString())
-                    this._markTopout();
+                    this.endGame();
                 }
                 super.tick(delta);
             }

@@ -152,6 +152,8 @@ function Point(x, y)
  */
 function saveOptionsWithDeafults(settingsObject, defaultsObject)
 {
+    if (settingsObject === undefined || settingsObject === null)
+        settingsObject = {}
     let object = Object.create(defaultsObject);
 
     for (let key of Object.keys(settingsObject))

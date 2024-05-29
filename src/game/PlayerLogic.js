@@ -442,7 +442,7 @@ class PlayerLogic
 
         //check for topout
         if (Math.min(...this.currentPiece.minos.map(element => element.y)) >= this.#board.height)
-            this.#markTopout();
+            this.endGame();
 
         let newBoard = this.#board.copy();
         for (let mino of this.#currentPiece.minos)
@@ -476,7 +476,7 @@ class PlayerLogic
         //check for topout
         if (this.#board.doesColide(newFallingPiece))
         {
-            this.#markTopout();
+            this.endGame();
             return;
         }
 
@@ -484,7 +484,7 @@ class PlayerLogic
         this.#topupNextQueue();
     }
 
-    #markTopout()
+    endGame()
     {
         this.stats.end = new Date();
         this.#alive = false;
@@ -496,6 +496,7 @@ class PlayerLogic
             start: new Date(),       //assuming the game starts as soon as the object is constructed
             perfectClears: 0,
             combo: 0,
+            highestCombo: 0,
             piecesPlaced: 0,
             spins: {
                 "1": {       //mini spins 
@@ -561,10 +562,14 @@ eventManager.addEvent("onPieceLock", (e) =>
          ++(logicPlayer.stats.spins[2][logicPlayer.currentPiece.type][e.clearedLines])
     }
 
-    if (e.clearedLines > 0)
-        ++(logicPlayer.stats.combo);
-    else
+    if (e.clearedLines === 0)
         logicPlayer.stats.combo = 0;
+    else
+    {
+        ++(logicPlayer.stats.combo);
+        if (logicPlayer.stats.combo > logicPlayer.stats.highestCombo)
+            logicPlayer.stats.highestCombo = logicPlayer.stats.combo
+    }
 
     logicPlayer.stats.piecesPlaced += 1;
 });

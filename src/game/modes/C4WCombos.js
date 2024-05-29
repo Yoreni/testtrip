@@ -25,8 +25,8 @@
             {
                 if (e.player.logic.piecesPlaced != e.player.logic.combo)
                 {
-                    e.player.logic._markTopout();
-                    alert(`Combo: ${e.player.logic.combo}`)
+                    e.player.logic.endGame();
+                    alert(`Combo: ${e.player.logic.stats.highestCombo}`)
                 }
             }
         },

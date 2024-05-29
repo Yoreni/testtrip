@@ -25,6 +25,10 @@ class ModeMenu extends IScene
         this._objects.settings.position.set(app.view.width - 100, 10);
         this._objects.settings.onClick = () => sceneManager.start("settings");
         this.container.addChild(this._objects.settings)
+
+        this._objects.text = new ValueSelector({options: new Array(8)});
+        this._objects.text.position.set(300, 300);
+        this.container.addChild(this._objects.text);
     }
 
     start()
