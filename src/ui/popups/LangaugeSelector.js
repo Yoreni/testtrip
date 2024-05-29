@@ -6,9 +6,8 @@ class LangaugeSelector extends PopUp
 
         for (const [index, language] of Object.entries(langauges))
         {
-            console.log(language);
             let button = new Button(language.name, {
-                onClick: () => this.#setLanguage(language.code)
+                onClick: () => LangaugeSelector.#setLanguage(language.code)
             });
             button.y = (index * 60) + 10;
             button.x = 10;
@@ -20,9 +19,8 @@ class LangaugeSelector extends PopUp
      * 
      * @param {string} languageCode 
      */
-    #setLanguage(languageCode)
+    static #setLanguage(languageCode)
     {
-        console.log("language set to " + languageCode)
         otherSettings.language = languageCode;
         saveSettingsToLocalStorange();
         location.reload();

@@ -26,7 +26,7 @@ class ModeMenu extends IScene
         this._objects.settings.onClick = () => sceneManager.start("settings");
         this.container.addChild(this._objects.settings)
 
-        this._objects.text = new ValueSelector({options: new Array(8)});
+        this._objects.text = new ValueSelector({options: [Option(1), Option(2), Option(4), Option(10), Option(20), Option(40), Option(100), Option(250), Option(500), Option("1,000", 1000), Option("10,000", 10_000)]});
         this._objects.text.position.set(300, 300);
         this.container.addChild(this._objects.text);
     }

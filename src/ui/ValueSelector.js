@@ -21,14 +21,17 @@ class ValueSelector extends PIXI.Container
         });
         this.addChild(decrementIndexButton);
 
-        this.#displayText = new PIXI.Text(this.#index)
+        this.#displayText = new PIXI.Text(this.#index, textStyle())
         this.#updateText();
+        this.#displayText.y = decrementIndexButton.height / 2;
+        this.#displayText.x = (this.#settings.width / 2) + (decrementIndexButton.width);
+        this.#displayText.pivot.y = decrementIndexButton.height / 2;
         this.addChild(this.#displayText)
 
         let incrementIndexButton = new Button(">", {
             onClick: () => this.#changeIndex(1)
         });
-        incrementIndexButton.x = this.#settings.width;
+        incrementIndexButton.x = this.#settings.width + decrementIndexButton.width;
         this.addChild(incrementIndexButton);
 
 
@@ -43,24 +46,29 @@ class ValueSelector extends PIXI.Container
 
     #updateText()
     {
-        this.#displayText.text = this.#index;
+        this.#displayText.text = this.#settings.options[this.#index].display;
         this.#displayText.pivot.x = this.#displayText.width / 2;
-        this.#displayText.pivot.y = this.#displayText.height / 2;
-        this.#displayText.x = this.#settings.width / 2;
     }
 
     get value()
     {
-        throw "Not Implemented";
+        return this.#settings.options[this.#index].value;
+    }
+
+    get displayText()
+    {
+        return this.#settings.options[this.#index].display;
     }
 
     get index()
     {
-        throw "Not Implemented";
+        return this.#index;
     }
 }
 
 function Option(display, value)
 {
+    if (value == undefined)
+        return {"display": display.toString(), "value": display};
     return {display, value};
 }
