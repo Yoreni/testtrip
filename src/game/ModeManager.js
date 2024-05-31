@@ -20,6 +20,11 @@ class ModeManager
         return mode;
     }
 
+    getConfigFields(modeName)
+    {
+        return this.#modes[modeName].config;
+    }
+
     register(name, modeData)
     {
         this.#modes[name] = modeData;

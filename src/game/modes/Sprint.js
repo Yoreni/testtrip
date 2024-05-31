@@ -61,6 +61,14 @@
             PlayerRenderer.addStat("linesRemaining", (player) => Math.max(lineGoal - player.linesCleared, 0));
             PlayerRenderer.addStat("lPPS", (player) => lppstracker.length <= 1 ? "0.00" : 
                 (lppstracker.length / (lppstracker[0] - lppstracker.at(-1))).toFixed(2))
+        },
+        config: {
+            lineGoal: {
+                type: ValueSelector,
+                options: [Option(1), Option(2), Option(4), Option(10), Option(20), Option(40), Option(100), Option(250), Option(500), Option("1,000", 1000), Option("10,000", 10_000)],
+                defaultIndex: 5,
+                title: "Line Goal"
+            }
         }
     });
 }

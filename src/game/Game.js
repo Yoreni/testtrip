@@ -12,7 +12,7 @@ class Game extends IScene
         this.gameManager = new GameManager(this.container);
     }
 
-    start() 
+    start()
     {
         this.resetKey = new KeyDetector(controls.reset);
         this.container.visible = true
