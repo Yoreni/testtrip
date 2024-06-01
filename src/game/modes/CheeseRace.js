@@ -73,7 +73,7 @@
                 }
 
                 if (logicPlayer.garbageCleared >= lineGoal)
-                    logicPlayer._markTopout();
+                    logicPlayer.endGame();
             },
             onPiecePlace: (e) =>
             {

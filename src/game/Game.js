@@ -16,7 +16,7 @@ class Game extends IScene
     {
         this.resetKey = new KeyDetector(controls.reset);
         this.container.visible = true
-        this.gameManager.load(selectedMode);
+        this.gameManager.load(selectedMode, modeSettings);
         this.gameManager.start();
     }
 

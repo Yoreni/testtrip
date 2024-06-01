@@ -49,7 +49,7 @@
 
                 if (e.player.logic.linesCleared >= lineGoal)
                 {
-                    e.player.logic._markTopout();
+                    e.player.logic.endGame();
                     alert(`Pieces: ${e.player.logic.piecesPlaced}`)
                 }
             }

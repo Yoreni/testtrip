@@ -1,4 +1,5 @@
 let selectedMode;
+let modeSettings;
 
 class ModeMenu extends IScene
 {
@@ -18,7 +19,7 @@ class ModeMenu extends IScene
 
         this._objects.play = new Button(langManager.get("play"), {colour: 0x00FF00});
         this._objects.play.position.set(app.view.width / 2, app.view.height - this._objects.play.height);
-        this._objects.play.onClick = () => sceneManager.start("game");
+        this._objects.play.onClick = () => this.#gotoGame();
         this.container.addChild(this._objects.play)
 
         this._objects.settings = new Button(langManager.get("settings"));
@@ -55,6 +56,12 @@ class ModeMenu extends IScene
 
     }
 
+    #gotoGame()
+    {
+        modeSettings = this.#getModeSettings(selectedMode);
+        sceneManager.start("game");
+    }
+
     /**
      * 
      * @param {PIXI.Container} container 
@@ -71,6 +78,11 @@ class ModeMenu extends IScene
         }
     }
 
+    /**
+     * select a new mode and show it on the UI
+     * 
+     * @param {string} newMode mode identifer 
+     */
     #switchMode(newMode)
     {
         const oldModesSettingsContainer = this._objects.modeSettingContainer[selectedMode];
@@ -85,6 +97,25 @@ class ModeMenu extends IScene
             newModesSettingsContainer.visible = true;
 
         selectedMode = newMode;
+    }
+
+    /**
+     * gets the mode settings that the user has set
+     * 
+     * @param {string} mode mode identifer
+     * @returns {object(string, any)}
+     */
+    #getModeSettings(mode)
+    {
+        const modesSettingsFields = this._objects.modeSettingContainer[mode]?.feilds;
+        if (modesSettingsFields === undefined)
+            return {}
+
+        let settings = {};
+        for (let [settingName, userInput] of Object.entries(modesSettingsFields))
+            settings[settingName] = userInput.value;
+
+        return settings;
     }
 
     /**
@@ -116,9 +147,5 @@ class ModeMenu extends IScene
 
         this.container.addChild(container);
         this._objects.modeSettingContainer[modeName] = container;
-
-        // let a = new ValueSelector({options: [Option(1), Option(2), Option(4), Option(10), Option(20), Option(40), Option(100), Option(250), Option(500), Option("1,000", 1000), Option("10,000", 10_000)]});
-        // this._objects.text.position.set(300, 300);
-        // this.container.addChild(this._objects.text);
     }
 }

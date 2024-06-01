@@ -50,6 +50,7 @@
             "time": "Time",
             "lPPS": "lPPS",
             "pace": "Pace",
+            "pieces": "Pieces",
             "garbageLeft": "Garbage Left",
             "timeRemaining": "Time"
         },
