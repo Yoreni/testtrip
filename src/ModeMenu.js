@@ -4,6 +4,7 @@ let modeSettings;
 class ModeMenu extends IScene
 {
     static gameModes = ["marathon", "sprint", "ultra", "cheeseRace", "tetraminoArt", "versus", "c4wcombos"];
+    #objects;
 
     constructor()
     {
@@ -11,23 +12,23 @@ class ModeMenu extends IScene
         selectedMode = "dev"//ModeMenu.gameModes[0];
 
         this.container = new PIXI.Container();
-        this._objects = {};
+        this.#objects = {};
 
-        this._objects.modes = new PIXI.Container();
-        this.#setupModeSelectionButtons(this._objects.modes)
-        this.container.addChild(this._objects.modes)
+        this.#objects.modes = new PIXI.Container();
+        this.#setupModeSelectionButtons(this.#objects.modes)
+        this.container.addChild(this.#objects.modes)
 
-        this._objects.play = new Button(langManager.get("play"), {colour: 0x00FF00});
-        this._objects.play.position.set(app.view.width / 2, app.view.height - this._objects.play.height);
-        this._objects.play.onClick = () => this.#gotoGame();
-        this.container.addChild(this._objects.play)
+        this.#objects.play = new Button(langManager.get("play"), {colour: 0x00FF00});
+        this.#objects.play.position.set(app.view.width / 2, app.view.height - this.#objects.play.height);
+        this.#objects.play.onClick = () => this.#gotoGame();
+        this.container.addChild(this.#objects.play)
 
-        this._objects.settings = new Button(langManager.get("settings"));
-        this._objects.settings.position.set(app.view.width - 100, 10);
-        this._objects.settings.onClick = () => sceneManager.start("settings");
-        this.container.addChild(this._objects.settings)
+        this.#objects.settings = new Button(langManager.get("settings"));
+        this.#objects.settings.position.set(app.view.width - 100, 10);
+        this.#objects.settings.onClick = () => sceneManager.start("settings");
+        this.container.addChild(this.#objects.settings)
 
-        this._objects.modeSettingContainer = {}
+        this.#objects.modeSettingContainer = {}
         this.#makeModeSettingInputs("sprint");
     }
 
@@ -85,11 +86,10 @@ class ModeMenu extends IScene
      */
     #switchMode(newMode)
     {
-        const oldModesSettingsContainer = this._objects.modeSettingContainer[selectedMode];
-        const newModesSettingsContainer = this._objects.modeSettingContainer[newMode];
+        this.#makeModeSettingInputs(newMode);
 
-        if (newModesSettingsContainer === undefined)
-            this.#makeModeSettingInputs(newMode);
+        const oldModesSettingsContainer = this.#objects.modeSettingContainer[selectedMode];
+        const newModesSettingsContainer = this.#objects.modeSettingContainer[newMode];
 
         if (oldModesSettingsContainer !== undefined)
             oldModesSettingsContainer.visible = false;
@@ -107,7 +107,7 @@ class ModeMenu extends IScene
      */
     #getModeSettings(mode)
     {
-        const modesSettingsFields = this._objects.modeSettingContainer[mode]?.feilds;
+        const modesSettingsFields = this.#objects.modeSettingContainer[mode]?.feilds;
         if (modesSettingsFields === undefined)
             return {}
 
@@ -127,7 +127,10 @@ class ModeMenu extends IScene
     {
         let configFields = modeManager.getConfigFields(modeName);
         if (configFields === undefined)
-            return;
+            return; //dont make it if the mode doesnt have any config settings
+        if (this.#objects.modeSettingContainer[modeName] !== undefined)
+            return; //dont make it if it has already been made
+
         let container = new PIXI.Container();
         container.feilds = {};
         container.position.set(300,100)
@@ -137,7 +140,6 @@ class ModeMenu extends IScene
         for (let [fieldName, settings] of Object.entries(configFields))
         {
             const InputType = settings.type;
-            console.log(settings);
             container.feilds[fieldName] = new InputType(settings);
             container.feilds[fieldName].x = index * 70;
             container.addChild(container.feilds[fieldName]);
@@ -146,6 +148,6 @@ class ModeMenu extends IScene
         }
 
         this.container.addChild(container);
-        this._objects.modeSettingContainer[modeName] = container;
+        this.#objects.modeSettingContainer[modeName] = container;
     }
 }
