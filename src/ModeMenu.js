@@ -141,7 +141,7 @@ class ModeMenu extends IScene
         {
             const InputType = settings.type;
             container.feilds[fieldName] = new InputType(settings);
-            container.feilds[fieldName].x = index * 70;
+            container.feilds[fieldName].y = index * 100;
             container.addChild(container.feilds[fieldName]);
 
             ++index;

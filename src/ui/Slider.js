@@ -2,6 +2,7 @@ class Slider extends PIXI.Container
 {
     #settings;
     #values;
+    #currentValue;
 
     static defaultSettings = {
         // colour: 0xBBBBBB,
@@ -11,10 +12,10 @@ class Slider extends PIXI.Container
         min: 0,
         max: 100,
         default: 50,
-        step: 25,
+        step: 1,
         label: "",
-        width: 0,
-        height: 0,
+        width: 200,
+        height: 15,
         vertical: false,
     }
 
@@ -56,6 +57,11 @@ class Slider extends PIXI.Container
         this.setSlider(this.#settings.default)
     }
 
+    get value()
+    {
+        return this.#currentValue;
+    }
+
     /**
      * sets the slider to a value
      * 
@@ -80,6 +86,7 @@ class Slider extends PIXI.Container
         this.elements.valueText.pivot.x = this.elements.valueText.width / 2;
         this.elements.valueText.x = this.elements.knob.x
         this.#settings.whileChanging(value);
+        this.#currentValue = value;
     }
 
     #makeKnob()

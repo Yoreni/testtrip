@@ -345,6 +345,8 @@ class PlayerLogic
 
     #placeCurrentPiece()
     {
+        const oldBoard = this.#board.copy();
+
         const spin = this.currentPiece.type === "T"
             ? this.#threeCornerSpinDetection()
             : this.#inmovableSpinDetection();
@@ -352,6 +354,8 @@ class PlayerLogic
 
         const linesClearedThisPiece = this.#board.completedLines.length
         this.#AREtimer = linesClearedThisPiece > 0 ? this.rules.lineARE : this.rules.ARE;
+
+        const boardPreLineClear = this.#board.copy();
 
         this.callEvent("onPieceLock", {
             oldBoard: this.#board.copy(),
@@ -364,6 +368,8 @@ class PlayerLogic
         this.#spawnNextPiece();
 
         this.callEvent("onPiecePlace");
+
+        console.log(oldBoard.toString())
     }
 
     //only for t pieces

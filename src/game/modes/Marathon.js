@@ -70,6 +70,15 @@
             PlayerRenderer.addStat("level", (player) => player.level);
         },
         addons: ["guidlineScoring","lineClearToasts"],
+        config: {
+            startingLevel: {
+                type: Slider,
+                min: 1,
+                max: 40,
+                default: 1,
+                label: "Starting Level"
+            }
+        }
     });
 
     class NumberPopup

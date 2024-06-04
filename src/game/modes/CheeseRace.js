@@ -109,6 +109,31 @@
             PlayerRenderer.addStat("garbageLeft", (player) => Math.max(lineGoal - player.garbageCleared, 0))
             PlayerRenderer.addStat("pace", (player) => Math.round((player.piecesPlaced / player.garbageCleared) * lineGoal))
         },
-        addons: ["lineClearToasts"]
+        addons: ["lineClearToasts"],
+        config: {
+            lineGoal: {
+                type: ValueSelector,
+                options: [Option(1), Option(2), Option(3), Option(4), Option(5), Option(6), Option(8), Option(10), Option(12), Option(14), Option(16)
+                    , Option(18), Option(20), Option(30), , Option(40), Option(50), Option(100), Option(200), Option(300), Option(400)
+                ],
+                defaultIndex: 17,
+                title: "Line Goal"
+            },
+            cheeseHeight: {
+                type: Slider,
+                min: 1,
+                max: 20,
+                default: 10,
+                label: "Cheese Height"
+            },
+            garbageMessiness: {
+                type: Slider,
+                min: 0,
+                max: 100,
+                default: 100,
+                valueDisplay: (value) => `${value}%`,
+                label: "Garbage Messiness"
+            }
+        }
     });
 }
