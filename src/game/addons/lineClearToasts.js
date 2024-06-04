@@ -204,26 +204,20 @@
                 if (e.clearedLines > 0)
                 {
                     const lineClearText = new LineClearText(e.clearedLines, logic.stats.b2b ?? 0,
-                         e.spinType, logic.currentPiece.type)
+                         e.spinType, e.piece.type)
                     lineClearText.x = -16 * 4
                     lineClearText.y = -16 * 14
                     render.playField.addChild(lineClearText)
                 }
 
-
-            },
-            onPiecePlace: (e) =>
-            {
                 if (e.player.logic.board.isPc)
                 {
-                    const render = e.player.render
                     const perfectClearText = new PerfectClearText();
-                    console.log(render._objects.board)
-                    perfectClearText.y -= 16 * 10//render._objects.board.height / 2
+                    perfectClearText.y -= 16 * 10
                     perfectClearText.x += 16 * 5
                     render.playField.addChild(perfectClearText)
                 }
-            },
+            }
         }
     }
 

@@ -4,14 +4,10 @@
     const spinClears = [400, 800, 1200, 1600, 2000];
     const perfectClearAmount = 3500;
 
-    //used to keep track of the score keeping process for each player
-    let changeTracker = {};
-
     const onGameStart = (e) => 
     {
         const logicPlayer = e.player.logic;
 
-        changeTracker = {}
         logicPlayer.score = 0;
         if (logicPlayer.rules.scoreMulti === undefined)
             logicPlayer.rules.scoreMulti = 1;
@@ -40,25 +36,13 @@
             change += 50 * (logicPlayer.combo - 1);
 
         change = Math.round(change * logicPlayer.rules.scoreMulti)
-        logicPlayer.score += change
-        if (change > 0)
-            e.change = change
-        changeTracker[logicPlayer.id] = e;
-    }
-
-    const onPiecePlace = (e) =>
-    {
-        const logicPlayer = e.player.logic;
 
         if (logicPlayer.board.isPc)
-        {
-            const pointsAwarded = Math.round(perfectClearAmount * logicPlayer.rules.scoreMulti);
-            logicPlayer.score += pointsAwarded;
-            changeTracker[logicPlayer.id].change += pointsAwarded;
-        }
+            change += Math.round(perfectClearAmount * logicPlayer.rules.scoreMulti);
 
-        if (changeTracker[logicPlayer.id].change > 0)
-            eventManager.callEvent("onScoreChange", changeTracker[logicPlayer.id]);
+        logicPlayer.score += change
+        if (change > 0)
+            eventManager.callEvent("onScoreChange", {change, ...e});
     }
 
     const addon = 
@@ -71,7 +55,6 @@
         {
             onGameStart,
             onPieceLock,
-            onPiecePlace,
             onSoftDrop: (e) => e.player.logic.score += e.distance,
             onHardDrop: (e) => e.player.logic.score += e.distance * 2
         },

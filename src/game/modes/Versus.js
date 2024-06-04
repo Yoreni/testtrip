@@ -156,7 +156,6 @@
 
                 let newBoard = e.oldBoard.copy()
                 newBoard.clearLines(e.oldBoard.completedLines)
-                console.log("isPc", newBoard.isPc)
 
                 if (completedLines > 0)
                 {

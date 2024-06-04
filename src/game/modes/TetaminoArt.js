@@ -134,7 +134,7 @@
         },
         events:
         {
-            onPiecePlace: (e) =>
+            onPieceLock: (e) =>
             {
                 if (artConditions[making](e.player.logic.board))
                     alert("You did it");

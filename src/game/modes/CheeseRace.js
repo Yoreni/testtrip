@@ -34,6 +34,45 @@
         }
     }
 
+    /**
+     * 
+     * @param {Playfield} board 
+     * @returns {Number} a number >0
+     */
+    const countClearedGarbage = function(board)
+    {
+        let count = 0;
+        for (let line of board.completedLines)
+        {
+                //if the line is a garbageLine
+                if (board.get(0, line) === "#" || board.get(1, line) === "#")
+                    ++count;  
+        }
+
+        return count;
+    }
+
+    /**
+     * Gets the amount of garbage that we should add to the player
+     * 
+     * @param {PlayerLogic} logicPlayer
+     * @returns {Number} a number >0
+     */
+    const calcGarbageToReplace = function(logicPlayer)
+    {
+        const garbageLeftToSpawn = Math.max(lineGoal - logicPlayer.currentCheeseHeight - logicPlayer.garbageCleared, 0);
+        let replaceAmount = clamp(garbageLeftToSpawn, 0, cheeseHeight - logicPlayer.currentCheeseHeight);
+
+        //dont replace garbage lines if we are in a combo
+        if (logicPlayer.combo > 0)
+        {
+            replaceAmount = clamp(replaceAmount, inComboMinCheeseHeight - logicPlayer.currentCheeseHeight, 0);
+            replaceAmount = Math.min(replaceAmount, garbageLeftToSpawn)
+        }
+
+        return replaceAmount;
+    }
+
     modeManager.register("cheeseRace",
     {
         render: class extends PlayerRenderer
@@ -62,34 +101,14 @@
             {
                 const logicPlayer = e.player.logic;
 
-                for (let line of e.oldBoard.completedLines)
-                {
-                    //if the line is a garbageLine
-                    if (e.oldBoard.get(0, line) === "#" || e.oldBoard.get(1, line) === "#")
-                    {
-                        ++(logicPlayer.garbageCleared);
-                        --(logicPlayer.currentCheeseHeight);    
-                    }
-                }
+                const garbageCleard = countClearedGarbage(e.oldBoard);
+                logicPlayer.garbageCleared += garbageCleard;
+                logicPlayer.currentCheeseHeight -= garbageCleard;
 
                 if (logicPlayer.garbageCleared >= lineGoal)
                     logicPlayer.endGame();
-            },
-            onPiecePlace: (e) =>
-            {
-                const logicPlayer = e.player.logic;
 
-                //replace garbage lines
-                const garbageLeftToSpawn = Math.max(lineGoal - logicPlayer.currentCheeseHeight - logicPlayer.garbageCleared, 0);
-                let replaceAmount = clamp(garbageLeftToSpawn, 0, cheeseHeight - logicPlayer.currentCheeseHeight);
-
-                //dont replace garbage lines if we are in a combo
-                if (logicPlayer.combo > 0)
-                {
-                    replaceAmount = clamp(replaceAmount, inComboMinCheeseHeight - logicPlayer.currentCheeseHeight, 0);
-                    replaceAmount = Math.min(replaceAmount, garbageLeftToSpawn)
-                }
-
+                const replaceAmount = calcGarbageToReplace(logicPlayer);
                 replaceGarbage(logicPlayer, replaceAmount);
                 e.player.render._drawBoard(logicPlayer.board);
                 e.player.render._drawGhostPiece();
@@ -114,9 +133,9 @@
             lineGoal: {
                 type: ValueSelector,
                 options: [Option(1), Option(2), Option(3), Option(4), Option(5), Option(6), Option(8), Option(10), Option(12), Option(14), Option(16)
-                    , Option(18), Option(20), Option(30), , Option(40), Option(50), Option(100), Option(200), Option(300), Option(400)
+                    , Option(18), Option(20), Option(30), Option(40), Option(50), Option(100), Option(200), Option(300), Option(400)
                 ],
-                defaultIndex: 17,
+                defaultIndex: 16,
                 title: "Line Goal"
             },
             cheeseHeight: {

@@ -9,6 +9,9 @@ class EventManager
 
     addEvent(name, func)
     {
+        if (name === "onPiecePlace")
+            console.log("onPiecePlace is deprecated use onPieceLock instead")
+        
         const eventId = EventManager.#eventIdCounter++
 
         if (this._events[name] === undefined)
