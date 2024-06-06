@@ -84,6 +84,7 @@ function makePromiseWithDelay(delay) {
 
 const textures = PIXI.Assets.load(["assets/rasei.png"])
     .then(loadSkin())
+    .then(langManager.fetchStrings())
     .then(function(promise)
     {
         console.log("Textures Loaded");

@@ -11,11 +11,10 @@ class LangManager
     constructor(locale)
     {
         this.locale = locale;
-        this.#fetchStrings();
         this.#languages = this.getLangauges();
     }
 
-    #fetchStrings()
+    async fetchStrings()
     {
         fetch(`lang/${this.locale}.json`)
         .then((response) => 
@@ -52,7 +51,9 @@ class LangManager
     /**
      * 
      * @param {String} translationKey
-     * @param {String[]} placeholders 
+     * @param {String[]} placeholders
+     * 
+     * @returns {String}
      */
     get(translationKey, ...placeholders)
     {

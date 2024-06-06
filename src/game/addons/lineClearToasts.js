@@ -61,7 +61,7 @@
 
             let comboStyle = textStyle(20)
             comboStyle.fill = "#fcf811"
-            let comboText = new PIXI.Text("combo", comboStyle)
+            let comboText = new PIXI.Text(langManager.get("gameHud.stats.combo").toLowerCase(), comboStyle)
             comboText.pivot.x = comboText.width / 2
             comboText.pivot.y = comboText.height / 2 - 20
             this.addChild(comboText)
