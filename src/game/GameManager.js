@@ -43,9 +43,6 @@ class GameManager
         }
         addonMangaer.applyAddons(this.#mode);
 
-        if (this.#mode.init !== undefined)
-            this.#mode.init(this.#mode.gameRules ?? PlayerLogic.defaultRules);
-
         this.#playerSubContainers = [];
     }
 
@@ -65,9 +62,7 @@ class GameManager
     restartGame()
     {
         if (this.#mode.load !== undefined)
-            this.#mode.load({})
-        if (this.#mode.init !== undefined)
-            this.#mode.init(this.#mode.gameRules ?? PlayerLogic.defaultRules);
+            this.#mode.load({}, this.#mode.gameRules)
 
         const Logic = this.#mode.logic ?? PlayerLogic;
         for (const player of this.#players)

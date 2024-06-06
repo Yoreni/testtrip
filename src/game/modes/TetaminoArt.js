@@ -140,11 +140,11 @@
                     alert("You did it");
             }
         },
-        gameRules:
+        load: (modeOptions, rules) => 
         {
-            gravitiy: 0,
-            // lockDelay: 10000,
-            // maxLockResets: 999999999999999
-        }   
+            rules.gravitiy = 0;
+            // rules.lockDelay = 10000;
+            // rules.maxLockResets = 9999999999;
+        }
     });
 }

@@ -60,11 +60,9 @@
             }
 
         },
-        gameRules: {
-            hold: 1
-        },
-        load: (modeOptions) => 
+        load: (modeOptions, rules) => 
         {
+            rules.hold = 1;
             startingLevel = modeOptions.startingLevel ?? startingLevel
 
             PlayerRenderer.addStat("level", (player) => player.level);

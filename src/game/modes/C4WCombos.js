@@ -30,15 +30,10 @@
                 }
             }
         },
-        gameRules: {
-            board: {
-                width: 4,
-                height: 20
-            },
-            // pieceRoster: ["I"]
-        },
-        load: (modeOptions) => 
+        load: (modeOptions, rules) => 
         {
+            rules.board = {width: 4, height: 20};
+            // rules.pieceRoster = ["I"]
             PlayerRenderer.addStat("combo", (player) => player.combo)
         },
         addons: ["lineClearToasts"]

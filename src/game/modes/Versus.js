@@ -14,8 +14,6 @@
     const garbageCap = 6;
     const incomingAttackColours = [0xFF0000, 0xf9f90e, 0x24f204, 0x04e6f2, 0x0f07f9, 0xef04e7]
 
-    let pieceRandimiserSeed = 0
-
     const absorbIncomingAttack = (player, amount) =>
     {
         const remainingAttack = Math.max(0, amount - player.garbageIncoming);
@@ -174,9 +172,10 @@
         gameRules: {
             hold: 1,
         },
-        load: (modeOptions) => 
+        load: (modeOptions, rules) => 
         {
-            pieceRandimiserSeed = modeOptions.seed ?? new Date().getTime()
+            rules.hold = 1;
+            rules.seed = modeOptions.seed ?? new Date().getTime()
 
             PlayerRenderer.addStat("APM", (player) => {
                 const apm = player.stats.attack / player.time * 60
@@ -189,10 +188,6 @@
                 return  Number.isNaN(vsScore) ? (0).toFixed(2) : vsScore.toFixed(vsScore < 9.95 ? 2 : vsScore < 99.5 ? 1 : 0);
             });
             PlayerRenderer.addStat("attack", (player) => player.stats.attack);
-        },
-        init: (rules) =>
-        {
-            rules.seed = pieceRandimiserSeed
         },
         addons: ["backToBack", "lineClearToasts"],
         endCondition: (alivePlayers) => alivePlayers === 1,

@@ -67,13 +67,13 @@
                 actions = null;
             }
         },
-        gameRules:
+        load: (modeOptions, rules) =>
         {
-            gravitiy: 0,
-            lockDelay: 3999999990,
-            maxLockResets: 9999999,
-            seed: 1,
-            // pieceRoster: ["I5"],
+            rules.gravitiy = 0;
+            rules.lockDelay = 10000;
+            rules.maxLockResets = 9999999999;
+            rules.seed = 1;
+            rules.pieceRoster = ["I5"]
         },
         addons: ["lineClearToasts"]
     });

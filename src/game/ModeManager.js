@@ -14,8 +14,9 @@ class ModeManager
         let mode = this.#modes[modeName];
         mode.name = modeName;
 
+        mode.gameRules = {}
         if (mode.load !== undefined)
-            mode.load(modeOptions)
+            mode.load(modeOptions, mode.gameRules)
 
         return mode;
     }

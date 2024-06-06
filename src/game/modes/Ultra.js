@@ -31,9 +31,6 @@
                 new NumberPopup(e.player.render.container, e.change, pos);
             }
         },
-        init: (rules) =>
-        {
-        },
         load: (modeOptions) => 
         {
             timeLimit = modeOptions.timeLimit ?? timeLimit

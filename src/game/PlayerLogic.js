@@ -359,7 +359,6 @@ class PlayerLogic
         const boardPreLineClear = this.#board.copy();
 
         this.#board.clearLines(this.#board.completedLines)
-        this.#spawnNextPiece();
 
         this.callEvent("onPieceLock", {
             lastBoardState: oldBoard,
@@ -370,11 +369,9 @@ class PlayerLogic
             piece: piece
         })
 
+        this.#spawnNextPiece();
+
         this.callEvent("onPiecePlace");
-
-
-
-        //console.log(oldBoard.toString())
     }
 
     //only for t pieces

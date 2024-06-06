@@ -54,7 +54,7 @@
                 }
             }
         },
-        load: (modeOptions) => 
+        load: (modeOptions, rules) => 
         {
             lineGoal = modeOptions.lineGoal ?? lineGoal
 

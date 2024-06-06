@@ -114,10 +114,6 @@
                 e.player.render._drawGhostPiece();
             }
         },
-        gameRules:
-        {
-            seed: 10
-        },
         load: (modeOptions) => 
         {
             lineGoal = modeOptions.lineGoal ?? lineGoal
