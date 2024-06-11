@@ -18,9 +18,17 @@ const
 const SpinType = _enum("NONE", "MINI", "FULL");
 const sceneManager = new SceneManager(app);
 console.log(otherSettings.language);
-let langManager = new LangManager(otherSettings.language);
+const langManager = new LangManager(otherSettings.language);
 
-function init() 
+PIXI.Assets.load(["assets/rasei.png"])
+    .then(async () =>
+    {
+        await loadSkin();
+        await langManager.fetchStrings();
+        await init();
+    });
+
+async function init() 
 {
     resize();
     app.ticker.maxFPS = 60
@@ -34,6 +42,7 @@ function init()
     sceneManager.add("modeMenu", new ModeMenu())
     sceneManager.add("settings", new SettingsScreen())
     sceneManager.start("modeMenu")
+    console.log("scenes started")
 
     setup();
 }
@@ -81,15 +90,6 @@ function makePromiseWithDelay(delay) {
       }, delay);
     });
   }
-
-const textures = PIXI.Assets.load(["assets/rasei.png"])
-    .then(loadSkin())
-    .then(langManager.fetchStrings())
-    .then(function(promise)
-    {
-        console.log("Textures Loaded");
-        init();
-    });
 
 // const misamino = new Worker("src/utils/bots/misaImport.js");
 // misamino.onmessage = (message) => console.log(message.data);

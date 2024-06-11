@@ -16,18 +16,18 @@ class LangManager
 
     async fetchStrings()
     {
-        fetch(`lang/${this.locale}.json`)
-        .then((response) => 
+        try 
         {
-            return response.json();
-        }).then((data) => 
-        {
-            console.log("retrived translations");
+            const response = await fetch(`lang/${this.locale}.json`);
+            const data = await response.json();
+            console.log("retrieved translations");
             this.#translations = data;
-        }).catch(error =>
+        } 
+        catch (error) 
         {
             console.log(error);
-        });
+        }
+        return;
     }
 
     /**
