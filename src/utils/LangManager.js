@@ -7,11 +7,18 @@ class LangManager
      */
     #translations = {};
     #languages;
+    static #instance;
 
     constructor(locale)
     {
         this.locale = locale;
         this.#languages = this.getLangauges();
+        LangManager.#instance = this;
+    }
+
+    static get instance()
+    {
+        return LangManager.#instance;
     }
 
     async fetchStrings()

@@ -252,3 +252,37 @@ function interpolateColour(startColour, endColour, progress)
 
     return interpolatedColor;
 }
+
+/**
+ * 
+ * Loads and runs javascript code from a file
+ * https://stackoverflow.com/questions/21294/dynamically-load-a-javascript-file
+ * 
+ * @param {String} filePath 
+ * @returns {Promise}
+ */
+function loadJavascript(filePath)
+{
+    return new Promise((resolve, reject) => 
+    {
+        // adding the script element to the head as suggested before
+        let head = document.getElementsByTagName('head')[0];
+        let script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = filePath;
+
+        // then bind the event to the resolve function
+        // there are several events for cross browser compatibility
+        script.onreadystatechange = () => {
+            if (script.readyState === 'complete' || script.readyState === 'loaded') 
+                resolve();
+        };
+        script.onload = resolve;
+
+        // handle errors
+        script.onerror = reject;
+
+        // fire the loading
+        head.appendChild(script);
+    });
+}

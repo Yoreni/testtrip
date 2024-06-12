@@ -17,14 +17,13 @@ const
 
 const SpinType = _enum("NONE", "MINI", "FULL");
 const sceneManager = new SceneManager(app);
-console.log(otherSettings.language);
-const langManager = new LangManager(otherSettings.language);
 
 PIXI.Assets.load(["assets/rasei.png"])
     .then(async () =>
     {
         await loadSkin();
         await langManager.fetchStrings();
+        await loadJavascript("src/game/modes/Sprint.js");
         await init();
     });
 

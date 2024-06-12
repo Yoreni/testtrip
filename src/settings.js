@@ -23,6 +23,8 @@ const otherSettings = JSON.parse(localStorage.getItem("settings")) ?? {
     language: "en_en"
 }
 
+const langManager = new LangManager(otherSettings.language);
+
 function saveSettingsToLocalStorange()
 {
     localStorage.setItem("handling",  JSON.stringify(handling));

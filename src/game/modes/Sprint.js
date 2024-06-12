@@ -65,7 +65,8 @@
         config: {
             lineGoal: {
                 type: ValueSelector,
-                options: [Option(1), Option(2), Option(4), Option(10), Option(20), Option(40), Option(100), Option(250), Option(500), Option("1,000", 1000), Option("10,000", 10_000)],
+                options: [1, 2, 4, 10, 20, 40, 100, 250, 500, 1000, 10_000]
+                            .map(number => Option(langManager.formatNumber(number), number)),
                 defaultIndex: 5,
                 title: "Line Goal"
             }
