@@ -23,9 +23,19 @@ PIXI.Assets.load(["assets/rasei.png"])
     {
         await loadSkin();
         await langManager.fetchStrings();
-        await loadJavascript("src/game/modes/Sprint.js");
+        await loadModes();
         await init();
     });
+
+
+const modes = ["C4WCombos", "CheeseRace", "DevMode", "Marathon", "Sprint", "TetaminoArt", "Ultra", "Versus"];
+
+async function loadModes()
+{
+    for (let mode of modes)
+        await loadJavascript(`src/game/modes/${mode}.js`);
+}
+
 
 async function init() 
 {

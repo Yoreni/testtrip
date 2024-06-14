@@ -187,7 +187,7 @@ class PlayerRenderer
         }
 
         this._objects.holdPiece = new RenderedPiece(null);
-        this._objects.holdPiece.position.set((2 * -16), (this._logicPlayer.board.height) * -16)
+        this._objects.holdPiece.position.set((2.5 * -16), (this._logicPlayer.board.height) * -16)
         playField.addChild(this._objects.holdPiece);
     
         this._objects.statsDisplay = new PIXI.Container();
