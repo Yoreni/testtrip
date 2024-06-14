@@ -68,7 +68,7 @@
                 options: [1, 2, 4, 10, 20, 40, 100, 250, 500, 1000, 10_000]
                             .map(number => Option(langManager.formatNumber(number), number)),
                 defaultIndex: 5,
-                title: "Line Goal"
+                title: langManager.get("menu.modeSettings.lineGoal")
             }
         }
     });

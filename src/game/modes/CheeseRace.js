@@ -132,14 +132,14 @@
                     , Option(18), Option(20), Option(30), Option(40), Option(50), Option(100), Option(200), Option(300), Option(400)
                 ],
                 defaultIndex: 16,
-                title: "Line Goal"
+                title: langManager.get("menu.modeSettings.lineGoal")
             },
             cheeseHeight: {
                 type: Slider,
                 min: 1,
                 max: 20,
                 default: 10,
-                label: "Cheese Height"
+                label: langManager.get("menu.modeSettings.cheeseHeight")
             },
             garbageMessiness: {
                 type: Slider,
@@ -147,7 +147,7 @@
                 max: 100,
                 default: 100,
                 valueDisplay: (value) => `${value}%`,
-                label: "Garbage Messiness"
+                label: langManager.get("menu.modeSettings.garbMess")
             }
         }
     });

@@ -26,6 +26,14 @@
             "keyboard": "Keyboard",
             "gamepadn": "Gamepad {$0}",
             "langauge": "Langauge"
+        },
+        "modeSettings": 
+        {
+            "lineGoal": "Line Goal",
+            "startingLevel": "Starting Level",
+            "timeLimit": "Time Limit",
+            "cheeseHeight": "Cheese Height",
+            "garbMess": "Garbage Messiness"
         }
     },
     "modes": {

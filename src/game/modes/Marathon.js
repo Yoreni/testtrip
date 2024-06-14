@@ -74,7 +74,7 @@
                 min: 1,
                 max: 40,
                 default: 1,
-                label: "Starting Level"
+                label: langManager.get("menu.modeSettings.startingLevel")
             }
         }
     });

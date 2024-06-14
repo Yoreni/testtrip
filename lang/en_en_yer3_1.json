@@ -26,6 +26,14 @@
             "keyboard": "Kiybód",
             "gamepadn": "Geympad {$0}",
             "langauge": "Laŋgwij"
+        },
+        "modeSettings": 
+        {
+            "lineGoal": "Láyn Gow",
+            "startingLevel": "Sdátiŋ Levul",
+            "timeLimit": "Táym Limit",
+            "cheeseHeight": "Ciyz Háyt",
+            "garbMess": "Gábij Mesiynəs"
         }
     },
     "modes": {

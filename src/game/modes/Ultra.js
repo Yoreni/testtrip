@@ -44,7 +44,7 @@
                 options: [Option("0:15", 15), Option("0:30", 30), Option("1:00", 60), Option("2:00", 120), Option("3:00", 180), Option("5:00", 300),
                              Option("10:00", 600), Option("15:00", 900), Option("30:00", 1800), Option("60:00", 3600), Option("99:59", 6000)],
                 defaultIndex: 3,
-                title: "Time Limit"
+                title: langManager.get("menu.modeSettings.timeLimit")
             }
         }
     });
