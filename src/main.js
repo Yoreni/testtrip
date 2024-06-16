@@ -50,6 +50,7 @@ async function init()
     sceneManager.add("game", new Game())
     sceneManager.add("modeMenu", new ModeMenu())
     sceneManager.add("settings", new SettingsScreen())
+    sceneManager.add("results", new ResultsScreen())
     sceneManager.start("modeMenu")
     console.log("scenes started")
 

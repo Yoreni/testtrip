@@ -7,7 +7,8 @@ const controlNames = [
     "hold",
     "rotate180",
     "harddrop",
-    "reset"
+    "reset",
+    "quit"
 ]
 
 class Keyboard 

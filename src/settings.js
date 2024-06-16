@@ -16,6 +16,7 @@ const controls = JSON.parse(localStorage.getItem("controls")) ?? {
     rotate180: "c",
     harddrop: " ",
     reset: "r",
+    quit: "q",
 }
 KeyBinder.controlsObject = controls;
 
