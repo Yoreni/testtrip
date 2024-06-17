@@ -17,6 +17,8 @@ class ResultsScreen extends IScene
     start()
     {
         this.container.visible = true;
+
+        this.#objects.scoreText.text = `Time: ${mss000timeformat(gameResult.time)}`;
     }
 
     stop()
@@ -40,5 +42,10 @@ class ResultsScreen extends IScene
         this.#objects.back.position.set(app.view.width / 2, app.view.height - this.#objects.back.height - 5);
         this.#objects.back.onClick = () => sceneManager.start("modeMenu");
         this.container.addChild(this.#objects.back)
+
+        this.#objects.scoreText = new PIXI.Text("", textStyle());
+        this.#objects.scoreText.position.set(app.view.width / 2, 30);
+        this.container.addChild(this.#objects.scoreText);
+
     }
 }

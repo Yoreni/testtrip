@@ -1,5 +1,7 @@
 PlayerRenderer.addEvents();
 
+let gameResult;
+
 class Game extends IScene 
 {
     #objects;
@@ -22,125 +24,10 @@ class Game extends IScene
     }
 
     stop() 
-    {
-        {
-            {
-                {
-                    {   // i always write the cleanst code
-                        {
-                            {
-                                {
-                                    {
-                                        {
-                                            {
-                                                {
-                                                    {
-                                                        {
-                                                            {
-                                                                {
-                                                                    {
-                                                                        {
-                                                                            {
-                                                                                {
-                                                                                    {
-                                                                                        {
-                                                                                            {
-                                                                                                {
-                                                                                                    {
-                                                                                                        {
-                                                                                                            {
-                                                                                                                {
-                                                                                                                    {
-                                                                                                                        {
-                                                                                                                            {
-                                                                                                                                {
-                                                                                                                                    {
-                                                                                                                                        {
-                                                                                                                                            {
-                                                                                                                                                {
-                                                                                                                                                    {
-                                                                                                                                                        {
-                                                                                                                                                            {
-                                                                                                                                                                {
-                                                                                                                                                                    {
-                                                                                                                                                                        {
-                                                                                                                                                                            {
-                                                                                                                                                                                {
-                                                                                                                                                                                    {
-                                                                                                                                                                                        {
-                                                                                                                                                                                            {
-                                                                                                                                                                                                {
-                                                                                                                                                                                                    {
-                                                                                                                                                                                                        {
-                                                                                                                                                                                                            {
-                                                                                                                                                                                                                {
-                                                                                                                                                                                                                    {
-                                                                                                                                                                                                                        {
-                                                                                                                                                                                                                            {
-                                                                                                                                                                                                                                {
-                                                                                                                                                                                                                                    {
-                                                                                                                                                                                                                                        {
-                                                                                                                                                                                                                                            {
-                                                                                                                                                                                                                                                this.gameManager.unload();
-                                                                                                                                                                                                                                                this.container.visible = false;
-                                                                                                                                                                                                                                            }
-                                                                                                                                                                                                                                        }
-                                                                                                                                                                                                                                    }
-                                                                                                                                                                                                                                }
-                                                                                                                                                                                                                            }
-                                                                                                                                                                                                                        }
-                                                                                                                                                                                                                    }
-                                                                                                                                                                                                                }
-                                                                                                                                                                                                            }
-                                                                                                                                                                                                        }
-                                                                                                                                                                                                    }
-                                                                                                                                                                                                }
-                                                                                                                                                                                            }
-                                                                                                                                                                                        }
-                                                                                                                                                                                    }
-                                                                                                                                                                                }
-                                                                                                                                                                            }
-                                                                                                                                                                        }
-                                                                                                                                                                    }
-                                                                                                                                                                }
-                                                                                                                                                            }
-                                                                                                                                                        }
-                                                                                                                                                    }
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+    {       
+        gameResult = this.gameManager.players[0].logic
+        this.gameManager.unload();
+        this.container.visible = false;                                                                                                                                            
     }
 
     update(delta) 
@@ -176,7 +63,7 @@ class Game extends IScene
      * 
      * @param {KeyDetector} key the user input to detect  
      * @param {CircleBar} indicator the circle bar to update  
-     * @param {Number} frames the amount of frames te key needs to be held for the action 
+     * @param {Number} frames the amount of frames the key needs to be held for the action 
      * @param {function} callback the action 
      */
     #circleBarAction(key, indicator, frames, callback)

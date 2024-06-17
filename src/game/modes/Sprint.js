@@ -50,7 +50,7 @@
                 if (e.player.logic.linesCleared >= lineGoal)
                 {
                     e.player.logic.endGame();
-                    alert(`Pieces: ${e.player.logic.piecesPlaced}`)
+                    // alert(`Pieces: ${e.player.logic.piecesPlaced}`)
                 }
             }
         },
@@ -70,6 +70,9 @@
                 defaultIndex: 5,
                 title: langManager.get("menu.modeSettings.lineGoal")
             }
+        },
+        result: {
+            primary: "time"
         }
     });
 }
