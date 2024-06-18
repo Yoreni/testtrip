@@ -24,18 +24,19 @@
             onPieceLock: (e) =>
             {
                 if (e.player.logic.piecesPlaced != e.player.logic.combo)
-                {
                     e.player.logic.endGame();
-                    alert(`Combo: ${e.player.logic.stats.highestCombo}`)
-                }
             }
         },
         load: (modeOptions, rules) => 
         {
             rules.board = {width: 4, height: 20};
             // rules.pieceRoster = ["I"]
-            PlayerRenderer.addStat("combo", (player) => player.combo)
+            StatsFormatter.addStat("combo", (player) => player.combo)
+            StatsFormatter.addStat("highestCombo", (player) => player.stats.highestCombo)
         },
-        addons: ["lineClearToasts"]
+        addons: ["lineClearToasts"],
+        result: {
+            primary: "highestCombo"
+        }
     });
 }

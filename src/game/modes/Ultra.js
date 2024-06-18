@@ -46,6 +46,9 @@
                 defaultIndex: 3,
                 title: langManager.get("menu.modeSettings.timeLimit")
             }
+        },
+        result: {
+            primary: "score"
         }
     });
 

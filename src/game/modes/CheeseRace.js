@@ -149,6 +149,9 @@
                 valueDisplay: (value) => `${value}%`,
                 label: langManager.get("menu.modeSettings.garbMess")
             }
+        },
+        result: {
+            primary: "pieces"
         }
     });
 }

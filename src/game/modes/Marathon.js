@@ -76,6 +76,9 @@
                 default: 1,
                 label: langManager.get("menu.modeSettings.startingLevel")
             }
+        },
+        result: {
+            primary: "score"
         }
     });
 

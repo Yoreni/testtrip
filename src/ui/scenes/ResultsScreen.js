@@ -20,7 +20,15 @@ class ResultsScreen extends IScene
 
         const resultDisplay = modeManager.getResultsDisplay(selectedMode);
 
-        this.#objects.scoreText.text = `Time: ${mss000timeformat(gameResult.time)}`;
+        if (resultDisplay === undefined)
+        {
+            this.#objects.scoreText.text = "";
+            return;
+        }
+        const statName = resultDisplay.primary;
+        const statValue = StatsFormatter.getPlayerStat(statName, gameResult);
+
+        this.#objects.scoreText.text = `${langManager.get("gameHud.stats." + statName)}: ${statValue}`;
     }
 
     stop()
