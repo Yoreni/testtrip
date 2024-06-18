@@ -26,6 +26,11 @@ class ModeManager
         return this.#modes[modeName].config;
     }
 
+    getResultsDisplay(modeName)
+    {
+        return this.#modes[modeName].result;
+    }
+
     register(name, modeData)
     {
         this.#modes[name] = modeData;

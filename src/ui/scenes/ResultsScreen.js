@@ -18,6 +18,8 @@ class ResultsScreen extends IScene
     {
         this.container.visible = true;
 
+        const resultDisplay = modeManager.getResultsDisplay(selectedMode);
+
         this.#objects.scoreText.text = `Time: ${mss000timeformat(gameResult.time)}`;
     }
 

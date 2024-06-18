@@ -10,16 +10,6 @@ greyScaleFilter.blackAndWhite();
 
 class PlayerRenderer
 {
-    /**
-     * @type {Object{string: function(Player) : string}}
-     */
-    static #FORMATTED_STATS = {
-        "PPS": (player) => player.pps.toFixed(2),
-        "time": (player) => mss000timeformat(player.time),
-        "pieces": (player) => player.piecesPlaced,
-        "lines": (player) => player.linesCleared,
-    }
-
     constructor(logicPlayer, pixiContainer)
     {
         this._logicPlayer = logicPlayer;
@@ -283,16 +273,25 @@ class PlayerRenderer
      * gets a human readble format of a stat releated to a player
      * 
      * @param {string} statName 
+     * @deprecated use the stats formatter class instead
      */
     getPlayerStat(statName)
     {
-        const func = PlayerRenderer.#FORMATTED_STATS[statName];
-        return func(this._logicPlayer) ?? "undefined";
+        console.warn("depercated function. use the stats formatter instead")
+        return StatsFormatter.getPlayerStat(statName, this._logicPlayer)
     }
 
+    /**
+     * 
+     * @param {string} statName 
+     * @param {function} func
+     * 
+     * @deprecated use the stats formatter class instead 
+     */
     static addStat(statName, func)
     {
-        PlayerRenderer.#FORMATTED_STATS[statName] = func;
+        console.warn("depercated function. use the stats formatter instead")
+        StatsFormatter.addStat(statName, func);
     }
 }
 
