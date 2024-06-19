@@ -20,6 +20,8 @@ class ResultsScreen extends IScene
 
     start()
     {
+        this.resetKey = new KeyDetector(controls.reset);
+        this.quitKey = new KeyDetector(controls.quit);
         this.container.visible = true;
 
         this.#resultsDisplay = modeManager.getResultsDisplay(selectedMode);
@@ -42,7 +44,10 @@ class ResultsScreen extends IScene
 
     update(delta)
     {
-
+        if (this.quitKey.isDown)
+            sceneManager.start("modeMenu");
+        else if (this.resetKey.isDown)
+            sceneManager.start("game");
     }
 
     destory()
