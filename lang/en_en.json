@@ -60,7 +60,8 @@
             "pace": "Pace",
             "pieces": "Pieces",
             "garbageLeft": "Garbage Left",
-            "timeRemaining": "Time"
+            "timeRemaining": "Time",
+            "PPB": "PPB"
         },
         "1LineClear": "Single",
         "2LineClear": "Double",

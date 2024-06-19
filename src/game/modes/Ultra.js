@@ -16,10 +16,7 @@
             tick(delta)
             {
                 if (this.time >= timeLimit && this.isAlive)
-                {
-                    alert(this.score.toLocaleString())
                     this.endGame();
-                }
                 super.tick(delta);
             }
         },
@@ -35,7 +32,8 @@
         {
             timeLimit = modeOptions.timeLimit ?? timeLimit
 
-            PlayerRenderer.addStat("timeRemaining", (player) => mss000timeformat(Math.max(timeLimit - player.time, 0)))
+            StatsFormatter.addStat("timeRemaining", (player) => mss000timeformat(Math.max(timeLimit - player.time, 0)))
+            StatsFormatter.addStat("PPB", (player) => Math.round(player.score / player.piecesPlaced))
         },
         addons: ["guidlineScoring","lineClearToasts"],
         config: {
@@ -48,7 +46,8 @@
             }
         },
         result: {
-            primary: "score"
+            primary: "score",
+            other: ["PPB"]
         }
     });
 

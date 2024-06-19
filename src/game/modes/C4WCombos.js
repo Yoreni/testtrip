@@ -36,7 +36,8 @@
         },
         addons: ["lineClearToasts"],
         result: {
-            primary: {stat: "highestCombo", localKey: "gameHud.stats.combo"}
+            primary: {stat: "highestCombo", localKey: "gameHud.stats.combo"},
+            other: ["PPS", "time"]
         }
     });
 }

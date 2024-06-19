@@ -52,9 +52,7 @@ class ResultsScreen extends IScene
 
     #makeOtherText()
     {
-        const stats = this.#resultsDisplay.other;
-        if (stats == undefined || stats.length == 0)
-            return;
+        const stats = this.#resultsDisplay.other ?? [];
 
         for (let index = 0; index != Math.max(stats.length, this.#objects.otherTexts.length); ++index)
         {

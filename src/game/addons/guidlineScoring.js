@@ -49,7 +49,7 @@
     {
         onAdd: () =>
         {    
-            PlayerRenderer.addStat("score", (player) => langManager.formatNumber(player.score));
+            StatsFormatter.addStat("score", (player) => langManager.formatNumber(player.score));
         },
         events:
         {
