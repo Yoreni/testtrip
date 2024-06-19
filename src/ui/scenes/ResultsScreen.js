@@ -1,6 +1,7 @@
 class ResultsScreen extends IScene
 {
     #objects;
+    #resultsDisplay;
 
     constructor() 
     {
@@ -11,23 +12,27 @@ class ResultsScreen extends IScene
 
     init()
     {
+        this.#objects.otherTexts = [];
+
         this.#makeButtons();
+        this.#makeText();
     }
 
     start()
     {
         this.container.visible = true;
 
-        const resultDisplay = modeManager.getResultsDisplay(selectedMode);
+        this.#resultsDisplay = modeManager.getResultsDisplay(selectedMode);
 
-        if (resultDisplay === undefined)
+        if (this.#resultsDisplay === undefined)
         {
             this.#objects.scoreText.text = "";
             return;
         }
-        const stat = this.#getStat(gameResult, resultDisplay.primary);
-
+        const stat = this.#getStat(gameResult, this.#resultsDisplay.primary);
         this.#objects.scoreText.text = `${stat.name}: ${stat.value}`;
+
+        this.#makeOtherText();
     }
 
     stop()
@@ -45,16 +50,50 @@ class ResultsScreen extends IScene
 
     }
 
+    #makeOtherText()
+    {
+        const stats = this.#resultsDisplay.other;
+        if (stats == undefined || stats.length == 0)
+            return;
+
+        for (let index = 0; index != Math.max(stats.length, this.#objects.otherTexts.length); ++index)
+        {
+            if (index < stats.length)
+            {
+                // if text object doesnt exist but needed
+                if (index === this.#objects.otherTexts.length)
+                {
+                    this.#objects.otherTexts.push(new PIXI.Text("", textStyle(24)));
+                    this.#objects.otherTexts[index].position.set(app.view.width / 2, 80 + (index * 20));
+                    this.container.addChild(this.#objects.otherTexts[index]);
+                }
+                
+                //if text object already exists
+                const stat = this.#getStat(gameResult, stats[index])
+                this.#objects.otherTexts[index].visible = true;
+                this.#objects.otherTexts[index].text = `${stat.name}: ${stat.value}`;
+            }
+            else
+            {
+                //if text object exists but isnt needed
+                this.#objects.otherTexts[index].visible = false;
+            }
+        }
+    }
+
+    #makeText()
+    {
+        this.#objects.scoreText = new PIXI.Text("", textStyle(36));
+        this.#objects.scoreText.position.set(app.view.width / 2, 30);
+        this.container.addChild(this.#objects.scoreText);
+    }
+
     #makeButtons()
     {
         this.#objects.back = new Button(langManager.get("back"), {colour: 0xFF5959});
         this.#objects.back.position.set(app.view.width / 2, app.view.height - this.#objects.back.height - 5);
         this.#objects.back.onClick = () => sceneManager.start("modeMenu");
         this.container.addChild(this.#objects.back)
-
-        this.#objects.scoreText = new PIXI.Text("", textStyle());
-        this.#objects.scoreText.position.set(app.view.width / 2, 30);
-        this.container.addChild(this.#objects.scoreText);
     }
 
     /**

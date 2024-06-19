@@ -72,7 +72,8 @@
             }
         },
         result: {
-            primary: "time"
+            primary: "time",
+            other: ["PPS", "pieces"],
         }
     });
 }
