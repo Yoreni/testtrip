@@ -36,7 +36,7 @@
         },
         addons: ["lineClearToasts"],
         result: {
-            primary: "highestCombo"
+            primary: {stat: "highestCombo", localKey: "gameHud.stats.combo"}
         }
     });
 }

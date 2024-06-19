@@ -25,10 +25,9 @@ class ResultsScreen extends IScene
             this.#objects.scoreText.text = "";
             return;
         }
-        const statName = resultDisplay.primary;
-        const statValue = StatsFormatter.getPlayerStat(statName, gameResult);
+        const stat = this.#getStat(gameResult, resultDisplay.primary);
 
-        this.#objects.scoreText.text = `${langManager.get("gameHud.stats." + statName)}: ${statValue}`;
+        this.#objects.scoreText.text = `${stat.name}: ${stat.value}`;
     }
 
     stop()
@@ -56,6 +55,30 @@ class ResultsScreen extends IScene
         this.#objects.scoreText = new PIXI.Text("", textStyle());
         this.#objects.scoreText.position.set(app.view.width / 2, 30);
         this.container.addChild(this.#objects.scoreText);
+    }
 
+    /**
+     * 
+     * @param {PlayerLogic} player 
+     * @param {string | object} stat 
+     * @returns {object}
+     */
+    #getStat(player, stat)
+    {
+        if (typeof stat == "string")
+        {
+            return {
+                value: StatsFormatter.getPlayerStat(stat, player),
+                name: langManager.get("gameHud.stats." + stat)
+            }
+        }
+        else if (typeof stat == "object")
+        {
+            return {
+                value: StatsFormatter.getPlayerStat(stat.stat, player),
+                name: langManager.get(stat.localKey)
+            }
+        }
+        throw TypeError("stat given is not of an regignosable type " + stat)
     }
 }
