@@ -1,37 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+        <!-- <link rel=”stylesheet” href="css/normalize.css" type="text/css"> -->
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <!-- why do the CSS files not work like they dont get sent over even tho they are specified here-->
-    <link rel=”stylesheet” href="css/index.css" type="text/css">
-    <link rel=”stylesheet” href="css/normalize.css" type="text/css">
-    <style>
-        * {
-            padding: 0;
-            margin: 0;
-            overflow: hidden;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- <p>Test</p> -->
+
+    <div class="container_row">
+        <div class="layer1">
+            <canvas id="app"></canvas>
+        </div>
+        <div class="layer2">
+            <canvas id="line_graph" style="display: none;" width="500" height="300"></canvas>
+        </div>
+    </div>
+
     <script src="src/utils/lib/pixi.js"></script>
     <script>
         const app = new PIXI.Application({
             backgroundColor: 0xEEEEEE,
             width: 720,
             height: 360,
+            antialias: true,
+            view:  document.getElementById('app'),
         });
     </script>
 
-    <!-- Libary scripts -->
+
     <script src="src/utils/lib/Stats.js"></script>
     <script src="src/utils/lib/jzip.min.js"></script>
     <script src="src/utils/lib/Random.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 
-    <!-- Util scripts-->
+
     <script src="src/utils/IScene.js"></script>
     <script src="src/utils/SceneManager.js"></script>
     <script src="src/utils/KeyDetector.js"></script>
@@ -46,6 +52,7 @@
     <script src="src/ui/KeyBinder.js"></script>
     <script src="src/ui/Slider.js"></script>
     <script src="src/ui/CircleBar.js"></script>
+    <script src="src/ui/LineChart.js"></script>
     <script src="src/ui/ValueSelector.js"></script>
     <script src="src/ui/PopUp.js"></script>
 
@@ -80,6 +87,7 @@
     <script src="src/game/addons/guidlineScoring.js"></script>
     <script src="src/game/addons/backToBack.js"></script>
     <script src="src/game/addons/lineClearToasts.js"></script>
+    <script src="src/game/addons/advancedPpsTracker.js"></script>
 
     <script src="src/ui/scenes/Game.js"></script>
     <script src="src/ui/scenes/ResultsScreen.js"></script>

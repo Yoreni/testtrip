@@ -1,22 +1,10 @@
 {
     let lineGoal = 40;
 
-    let lppstracker = []
-
     modeManager.register("sprint",
     {
         render: class extends PlayerRenderer
         {
-            getPlayerStat(statName)
-            {
-                if (statName === "linesRemaining")
-                    return Math.max(lineGoal - this._logicPlayer.linesCleared, 0);
-                if (statName === "lPPS")
-                    return  lppstracker.length <= 1 ? "0.00" : 
-                        (lppstracker.length / (lppstracker[0] - lppstracker.at(-1))).toFixed(2);
-                return super.getPlayerStat(statName)
-            }
-
             _updateStats()
             {
                 let display = ["PPS", "time", "linesRemaining", "lPPS"];
@@ -43,15 +31,8 @@
         {
             onPieceLock: (e) =>
             {
-                lppstracker.unshift(new Date().getTime() / 1000)
-                if (lppstracker.length > 5)
-                    lppstracker.pop()
-
                 if (e.player.logic.linesCleared >= lineGoal)
-                {
                     e.player.logic.endGame();
-                    // alert(`Pieces: ${e.player.logic.piecesPlaced}`)
-                }
             }
         },
         load: (modeOptions, rules) => 
@@ -59,8 +40,7 @@
             lineGoal = modeOptions.lineGoal ?? lineGoal
 
             PlayerRenderer.addStat("linesRemaining", (player) => Math.max(lineGoal - player.linesCleared, 0));
-            PlayerRenderer.addStat("lPPS", (player) => lppstracker.length <= 1 ? "0.00" : 
-                (lppstracker.length / (lppstracker[0] - lppstracker.at(-1))).toFixed(2))
+
         },
         config: {
             lineGoal: {
@@ -74,6 +54,7 @@
         result: {
             primary: "time",
             other: ["PPS", "pieces"],
-        }
+        },
+        addons: ["advancedPpsTracker"]
     });
 }

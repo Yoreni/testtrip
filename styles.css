@@ -1,0 +1,28 @@
+* {
+    padding: 0;
+    margin: 0;
+    /* overflow: hidden; */
+}
+
+p {
+ font-size: xx-large;   
+}
+
+.container_row {
+    margin: 0;
+    position: relative;
+}
+
+.layer1 {
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    top: 0;
+}
+
+.layer2 {
+    position: absolute;
+    z-index: 2;
+    left: 200px;
+    top: 200px;
+}

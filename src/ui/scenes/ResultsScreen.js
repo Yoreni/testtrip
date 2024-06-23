@@ -35,6 +35,32 @@ class ResultsScreen extends IScene
         this.#objects.scoreText.text = `${stat.name}: ${stat.value}`;
 
         this.#makeOtherText();
+
+        //line chart test
+        this.#objects.ppsChart = new LineChart({
+            type: 'line',
+            data: {
+                labels: ["1", "2", "3"],
+                datasets: [{
+                  axis: 'y',
+                  label: 'My First Dataset',
+                  data: [1.02, 1.53, 2.05, 1.78, 1.99, 2.54, 1.6],
+                  fill: false,
+                  borderWidth: 5
+                }]
+            },
+            options: {
+              indexAxis: 'x',
+              responsive: false,
+              scales: {
+                x: {
+                  beginAtZero: true
+                }
+              }
+            }
+        })
+        this.#objects.ppsChart.position.set(200, 200)
+        this.container.addChild(this.#objects.ppsChart);
     }
 
     stop()
