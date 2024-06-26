@@ -1,7 +1,7 @@
 {
     const LPPS_PERIOD_LENGTH = 5;
 
-    const calculateLpps = (dropLog, gameStart) =>
+    const calculateLpps = (dropLog) =>
     {
         if (dropLog.length == 0)
             return 0;
@@ -9,7 +9,7 @@
         const lastElement = dropLog.length - 1
         const periodEnd = dropLog[lastElement]
         const periodStart = dropLog.length < LPPS_PERIOD_LENGTH ?
-            gameStart : dropLog[lastElement - LPPS_PERIOD_LENGTH + 1]
+            0 : dropLog[lastElement - LPPS_PERIOD_LENGTH + 1]
 
         return LPPS_PERIOD_LENGTH / (periodEnd - periodStart);
     }
@@ -18,8 +18,9 @@
     {
         const logicPlayer = e.player.logic;
 
-        logicPlayer.stats.lockLog.push(new Date().getTime() / 1000);
-        logicPlayer.stats.lppsLog.push(calculateLpps(logicPlayer.stats.lockLog, logicPlayer.stats.start.getTime() / 1000))
+        const gameStart =  logicPlayer.stats.start.getTime() / 1000;
+        logicPlayer.stats.lockLog.push((new Date().getTime() / 1000) - gameStart);
+        logicPlayer.stats.lppsLog.push(calculateLpps(logicPlayer.stats.lockLog))
     };
 
     const addon =

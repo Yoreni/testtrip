@@ -37,30 +37,44 @@ class ResultsScreen extends IScene
         this.#makeOtherText();
 
         //line chart test
+        try
+        {
         this.#objects.ppsChart = new LineChart({
             type: 'line',
             data: {
-                labels: ["1", "2", "3"],
+                labels: gameResult.stats.lockLog.map(mss000timeformat),
                 datasets: [{
-                  axis: 'y',
-                  label: 'My First Dataset',
-                  data: [1.02, 1.53, 2.05, 1.78, 1.99, 2.54, 1.6],
+                  label: 'lPPS',
+                  data: gameResult.stats.lppsLog,
                   fill: false,
-                  borderWidth: 5
+                  borderWidth: 3
                 }]
             },
             options: {
-              indexAxis: 'x',
               responsive: false,
               scales: {
                 x: {
-                  beginAtZero: true
+                  beginAtZero: true,
+                //   ticks: {
+                //     callback: function(value, index, ticks) { console.log(value); console.log(index); console.log(ticks); return value }
+                //   }
                 }
               }
-            }
+            },
+            plugins: {
+                decimation: {
+                    enabled: true,
+                    algorithm: 'min-max',
+                },
+            },
         })
         this.#objects.ppsChart.position.set(200, 200)
         this.container.addChild(this.#objects.ppsChart);
+        }
+        catch (exception)
+        {
+
+        }
     }
 
     stop()
